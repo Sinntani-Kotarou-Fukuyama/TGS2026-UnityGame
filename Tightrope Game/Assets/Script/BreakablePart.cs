@@ -11,6 +11,7 @@ public class BreakablePart : MonoBehaviour
 
     public void Break(Vector3 explosionPos, float force)
     {
+        transform.SetParent(null);
         rb.isKinematic = false;
         rb.AddExplosionForce(force, explosionPos, 10f);
     }
