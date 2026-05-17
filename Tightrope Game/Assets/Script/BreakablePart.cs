@@ -13,6 +13,6 @@ public class BreakablePart : MonoBehaviour
     {
         transform.SetParent(null);
         rb.isKinematic = false;
-        rb.AddExplosionForce(force, explosionPos, 10f);
+        rb.AddExplosionForce(force, explosionPos, 15f);
     }
 }

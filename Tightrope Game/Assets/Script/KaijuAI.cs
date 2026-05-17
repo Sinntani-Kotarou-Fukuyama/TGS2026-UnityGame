@@ -9,7 +9,6 @@ public class KaijuAI : MonoBehaviour
     public float moveSpeed = 1.0f;
     public float rotateSpeed = 5.0f;
 
-    
     public float attackDistance = 4.5f;
 
     public float attackCooldown = 2f;
@@ -22,8 +21,10 @@ public class KaijuAI : MonoBehaviour
 
     float fixedY;
 
-    public ParticleSystem footSmokeLeft;
-    public ParticleSystem footSmokeRight;
+    public ParticleSystem footSmokeLeft;//左足エフェクト
+    public ParticleSystem footSmokeRight;//右足エフェクト
+    public Transform[] patrolPoints;// 巡回ポイント
+    int patrolIndex = 0;//今向かっているポイント
 
     void Start()
     {
@@ -46,9 +47,10 @@ public class KaijuAI : MonoBehaviour
 
         if (targetBuilding == null)
         {
-            anim.SetFloat("Speed", 0);
+            Patrol();
             return;
         }
+
 
         Vector3 dir = targetBuilding.transform.position - transform.position;
         dir.y = 0;
@@ -153,4 +155,42 @@ public class KaijuAI : MonoBehaviour
         if (footSmokeRight != null)
             footSmokeRight.Play();
     }
+    void Patrol()
+    {
+        //巡回ポイントが無い場合は止まる
+        if (patrolPoints == null || patrolPoints.Length == 0)
+        {
+            anim.SetFloat("Speed", 0);
+            return;
+        }
+
+        Transform target = patrolPoints[patrolIndex];
+
+        //方向
+        Vector3 dir = target.position - transform.position;
+        dir.y = 0;
+
+        //回転
+        if (dir != Vector3.zero)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(dir);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotateSpeed * Time.deltaTime);
+        }
+
+        //移動
+        Vector3 move = dir.normalized * moveSpeed * Time.deltaTime;
+        transform.position += move;
+
+        anim.SetFloat("Speed", move.magnitude);
+
+        //近づいたら次のポイントへ
+        if (dir.magnitude < 2.0f)
+        {
+            patrolIndex = (patrolIndex + 1) % patrolPoints.Length;
+        }
+
+        
+        FindNewBuilding();
+    }
+
 }

@@ -3,22 +3,30 @@ using UnityEngine;
 public class BreakBuilding : MonoBehaviour
 {
     public BreakablePart[] parts;
-    public float debrisLifetime = 3f; // ← 破片が残る時間（秒）
+    public float debrisLifetime = 3f; // 破片が残る時間（秒）
+
+   
+
+    public GameObject breakSoundPrefab; 
 
     public void Break(Vector3 hitPos)
     {
-        // 破片を飛ばす
         foreach (var p in parts)
         {
-            p.Break(hitPos, 8f);
-
-            // ★ 破片だけ遅れて消す
+            p.Break(hitPos, 12f);
             Destroy(p.gameObject, debrisLifetime);
         }
 
-        // ★ 建物本体はすぐ消す（当たり判定やAIのターゲットから除外）
+        //破壊音専用オブジェクトを生成して音を鳴らす
+        if (breakSoundPrefab != null)
+        {
+            Instantiate(breakSoundPrefab, transform.position, Quaternion.identity);
+        }
+
+        // 建物を破壊
         Destroy(gameObject);
     }
+
 
     void Update()
     {
