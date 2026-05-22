@@ -4,7 +4,7 @@ using Unity.Cinemachine;
 
 public class CameraSwhich : MonoBehaviour
 {
-    //このスクリプトはCameraManagerにアタッチしてある
+    //CameraManagerにアタッチしてある
     //Camera1にManCamera,Camera2にDinoCameraを入れる
     [SerializeField] private CinemachineCamera camera1;
     [SerializeField] private CinemachineCamera camera2;
