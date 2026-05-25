@@ -6,15 +6,15 @@ public class CameraSwhich : MonoBehaviour
 {
     //CameraManagerにアタッチしてある
     //Camera1にManCamera,Camera2にDinoCameraを入れる
-    [SerializeField] private CinemachineCamera camera1;
-    [SerializeField] private CinemachineCamera camera2;
+    [SerializeField] private CinemachineCamera mancamera;
+    [SerializeField] private CinemachineCamera dinocamera;
   
     void Start()
     {
         Debug.Log("怪獣注目のやつEscでスキップできるよ");
         //カメラの描画優先度を変える
-        camera1.Priority.Value = 5;
-        camera2.Priority.Value = 15;
+        mancamera.Priority.Value = 5;
+        dinocamera.Priority.Value = 15;
         
         Invoke("CameraSet", 5f);//5秒でカメラを切り替える
     }
@@ -30,8 +30,8 @@ public class CameraSwhich : MonoBehaviour
             blend.Time = 0f;
             brain.DefaultBlend = blend;
             //カメラの描画優先度を変える
-            camera1.Priority.Value = 15;
-            camera2.Priority.Value = 5;
+            mancamera.Priority.Value = 15;
+            dinocamera.Priority.Value = 5;
             
         
         }
@@ -39,8 +39,8 @@ public class CameraSwhich : MonoBehaviour
     private void CameraSet()
     {
         //カメラの描画優先度を変える
-        camera1.Priority.Value = 15;
-        camera2.Priority.Value = 5;
+        mancamera.Priority.Value = 15;
+        dinocamera.Priority.Value = 5;
     }
    
 }
