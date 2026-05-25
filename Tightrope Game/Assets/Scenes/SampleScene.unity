@@ -9996,10 +9996,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dino
       objectReference: {fileID: 0}
+    - target: {fileID: 4036591394322352865, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5919532609706824771, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: asiato
       value: 
       objectReference: {fileID: 1452297742}
+    - target: {fileID: 5919532609706824771, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
+      propertyPath: attackCooldown
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5919532609706824771, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: patrolPoints.Array.size
       value: 4
@@ -13954,7 +13962,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 55782d8f11618ad47b2afc4fd810b828, type: 3}
   m_Resource: {fileID: 8300000, guid: 55782d8f11618ad47b2afc4fd810b828, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.502
   m_Pitch: 1
   Loop: 0
   Mute: 0
