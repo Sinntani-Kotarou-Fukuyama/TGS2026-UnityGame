@@ -21,6 +21,7 @@ public class KaijuAI : MonoBehaviour
 
     float fixedY;
 
+    public AudioSource asiato;//足跡SE
     public ParticleSystem footSmokeLeft;//左足エフェクト
     public ParticleSystem footSmokeRight;//右足エフェクト
     public Transform[] patrolPoints;// 巡回ポイント
@@ -148,12 +149,14 @@ public class KaijuAI : MonoBehaviour
     {
         if (footSmokeLeft != null)
             footSmokeLeft.Play();
+        asiato.Play();
     }
 
     public void FootStepRight()
     {
         if (footSmokeRight != null)
             footSmokeRight.Play();
+        asiato.Play();
     }
     void Patrol()
     {
