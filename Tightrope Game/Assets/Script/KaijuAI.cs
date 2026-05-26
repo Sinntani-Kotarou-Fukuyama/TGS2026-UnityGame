@@ -1,94 +1,111 @@
 using UnityEngine;
 using System.Linq;
 using System.Collections;
+using UnityEngine.AI;
 
 public class KaijuAI : MonoBehaviour
 {
-    Animator anim;
-
+    [Header("Move / Rotate")]
     public float moveSpeed = 1.0f;
     public float rotateSpeed = 5.0f;
 
+    [Header("Attack")]
     public float attackDistance = 4.5f;
-
     public float attackCooldown = 2f;
-    float attackTimer = 0f;
+
+    [Header("Effects")]
+    public AudioSource asiato;
+    public ParticleSystem footSmokeLeft;
+    public ParticleSystem footSmokeRight;
+
+    [Header("Patrol")]
+    public Transform[] patrolPoints;
+
+    Animator anim;
+    NavMeshAgent agent;
 
     GameObject targetBuilding;
     BreakBuilding targetBreakScript;
 
+    float attackTimer = 0f;
     bool isAttacking = false;
-
-    float fixedY;
-
-    public AudioSource asiato;//足跡SE
-    public ParticleSystem footSmokeLeft;//左足エフェクト
-    public ParticleSystem footSmokeRight;//右足エフェクト
-    public Transform[] patrolPoints;// 巡回ポイント
-    int patrolIndex = 0;//今向かっているポイント
+    int patrolIndex = 0;
 
     void Start()
     {
         anim = GetComponent<Animator>();
-        FindNewBuilding();
+        agent = GetComponent<NavMeshAgent>();
 
-       // fixedY = transform.position.y;
+        agent.speed = moveSpeed;
+        agent.angularSpeed = rotateSpeed * 100f;
+        agent.acceleration = 20f;
+        agent.stoppingDistance = attackDistance * 0.8f;
+
+        if (!agent.isOnNavMesh)
+        {
+            Debug.LogError("[KaijuAI] NavMesh 上にいません。", this);
+        }
+
+        FindNewBuilding();
     }
 
     void Update()
     {
-       //アニメーションの速度
         anim.speed = 0.7f;
-
-        // Y固定
-       // transform.position = new Vector3(transform.position.x, fixedY, transform.position.z);
 
         if (attackTimer > 0f)
             attackTimer -= Time.deltaTime;
 
         if (targetBuilding == null)
         {
-            Patrol();
+            FindNewBuilding();
+            if (targetBuilding == null)
+            {
+                Patrol();
+                return;
+            }
+        }
+
+        Vector3 toTarget = targetBuilding.transform.position - transform.position;
+        toTarget.y = 0f;
+        float dist = toTarget.magnitude;
+
+        // 攻撃開始
+        if (!isAttacking && dist <= attackDistance && attackTimer <= 0f)
+        {
+            StartAttack();
             return;
         }
 
-
-        Vector3 dir = targetBuilding.transform.position - transform.position;
-        dir.y = 0;
-
-        float dist = dir.magnitude;
-
-        // 回転
-        if (dir != Vector3.zero)
+        // 攻撃中は停止
+        if (isAttacking)
         {
-            Quaternion targetRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotateSpeed * Time.deltaTime);
-        }
-
-        
-        if (dist < attackDistance && !isAttacking)
-        {
-            isAttacking = true;
-            attackTimer = attackCooldown;
-
-            anim.SetTrigger("Attack");
-            anim.SetFloat("Speed", 0);
-
+            agent.ResetPath();
+            anim.SetFloat("Speed", 0f);
             return;
         }
 
-        
-        if (!isAttacking)
-        {
-            Vector3 move = dir.normalized * moveSpeed * Time.deltaTime;
-            transform.position += move;
+        // 通常移動
+        if (agent.isOnNavMesh)
+            agent.SetDestination(targetBuilding.transform.position);
 
-            anim.SetFloat("Speed", move.magnitude);
-        }
-        else
-        {
-            anim.SetFloat("Speed", 0);
-        }
+        float v = agent.velocity.magnitude;
+        if (v < 0.05f) v = 0.05f;
+
+        anim.SetFloat("Speed", v);
+
+    }
+
+    void StartAttack()
+    {
+        isAttacking = true;
+        attackTimer = attackCooldown;
+
+        if (agent.isOnNavMesh)
+            agent.ResetPath();
+
+        anim.SetTrigger("Attack");
+        anim.SetFloat("Speed", 0f);
     }
 
     void FindNewBuilding()
@@ -100,6 +117,7 @@ public class KaijuAI : MonoBehaviour
         if (buildings.Length == 0)
         {
             targetBuilding = null;
+            targetBreakScript = null;
             return;
         }
 
@@ -107,10 +125,9 @@ public class KaijuAI : MonoBehaviour
             .OrderBy(b => Vector3.Distance(transform.position, b.transform.position))
             .FirstOrDefault();
 
-        targetBreakScript = targetBuilding.GetComponent<BreakBuilding>();
+        targetBreakScript = targetBuilding?.GetComponent<BreakBuilding>();
     }
 
-   
     public void PunchHit()
     {
         StartCoroutine(PunchHitRoutine());
@@ -118,82 +135,74 @@ public class KaijuAI : MonoBehaviour
 
     IEnumerator PunchHitRoutine()
     {
+        if (agent.isOnNavMesh)
+            agent.ResetPath();
+
         if (targetBreakScript != null)
         {
             targetBreakScript.Break(transform.position);
 
-           
-            targetBuilding.SetActive(false);
+            if (targetBuilding != null)
+                targetBuilding.SetActive(false);
 
             targetBuilding = null;
             targetBreakScript = null;
 
-          
             attackTimer = 0f;
-
             FindNewBuilding();
         }
 
-        //硬直
+        //硬直中は待機状態にする
+        isAttacking = true;
+        anim.SetFloat("Speed", 0f);
+
         float stunTime = 1.2f;
         yield return new WaitForSeconds(stunTime);
 
-        
         isAttacking = false;
 
+        //移動させる
+        if (targetBuilding != null && agent.isOnNavMesh)
+            agent.SetDestination(targetBuilding.transform.position);
+
        
-        anim.SetFloat("Speed", 0.01f);
     }
+
+
 
     public void FootStepLeft()
     {
-        if (footSmokeLeft != null)
-            footSmokeLeft.Play();
-        asiato.Play();
+        if (footSmokeLeft != null) footSmokeLeft.Play();
+        if (asiato != null) asiato.Play();
     }
 
     public void FootStepRight()
     {
-        if (footSmokeRight != null)
-            footSmokeRight.Play();
-        asiato.Play();
+        if (footSmokeRight != null) footSmokeRight.Play();
+        if (asiato != null) asiato.Play();
     }
+
     void Patrol()
     {
-        //巡回ポイントが無い場合は止まる
         if (patrolPoints == null || patrolPoints.Length == 0)
         {
-            anim.SetFloat("Speed", 0);
+            anim.SetFloat("Speed", 0f);
+            if (agent.isOnNavMesh)
+                agent.ResetPath();
             return;
         }
 
         Transform target = patrolPoints[patrolIndex];
 
-        //方向
-        Vector3 dir = target.position - transform.position;
-        dir.y = 0;
+        if (agent.isOnNavMesh)
+            agent.SetDestination(target.position);
 
-        //回転
-        if (dir != Vector3.zero)
-        {
-            Quaternion targetRot = Quaternion.LookRotation(dir);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, rotateSpeed * Time.deltaTime);
-        }
+        float v = agent.velocity.magnitude;
+        if (v < 0.05f) v = 0.05f;
 
-        //移動
-        Vector3 move = dir.normalized * moveSpeed * Time.deltaTime;
-        transform.position += move;
+        anim.SetFloat("Speed", v);
 
-        anim.SetFloat("Speed", move.magnitude);
-
-        //近づいたら次のポイントへ
-        if (dir.magnitude < 2.0f)
-        {
+        if (Vector3.Distance(transform.position, target.position) < 2.0f)
             patrolIndex = (patrolIndex + 1) % patrolPoints.Length;
-        }
-
-        
-        FindNewBuilding();
     }
-
 }
