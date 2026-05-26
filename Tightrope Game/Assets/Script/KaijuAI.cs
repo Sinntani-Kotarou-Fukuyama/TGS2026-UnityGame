@@ -32,7 +32,7 @@ public class KaijuAI : MonoBehaviour
         anim = GetComponent<Animator>();
         FindNewBuilding();
 
-        fixedY = transform.position.y;
+       // fixedY = transform.position.y;
     }
 
     void Update()
@@ -41,7 +41,7 @@ public class KaijuAI : MonoBehaviour
         anim.speed = 0.7f;
 
         // YŒÅ’è
-        transform.position = new Vector3(transform.position.x, fixedY, transform.position.z);
+       // transform.position = new Vector3(transform.position.x, fixedY, transform.position.z);
 
         if (attackTimer > 0f)
             attackTimer -= Time.deltaTime;
