@@ -39,7 +39,7 @@ public class KaijuAI : MonoBehaviour
         agent.speed = moveSpeed;
         agent.angularSpeed = rotateSpeed * 100f;
         agent.acceleration = 20f;
-        agent.stoppingDistance = attackDistance * 0.8f;
+        agent.stoppingDistance = attackDistance * 0.65f;
 
         if (!agent.isOnNavMesh)
         {
