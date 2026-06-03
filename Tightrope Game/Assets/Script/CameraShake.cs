@@ -16,6 +16,7 @@ public class CameraShake : MonoBehaviour
     void Start()
     {
         perlin = GetComponent<CinemachineBasicMultiChannelPerlin>();
+        Debug.Log("デバッグ用 Yでカメラ揺らす");
     }
 
     // Update is called once per frame

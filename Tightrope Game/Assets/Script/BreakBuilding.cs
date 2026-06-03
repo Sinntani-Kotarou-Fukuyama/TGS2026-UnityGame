@@ -27,10 +27,13 @@ public class BreakBuilding : MonoBehaviour
         Destroy(gameObject);
     }
 
-
+    private void Start()
+    {
+        Debug.Log("デバッグ用 Tで建物全破壊");
+    }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T))//デバッグ用
         {
             Break(transform.position);
         }
