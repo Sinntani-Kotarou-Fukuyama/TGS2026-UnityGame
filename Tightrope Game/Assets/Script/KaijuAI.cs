@@ -51,6 +51,8 @@ public class KaijuAI : MonoBehaviour
 
     void Update()
     {
+        transform.Rotate(0, 50 * Time.deltaTime, 0);
+
         anim.speed = 0.7f;
 
         if (attackTimer > 0f)

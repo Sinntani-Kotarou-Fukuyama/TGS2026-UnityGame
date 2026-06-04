@@ -665,9 +665,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 828edb3c3c400444690b8b12271223f2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5919532609706824771}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 828edb3c3c400444690b8b12271223f2, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8695383376980152250}
   m_SourcePrefab: {fileID: 100100000, guid: 828edb3c3c400444690b8b12271223f2, type: 3}
 --- !u!4 &2056079594521962156 stripped
 Transform:
@@ -700,33 +697,10 @@ MonoBehaviour:
   rotateSpeed: 5
   attackDistance: 3
   attackCooldown: 2
+  asiato: {fileID: 0}
   footSmokeLeft: {fileID: 8286649670926095400}
   footSmokeRight: {fileID: 8137629098549885153}
---- !u!143 &8695383376980152250
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4036591394322352865}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 2
-  m_Radius: 0.5
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 1, z: -0.2}
+  patrolPoints: []
 --- !u!1001 &8744142853958422004
 PrefabInstance:
   m_ObjectHideFlags: 0

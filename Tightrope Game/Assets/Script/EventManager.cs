@@ -2,6 +2,14 @@ using System.Data;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
+/*
+ 使い方
+①　イベントスクリプト名の変数を宣言する
+②　このスクリプトに 変数.GetComponent<イベントスクリプト名>をStartメソッドに入れる
+③　イベントを起こすメソッドをtrueにする
+注意 このスクリプトでイベントを作成しても意味がないと思う
+Deleteでこのオブジェクトを消すため
+ */
 public class EventManager : MonoBehaviour
 {
     [SerializeField] private GameObject player;//プレイヤーの座標取得用
@@ -9,7 +17,7 @@ public class EventManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+       
     }
 
     // Update is called once per frame
@@ -67,7 +75,7 @@ public class EventManager : MonoBehaviour
     }
     void OnTriggerEnter(Collider t)
     {
-        if (t.gameObject.CompareTag("Player"))
+        if (t.gameObject.CompareTag("Player"))//タグがPlayerに当たったらイベントを起こす
         {
             Debug.Log("イベント開始");
             RandomEvent();
