@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.Events;
 using System.Collections;
+using TMPro;
+using UnityEngine.UI;
 
 public class BalanceManager : MonoBehaviour
 {
@@ -17,10 +19,59 @@ public class BalanceManager : MonoBehaviour
     {
     }
 
+    private struct RectTransformLayout
+    {
+        public Vector2 anchorMin;
+        public Vector2 anchorMax;
+        public Vector2 pivot;
+        public Vector2 anchoredPosition;
+        public Vector2 sizeDelta;
+        public Vector3 localScale;
+        public Quaternion localRotation;
+
+        public RectTransformLayout(RectTransform rectTransform)
+        {
+            anchorMin = rectTransform.anchorMin;
+            anchorMax = rectTransform.anchorMax;
+            pivot = rectTransform.pivot;
+            anchoredPosition = rectTransform.anchoredPosition;
+            sizeDelta = rectTransform.sizeDelta;
+            localScale = rectTransform.localScale;
+            localRotation = rectTransform.localRotation;
+        }
+
+        public void ApplyTo(RectTransform rectTransform)
+        {
+            rectTransform.anchorMin = anchorMin;
+            rectTransform.anchorMax = anchorMax;
+            rectTransform.pivot = pivot;
+            rectTransform.anchoredPosition = anchoredPosition;
+            rectTransform.sizeDelta = sizeDelta;
+            rectTransform.localScale = localScale;
+            rectTransform.localRotation = localRotation;
+        }
+    }
+
     [Header("UI")]
+    [SerializeField] private RectTransform gaugeRoot;
     [SerializeField] private RectTransform balanceBar;
     [SerializeField] private RectTransform targetZone;
     [SerializeField] private RectTransform balancePoint;
+
+    [Header("Event Vertical Layout")]
+    // イベント中にゲージ全体を画面左端へ置くための設定です。
+    // Canvasの左中央に寄せたいので、anchor/pivotの初期値を左中央にしています。
+    [SerializeField] private Vector2 eventVerticalAnchorMin = new Vector2(0f, 0.5f);
+    [SerializeField] private Vector2 eventVerticalAnchorMax = new Vector2(0f, 0.5f);
+    [SerializeField] private Vector2 eventVerticalPivot = new Vector2(0f, 0.5f);
+    [SerializeField] private Vector2 eventVerticalAnchoredPosition = new Vector2(40f, 0f);
+    // 縦表示時のBalanceBarの大きさです。xが太さ、yが長さです。
+    [SerializeField] private Vector2 eventVerticalBarSize = new Vector2(28f, 240f);
+    // 縦表示時のTargetZoneの大きさです。xが幅、yが縦方向の判定範囲です。
+    [SerializeField] private Vector2 eventVerticalTargetZoneSize = new Vector2(44f, 50f);
+    // 縦表示時のBalancePointの大きさです。白い球を正方形で扱います。
+    [SerializeField] private Vector2 eventVerticalPointSize = new Vector2(28f, 28f);
+    [SerializeField] private bool resetGaugePositionOnLayoutSwitch = true;
 
     [Header("Gauge Direction")]
     [SerializeField] private BalanceGaugeDirection gaugeDirection = BalanceGaugeDirection.Horizontal;
@@ -35,6 +86,24 @@ public class BalanceManager : MonoBehaviour
     [Header("Target Zone")]
     [SerializeField] private float targetMoveSpeed = 0.5f;
     [SerializeField] private float targetMoveRangeRate = 0.85f;
+
+    [Header("Random Challenge")]
+    // trueにすると、黄色い目標範囲は動き続けず、ランダムな位置へ出る方式になります。
+    [SerializeField] private bool useRandomTargetChallenge = true;
+    // PlayerMarkerをTargetYellowAreaへ合わせる制限時間です。
+    [SerializeField] private float challengeTimeLimit = 3f;
+    // 成功したら次のランダム位置へ移動します。
+    [SerializeField] private bool randomizeTargetAfterSuccess = true;
+    // 失敗したら次のランダム位置へ移動します。
+    [SerializeField] private bool randomizeTargetAfterFailure = true;
+    // ランダム位置が現在のPlayerMarkerと重なりにくいようにする最小距離です。
+    [SerializeField] private float randomTargetMinDistanceFromPoint = 30f;
+    // UI Textを使っている場合の残り時間表示です。
+    [SerializeField] private Text balanceTimerText;
+    // TextMeshProを使っている場合の残り時間表示です。
+    [SerializeField] private TMP_Text balanceTimerTmpText;
+    // 残り時間表示の書式です。{0:0.0} に秒数が入ります。
+    [SerializeField] private string timerFormat = "{0:0.0}";
 
     [Header("Failure")]
     [SerializeField] private float failTimeLimit = 1.5f;
@@ -75,18 +144,35 @@ public class BalanceManager : MonoBehaviour
     private float targetAxisPosition;
     private float targetMoveDirection = 1f;
     private float outsideTimer;
+    private float challengeTimer;
     private float wobbleTimer;
     private Quaternion wobbleBaseRotation;
     private bool wasInsideTarget;
     private Coroutine unbalanceCoroutine;
     private float nextTimerLogTime;
+    private bool hasSavedHorizontalLayout;
+    private RectTransformLayout savedGaugeRootLayout;
+    private RectTransformLayout savedBalanceBarLayout;
+    private RectTransformLayout savedTargetZoneLayout;
+    private RectTransformLayout savedBalancePointLayout;
 
     public bool IsInsideTarget { get; private set; }
     public float OutsideTimer => outsideTimer;
+    public float ChallengeRemainingTime => Mathf.Max(0f, challengeTimeLimit - challengeTimer);
     public BalanceGaugeDirection GaugeDirection => gaugeDirection;
 
     private void Start()
     {
+        AutoAssignBalanceUi();
+
+        if (gaugeRoot == null && balanceBar != null)
+        {
+            gaugeRoot = balanceBar.parent as RectTransform;
+        }
+
+        AutoAssignTimerText();
+        SaveHorizontalLayoutIfNeeded();
+
         // UIの初期位置を現在のInspector配置から読み取ります。
         pointAxisPosition = GetAxisAnchoredPosition(balancePoint);
         targetAxisPosition = GetAxisAnchoredPosition(targetZone);
@@ -96,9 +182,16 @@ public class BalanceManager : MonoBehaviour
             wobbleBaseRotation = wobbleTarget.localRotation;
         }
 
+        if (useRandomTargetChallenge)
+        {
+            RandomizeTargetZone();
+            challengeTimer = 0f;
+        }
+
         ApplyAllUiPositions();
         UpdateBalanceState();
         wasInsideTarget = IsInsideTarget;
+        UpdateTimerText();
 
         DebugLog($"Start: IsInsideTarget={IsInsideTarget}, animator={(animator != null ? animator.name : "null")}, failTimeLimit={failTimeLimit}");
         CheckAnimatorSetup();
@@ -106,11 +199,24 @@ public class BalanceManager : MonoBehaviour
 
     private void Update()
     {
-        MoveTargetZone();
+        if (!useRandomTargetChallenge)
+        {
+            MoveTargetZone();
+        }
+
         MoveBalancePoint();
         ApplyAllUiPositions();
         UpdateBalanceState();
-        UpdateFailureTimer();
+
+        if (useRandomTargetChallenge)
+        {
+            UpdateRandomChallenge();
+        }
+        else
+        {
+            UpdateFailureTimer();
+        }
+
         UpdateWobble();
     }
 
@@ -143,6 +249,46 @@ public class BalanceManager : MonoBehaviour
         SetGaugeDirection(BalanceGaugeDirection.Vertical);
     }
 
+    public void SwitchToEventVerticalLayout()
+    {
+        SaveHorizontalLayoutIfNeeded();
+
+        SetGaugeDirection(BalanceGaugeDirection.Vertical);
+        ApplyEventVerticalLayout();
+
+        if (resetGaugePositionOnLayoutSwitch)
+        {
+            ResetBalance();
+        }
+
+        DebugLog("Balance gauge switched to event vertical layout.");
+    }
+
+    public void SwitchToNormalHorizontalLayout()
+    {
+        RestoreHorizontalLayout();
+        SetGaugeDirection(BalanceGaugeDirection.Horizontal);
+
+        if (resetGaugePositionOnLayoutSwitch)
+        {
+            ResetBalance();
+        }
+
+        DebugLog("Balance gauge restored to normal horizontal layout.");
+    }
+
+    public void SetEventVerticalLayoutActive(bool eventActive)
+    {
+        if (eventActive)
+        {
+            SwitchToEventVerticalLayout();
+        }
+        else
+        {
+            SwitchToNormalHorizontalLayout();
+        }
+    }
+
     // ダメージ後やリトライ時にゲージを中央へ戻したい時用。
     public void ResetBalance()
     {
@@ -150,8 +296,16 @@ public class BalanceManager : MonoBehaviour
         targetAxisPosition = 0f;
         outsideTimer = 0f;
         targetMoveDirection = 1f;
+        challengeTimer = 0f;
+
+        if (useRandomTargetChallenge)
+        {
+            RandomizeTargetZone();
+        }
+
         ApplyAllUiPositions();
         UpdateBalanceState();
+        UpdateTimerText();
     }
 
     private void MoveBalancePoint()
@@ -213,11 +367,11 @@ public class BalanceManager : MonoBehaviour
         {
             DebugLog($"Balance state changed: IsInsideTarget={IsInsideTarget}, point={pointAxisPosition:F2}, targetMin={min:F2}, targetMax={max:F2}, targetCenter={targetAxisPosition:F2}");
 
-            if (IsInsideTarget)
+            if (!useRandomTargetChallenge && IsInsideTarget)
             {
                 onBalanceSuccess?.Invoke();
             }
-            else
+            else if (!useRandomTargetChallenge)
             {
                 onBalanceMiss?.Invoke();
             }
@@ -256,6 +410,166 @@ public class BalanceManager : MonoBehaviour
             {
                 DebugLog("BalancePoint reset to center after damage.");
                 pointAxisPosition = 0f;
+            }
+        }
+    }
+
+    private void UpdateRandomChallenge()
+    {
+        if (IsInsideTarget)
+        {
+            HandleChallengeSuccess();
+            return;
+        }
+
+        challengeTimer += Time.deltaTime;
+        UpdateTimerText();
+
+        if (challengeTimer >= challengeTimeLimit)
+        {
+            HandleChallengeFailure();
+        }
+    }
+
+    private void HandleChallengeSuccess()
+    {
+        DebugLog($"Random challenge success. point={pointAxisPosition:F2}, target={targetAxisPosition:F2}");
+        onBalanceSuccess?.Invoke();
+        challengeTimer = 0f;
+
+        if (randomizeTargetAfterSuccess)
+        {
+            RandomizeTargetZone();
+        }
+
+        ApplyAllUiPositions();
+        UpdateBalanceState();
+        wasInsideTarget = IsInsideTarget;
+        UpdateTimerText();
+    }
+
+    private void HandleChallengeFailure()
+    {
+        DebugLog($"Random challenge failed. challengeTimer={challengeTimer:F2}, limit={challengeTimeLimit:F2}");
+
+        challengeTimer = 0f;
+        outsideTimer = 0f;
+        StartWobble();
+        onBalanceMiss?.Invoke();
+        onDamage?.Invoke(damageAmount);
+        PlayUnbalance();
+
+        if (resetPointAfterDamage)
+        {
+            pointAxisPosition = 0f;
+        }
+
+        if (randomizeTargetAfterFailure)
+        {
+            RandomizeTargetZone();
+        }
+
+        ApplyAllUiPositions();
+        UpdateBalanceState();
+        wasInsideTarget = IsInsideTarget;
+        UpdateTimerText();
+    }
+
+    private void RandomizeTargetZone()
+    {
+        float min = GetMinTargetPosition();
+        float max = GetMaxTargetPosition();
+
+        if (max < min)
+        {
+            targetAxisPosition = 0f;
+            return;
+        }
+
+        float newPosition = Random.Range(min, max);
+
+        for (int i = 0; i < 10; i++)
+        {
+            if (Mathf.Abs(newPosition - pointAxisPosition) >= randomTargetMinDistanceFromPoint)
+            {
+                break;
+            }
+
+            newPosition = Random.Range(min, max);
+        }
+
+        targetAxisPosition = newPosition;
+        DebugLog($"Target randomized. target={targetAxisPosition:F2}");
+    }
+
+    private void UpdateTimerText()
+    {
+        if (!useRandomTargetChallenge)
+        {
+            SetTimerText(string.Empty);
+            return;
+        }
+
+        string text = string.Format(timerFormat, ChallengeRemainingTime);
+        SetTimerText(text);
+    }
+
+    private void SetTimerText(string text)
+    {
+        if (balanceTimerText != null)
+        {
+            balanceTimerText.text = text;
+        }
+
+        if (balanceTimerTmpText != null)
+        {
+            balanceTimerTmpText.text = text;
+        }
+    }
+
+    private void AutoAssignTimerText()
+    {
+        if (balanceTimerText != null || balanceTimerTmpText != null)
+        {
+            return;
+        }
+
+        GameObject timerObject = GameObject.Find("BalanceTimerText");
+        if (timerObject == null)
+        {
+            return;
+        }
+
+        balanceTimerText = timerObject.GetComponent<Text>();
+        balanceTimerTmpText = timerObject.GetComponent<TMP_Text>();
+    }
+
+    private void AutoAssignBalanceUi()
+    {
+        if (targetZone == null)
+        {
+            GameObject targetObject = GameObject.Find("TargetYellowArea");
+            if (targetObject != null)
+            {
+                targetZone = targetObject.GetComponent<RectTransform>();
+            }
+        }
+
+        if (balancePoint == null)
+        {
+            GameObject markerObject = GameObject.Find("PlayerMarker");
+            if (markerObject != null)
+            {
+                balancePoint = markerObject.GetComponent<RectTransform>();
+            }
+        }
+
+        if (gaugeRoot == null)
+        {
+            GameObject gaugeObject = GameObject.Find("BalanceGauge");
+            if (gaugeObject != null)
+            {
+                gaugeRoot = gaugeObject.GetComponent<RectTransform>();
             }
         }
     }
@@ -371,6 +685,95 @@ public class BalanceManager : MonoBehaviour
         SetAxisAnchoredPosition(targetZone, targetAxisPosition);
     }
 
+    private void SaveHorizontalLayoutIfNeeded()
+    {
+        if (hasSavedHorizontalLayout)
+        {
+            return;
+        }
+
+        if (gaugeRoot != null)
+        {
+            savedGaugeRootLayout = new RectTransformLayout(gaugeRoot);
+        }
+
+        if (balanceBar != null)
+        {
+            savedBalanceBarLayout = new RectTransformLayout(balanceBar);
+        }
+
+        if (targetZone != null)
+        {
+            savedTargetZoneLayout = new RectTransformLayout(targetZone);
+        }
+
+        if (balancePoint != null)
+        {
+            savedBalancePointLayout = new RectTransformLayout(balancePoint);
+        }
+
+        hasSavedHorizontalLayout = true;
+    }
+
+    private void ApplyEventVerticalLayout()
+    {
+        RectTransform root = gaugeRoot != null ? gaugeRoot : balanceBar;
+        if (root != null)
+        {
+            root.anchorMin = eventVerticalAnchorMin;
+            root.anchorMax = eventVerticalAnchorMax;
+            root.pivot = eventVerticalPivot;
+            root.anchoredPosition = eventVerticalAnchoredPosition;
+            root.localRotation = Quaternion.identity;
+        }
+
+        if (balanceBar != null)
+        {
+            balanceBar.sizeDelta = eventVerticalBarSize;
+            balanceBar.localRotation = Quaternion.identity;
+        }
+
+        if (targetZone != null)
+        {
+            targetZone.sizeDelta = eventVerticalTargetZoneSize;
+            SetCrossAxisAnchoredPosition(targetZone, 0f);
+        }
+
+        if (balancePoint != null)
+        {
+            balancePoint.sizeDelta = eventVerticalPointSize;
+            SetCrossAxisAnchoredPosition(balancePoint, 0f);
+        }
+    }
+
+    private void RestoreHorizontalLayout()
+    {
+        if (!hasSavedHorizontalLayout)
+        {
+            return;
+        }
+
+        if (gaugeRoot != null)
+        {
+            savedGaugeRootLayout.ApplyTo(gaugeRoot);
+        }
+
+        if (balanceBar != null)
+        {
+            savedBalanceBarLayout.ApplyTo(balanceBar);
+        }
+
+        if (targetZone != null)
+        {
+            savedTargetZoneLayout.ApplyTo(targetZone);
+        }
+
+        if (balancePoint != null)
+        {
+            savedBalancePointLayout.ApplyTo(balancePoint);
+        }
+    }
+
     private float GetMinPointPosition()
     {
         return -GetGaugeHalfLength() + GetAxisSize(balancePoint) * 0.5f;
@@ -443,6 +846,27 @@ public class BalanceManager : MonoBehaviour
         else
         {
             anchoredPosition.y = axisPosition;
+        }
+
+        rectTransform.anchoredPosition = anchoredPosition;
+    }
+
+    private void SetCrossAxisAnchoredPosition(RectTransform rectTransform, float crossAxisPosition)
+    {
+        if (rectTransform == null)
+        {
+            return;
+        }
+
+        Vector2 anchoredPosition = rectTransform.anchoredPosition;
+
+        if (gaugeDirection == BalanceGaugeDirection.Horizontal)
+        {
+            anchoredPosition.y = crossAxisPosition;
+        }
+        else
+        {
+            anchoredPosition.x = crossAxisPosition;
         }
 
         rectTransform.anchoredPosition = anchoredPosition;
