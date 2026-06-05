@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6246969405724225216}
   - component: {fileID: 6699056742036868254}
   - component: {fileID: 4948642133869229942}
-  - component: {fileID: 6881253315503970275}
+  - component: {fileID: 8885386143651873786}
   m_Layer: 0
   m_Name: EventFrag
   m_TagString: Untagged
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 1250435475418293425}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.714, y: 3.407, z: 6.58}
+  m_LocalPosition: {x: -0.7, y: 3, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -82,7 +82,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6881253315503970275
+--- !u!114 &8885386143651873786
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,7 +91,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1250435475418293425}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a047f4764f79c09469a7065d5b6e8dd4, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e7e807e1f877da4681a82944280e900, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}

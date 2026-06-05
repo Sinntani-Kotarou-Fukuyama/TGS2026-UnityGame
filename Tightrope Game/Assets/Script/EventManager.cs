@@ -1,93 +1,65 @@
+ï»¿using System;
 using System.Data;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
 /*
- g‚¢•û
-‡@@ƒCƒxƒ“ƒgƒXƒNƒŠƒvƒg–¼‚Ì•Ï”‚ğéŒ¾‚·‚é
-‡A@‚±‚ÌƒXƒNƒŠƒvƒg‚É •Ï”.GetComponent<ƒCƒxƒ“ƒgƒXƒNƒŠƒvƒg–¼>‚ğStartƒƒ\ƒbƒh‚É“ü‚ê‚é
-‡B@ƒCƒxƒ“ƒg‚ğ‹N‚±‚·ƒƒ\ƒbƒh‚ğtrue‚É‚·‚é
-’ˆÓ ‚±‚ÌƒXƒNƒŠƒvƒg‚ÅƒCƒxƒ“ƒg‚ğì¬‚µ‚Ä‚àˆÓ–¡‚ª‚È‚¢‚Æv‚¤
-Delete‚Å‚±‚ÌƒIƒuƒWƒFƒNƒg‚ğÁ‚·‚½‚ß
+  â—†èª¬æ˜
+ã€€ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ã‚ãŸã‚‹ã¨ã‚¤ãƒ™ãƒ³ãƒˆã‚’èµ·ã“ã™EventFlagã®ç”Ÿæˆã‚’ã—ã¦ã€ã‚¤ãƒ™ãƒ³ãƒˆã®ç™ºç”Ÿã‚’è¡Œã„ã¾ã™ã€‚
+ã€€â—†ä½¿ã„æ–¹
+ã€€â‘  ã‚¤ãƒ™ãƒ³ãƒˆã®å‡¦ç†ã‚’æ–°ã—ã„ã‚¹ã‚¯ãƒªãƒ—ãƒˆã«æ›¸ãã¾ã™ã€‚
+ã€€â ãƒ’ã‚¨ãƒ©ãƒ«ã‚­ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã®EventManagerã®ä¸‹éšå±¤ã«æ–°ã—ã„ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œã‚Šã¾ã™ã€‚
+ã€€â‘¢ â‘¡ã§ä½œã£ãŸã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã«â‘ ã§ä½œã£ãŸã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ã‚¢ã‚¿ãƒƒãƒã—ã¾ã™ã€‚
+ã€€â‘£ ã€Œ// ã‚¤ãƒ™ãƒ³ãƒˆã‚’èµ·ã“ã™ãŸã‚ã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã€ã®éƒ¨åˆ†ã«â‘ ã§ä½œã£ãŸã‚¯ãƒ©ã‚¹ã®å¤‰æ•°ã‚’å®£è¨€ã—ã¾ã™ã€‚
+ã€€â‘¤ ã‚¤ãƒ³ã‚¹ãƒšã‚¯ã‚¿ãƒ¼ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‹ã‚‰â‘¡ã§ä½œã£ãŸã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¨â‘£ã‚’ç´ä»˜ã‘ã¾ã™
+ã€€â‘¥ å¿…è¦ã§ã‚ã‚Œã°ã€EventTypeã«æ–°ã—ã„çŠ¶æ…‹ã‚’è¿½åŠ ã—ã¦ãã ã•ã„
+ã€€â‘¦ RandomEvent()ã®ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã®åˆ¤å®šã®éƒ¨åˆ†ã«â‘£ã‹ã‚‰å‡¦ç†ã‚’å‘¼ã³å‡ºã™ã‚³ãƒ¼ãƒ‰ã‚’è¨˜è¿°ã—ã¦ãã ã•ã„
  */
 public class EventManager : MonoBehaviour
 {
-    [SerializeField] private GameObject player;//ƒvƒŒƒCƒ„[‚ÌÀ•Wæ“¾—p
-    private int ramdomCount;//ƒ‰ƒ“ƒ_ƒ€‚È”š
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private GameObject player;//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™å–å¾—ç”¨
+    private int ramdomCount; // ãƒ©ãƒ³ãƒ€ãƒ ãªæ•°å­—
+    [SerializeField]EventFlag eventFlag;  // ã‚¤ãƒ™ãƒ³ãƒˆãƒ•ãƒ©ã‚°ã®prefab
+
+    // ã‚¤ãƒ™ãƒ³ãƒˆã‚’èµ·ã“ã™ãŸã‚ã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+    [SerializeField,Header("åœ°éœ‡ã‚¤ãƒ™ãƒ³ãƒˆã‚’èµ·ã“ã™ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ")] private Earthquake e_earthquake;
+
+    //ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡
+    public enum EventType
     {
-       
+        Earthquake,   // åœ°éœ‡
     }
 
-    // Update is called once per frame
-    void Update()
+
+    private void Start()
     {
-        if(ramdomCount==1)//ƒJƒEƒ“ƒg‚ª‚±‚Ì”š‚¾‚Á‚½‚ç‚±‚ÌƒCƒxƒ“ƒg‚ğŒÄ‚Ô
-        {
-            Destroy(this.gameObject);//ƒCƒxƒ“ƒg‚ªŠJn‚µ‚½‚çƒtƒ‰ƒO—pƒIƒuƒWƒFƒNƒg‚ğÁ‚·
-        }
+        EventFlag e;
 
-        if (ramdomCount == 2)
-        {
-            Destroy(this.gameObject);
-        }
+        // ã‚¤ãƒ™ãƒ³ãƒˆãƒ•ãƒ©ã‚°ã®ç”Ÿæˆã€è¨­å®š
+        e = Instantiate(eventFlag);
+        e.SetManager(this);
 
-        if (ramdomCount == 3)
-        {
-            Destroy(this.gameObject);
-        }
-
-        if (ramdomCount == 4)
-        {
-            Destroy(this.gameObject);
-        }
-
-        if (ramdomCount == 5)
-        {
-            Destroy(this.gameObject);
-        }
-
-        if (ramdomCount == 6)
-        {
-            Destroy(this.gameObject);
-        }
-
-        if (ramdomCount == 7)
-        {
-            Destroy(this.gameObject);
-        }
-
-        if (ramdomCount == 8)
-        {
-            Destroy(this.gameObject);
-        }
-
-        if (ramdomCount == 9)
-        {
-            Destroy(this.gameObject);
-        }
-
-        if (ramdomCount == 10)
-        {
-            Destroy(this.gameObject);
-        }
     }
-    void OnTriggerEnter(Collider t)
+
+    // ã‚¤ãƒ™ãƒ³ãƒˆãƒ•ãƒ©ã‚°ãŒãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ã‚ãŸã‚‹ã¨å‘¼ã³å‡ºã•ã‚Œã‚‹ãƒ¡ã‚½ãƒƒãƒ‰
+    public void RandomEvent()
     {
-        if (t.gameObject.CompareTag("Player"))//ƒ^ƒO‚ªPlayer‚É“–‚½‚Á‚½‚çƒCƒxƒ“ƒg‚ğ‹N‚±‚·
+        // 0ã‹ã‚‰EventTypeã®è¦ç´ æ•°ã¾ã§ã®ä¹±æ•°
+        ramdomCount = UnityEngine.Random.Range((int)0, (int)Enum.GetValues(typeof(EventType)).Length);
+        Debug.Log($"ä¹±æ•°ï¼ˆæ•´æ•°ï¼‰: {ramdomCount}");
+
+        // ã‚¤ãƒ™ãƒ³ãƒˆã®ç¨®é¡ã‚’åˆ¤å®šã™ã‚‹
+        switch (ramdomCount)
         {
-            Debug.Log("ƒCƒxƒ“ƒgŠJn");
-            RandomEvent();
+            // åœ°éœ‡ã‚¤ãƒ™ãƒ³ãƒˆã®å ´åˆ
+            case (int)EventType.Earthquake:
+                e_earthquake.StartEvent(); // åœ°éœ‡ã‚’èµ·ã“ã™
+                break;
+            default:
+                Debug.Log("ã‚¤ãƒ™ãƒ³ãƒˆãŒèµ·ã“ã‚Šã¾ã—ãŸã€‚");
+                break;
         }
-            
-       
+
     }
-    void RandomEvent()
-    {
-        // 0‚©‚ç11‚Ü‚Å‚Ì—”
-        ramdomCount = Random.Range(0, 11);
-        Debug.Log($"—”i®”j: {ramdomCount}");
-    }
-   
+
 }
