@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -12,6 +13,8 @@ public class CameraShake : MonoBehaviour
 
     CinemachineBasicMultiChannelPerlin perlin;
     private float shakeTimer;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -22,6 +25,8 @@ public class CameraShake : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+
         // 揺れ時間のカウントダウン
         if (shakeTimer > 0)
         {
@@ -31,6 +36,7 @@ public class CameraShake : MonoBehaviour
                 StopShake();
             }
         }
+
         if (Input.GetKeyDown(KeyCode.Y))//デバッグ用
         {
             Shake();
@@ -38,12 +44,15 @@ public class CameraShake : MonoBehaviour
         }
     }
 
-    void Shake()
+    public void Shake()
     {
+        
+
         shake.GetComponent<CinemachineBasicMultiChannelPerlin>();
         shake.AmplitudeGain = amplitudeGain;
         shake.FrequencyGain = frequencyGain;
         shakeTimer = shakeDuration;
+
     }
     public void StopShake()
     {
@@ -51,4 +60,8 @@ public class CameraShake : MonoBehaviour
         shake.FrequencyGain = 0f;
 
     }
+
+
+
+    
 }
