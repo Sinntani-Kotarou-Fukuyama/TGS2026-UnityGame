@@ -8,7 +8,8 @@ public class CameraSwhich : MonoBehaviour
     //Camera1にManCamera,Camera2にDinoCameraを入れる
     [SerializeField] private CinemachineCamera mancamera;
     [SerializeField] private CinemachineCamera dinocamera;
-  
+    [SerializeField] private CinemachineCamera eventdinocamera;
+
     void Start()
     {
         Debug.Log("怪獣注目のやつEscでスキップできるよ");
@@ -42,5 +43,23 @@ public class CameraSwhich : MonoBehaviour
         mancamera.Priority.Value = 15;
         dinocamera.Priority.Value = 5;
     }
-   
+    public void EventCameraSet()
+    {
+        var brain = Camera.main.GetComponent<CinemachineBrain>();
+
+        //DefaltBlendをEaseInOut(カメラをゆっくり切り替え)に変更
+        var blend = brain.DefaultBlend;
+        blend.Style = CinemachineBlendDefinition.Styles.EaseInOut;
+        blend.Time = 2f;
+        brain.DefaultBlend = blend;
+
+        mancamera.Priority.Value = 5;
+        eventdinocamera.Priority.Value = 15;
+        Invoke("EventFinish", 8.0f);
+    }
+    void EventFinish()
+    {
+        mancamera.Priority.Value = 15;
+        eventdinocamera.Priority.Value = 0;
+    }
 }

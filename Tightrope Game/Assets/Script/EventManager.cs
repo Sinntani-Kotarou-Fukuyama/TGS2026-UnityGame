@@ -18,6 +18,7 @@ using UnityEngine;
 public class EventManager : MonoBehaviour
 {
     [SerializeField] private GameObject player;//プレイヤーの座標取得用
+    [SerializeField] private Helicopter heliscript;//ヘリイベント呼び出し用
     private int ramdomCount; // ランダムな数字
     [SerializeField]EventFlag eventFlag;  // イベントフラグのprefab
 
@@ -28,6 +29,7 @@ public class EventManager : MonoBehaviour
     public enum EventType
     {
         Earthquake,   // 地震
+        Helicopter,   //ヘリ
     }
 
 
@@ -54,6 +56,10 @@ public class EventManager : MonoBehaviour
             // 地震イベントの場合
             case (int)EventType.Earthquake:
                 e_earthquake.StartEvent(); // 地震を起こす
+                break;
+            // ヘリイベントの場合
+            case (int)EventType.Helicopter:
+                heliscript.EventFlag(); // ヘリイベントを起こす
                 break;
             default:
                 Debug.Log("イベントが起こりました。");
