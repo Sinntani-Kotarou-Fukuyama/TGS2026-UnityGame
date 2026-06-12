@@ -33,9 +33,10 @@ public class BreakBuilding : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))//デバッグ用
+       /* if (Input.GetKeyDown(KeyCode.T))//デバッグ用
         {
             Break(transform.position);
         }
+       */
     }
 }
