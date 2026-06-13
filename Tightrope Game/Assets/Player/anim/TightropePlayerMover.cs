@@ -53,6 +53,9 @@ public class TightropePlayerMover : MonoBehaviour
     // 値を外から勝手に変更されないよう、読み取り専用にしています。
     public float MoveInput => lastMoveInput;
 
+    //プレイヤーを固定するフラグ
+    public bool playerStoping = false;
+
     // ResetはUnityでコンポーネントを追加した時やResetした時に呼ばれます。
     // Inspector設定の手間を減らすため、自動でAnimatorとRopePathを探します。
     private void Reset()
@@ -137,21 +140,33 @@ public class TightropePlayerMover : MonoBehaviour
         // まず入力なしを0として用意します。
         float input = 0f;
 
-        // 前進キーが押されていれば、前方向として+1します。
-        if (Input.GetKey(forwardKey))
-        {
-            input += 1f;
-        }
 
-        // 後退キーが押されていれば、後ろ方向として-1します。
-        if (Input.GetKey(backwardKey))
-        {
-            input -= 1f;
-        }
+            // 前進キーが押されていれば、前方向として+1します。
+            if (Input.GetKey(forwardKey))
+            {
 
-        // 前進と後退を同時押ししても、値が-1から1の範囲に収まるようにします。
-        // Clampは「これ以上大きくしない・小さくしない」という安全装置です。
-        return Mathf.Clamp(input, -1f, 1f);
+              if(playerStoping==false)
+              {
+                input += 1f;
+              }
+                
+            }
+
+            // 後退キーが押されていれば、後ろ方向として-1します。
+            if (Input.GetKey(backwardKey))
+            {
+              if(playerStoping==false)
+              {
+                input -= 1f;
+              }
+                
+            }
+
+            // 前進と後退を同時押ししても、値が-1から1の範囲に収まるようにします。
+            // Clampは「これ以上大きくしない・小さくしない」という安全装置です。
+            return Mathf.Clamp(input, -1f, 1f);
+        
+       
     }
 
     // プレイヤーの位置を、現在のdistanceAlongRopeに対応したロープ上の点へ移動します。

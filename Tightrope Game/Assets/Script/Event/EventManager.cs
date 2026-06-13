@@ -18,13 +18,12 @@ using UnityEngine;
 public class EventManager : MonoBehaviour
 {
     [SerializeField] private GameObject player;//プレイヤーの座標取得用
-    [SerializeField] private Helicopter heliscript;//ヘリイベント呼び出し用
     private int ramdomCount; // ランダムな数字
     [SerializeField]EventFlag eventFlag;  // イベントフラグのprefab
 
     // イベントを起こすためのゲームオブジェクト
     [SerializeField,Header("地震イベントを起こすゲームオブジェクト")] private Earthquake e_earthquake;
-
+    [SerializeField,Header("ヘリイベントを起こすゲームオブジェクト")] private Helicopter heliscript;//ヘリイベント呼び出し用
     //イベントの種類
     public enum EventType
     {

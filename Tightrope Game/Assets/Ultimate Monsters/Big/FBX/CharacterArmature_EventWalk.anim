@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: CharacterArmature_Walk
+  m_Name: CharacterArmature_EventWalk
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -36208,14 +36208,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.1
-    functionName: FootStepRight
+    functionName: Asiato
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.6333333
-    functionName: FootStepLeft
+    functionName: Asiato
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
