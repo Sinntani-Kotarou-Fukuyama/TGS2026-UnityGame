@@ -14918,7 +14918,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 098c2f59ebc00914daf97451aa9b41e9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0fae39bffc8d90146b8136bde1b9887f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -18813,7 +18813,7 @@ PrefabInstance:
   m_SourcePrefab: {fileID: 100100000, guid: b245472f39835104d908669a14c4a374, type: 3}
 --- !u!4 &1731604190 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 9058432095749335609, guid: e555ffc7cc719a74c8ca8d3f395dc177, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2569614855765391646, guid: e555ffc7cc719a74c8ca8d3f395dc177, type: 3}
   m_PrefabInstance: {fileID: 1517370823}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1733941585
