@@ -145,20 +145,18 @@ public class TightropePlayerMover : MonoBehaviour
             if (Input.GetKey(forwardKey))
             {
 
-              if(playerStoping==false)
-              {
+              
                 input += 1f;
-              }
+              
                 
             }
 
             // 後退キーが押されていれば、後ろ方向として-1します。
             if (Input.GetKey(backwardKey))
             {
-              if(playerStoping==false)
-              {
+             
                 input -= 1f;
-              }
+              
                 
             }
 

@@ -12,7 +12,7 @@ public class Helicopter : MonoBehaviour
     [SerializeField] GameObject explosion;//Explosion読み込み
     [SerializeField] MessageSequencer Message;//会話を進める
     [SerializeField] CameraSwhich cam;//カメラを切り替えれるように
-    [SerializeField] TightropePlayerMover playerMover;//プレイヤーの動き取得
+    [SerializeField] TightropeAutoGoalMover playerMover;//プレイヤーの動き取得
     [SerializeField] AudioSource explosionAudio;//爆発音
     [SerializeField] AudioSource cameraOnAudio;//カメラ起動音
     [SerializeField] float offsetX = 10f;
@@ -87,7 +87,7 @@ public class Helicopter : MonoBehaviour
     void HeliEvent()
     {
         DinoStoping = true;//怪獣を固定
-        playerMover.playerStoping = true;//プレイヤーを固定
+        playerMover.PlayerStoping = true;//プレイヤーを固定
         Quaternion rotation = Quaternion.Euler(0, 170, 0);//ヘリの向き
         //プレイヤーの右にヘリを生成
         Vector3 playerpos = player.transform.position + player.right * offsetX + player.forward * offsetZ;
@@ -159,7 +159,7 @@ public class Helicopter : MonoBehaviour
     private void Destroy()
     {
         DinoStoping = false;
-        playerMover.playerStoping = false;
+        playerMover.PlayerStoping = false;
         panel.SetActive(false);
         cameraFrame.SetActive(false);
         Dino.transform.position = new Vector3(17.0f, 0.0f, 14.0f);

@@ -12012,7 +12012,7 @@ PrefabInstance:
     - target: {fileID: 20523243259468201, guid: 1d7683ca59d0377419261a254cba261d, type: 3}
       propertyPath: playerMover
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 2019293633}
     - target: {fileID: 20523243259468201, guid: 1d7683ca59d0377419261a254cba261d, type: 3}
       propertyPath: cameraOnAudio
       value: 
@@ -19704,6 +19704,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5629407503719319764, guid: 36c6c6526d84be94888739a44a8de1df, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
+    - target: {fileID: 5629407503719319764, guid: 36c6c6526d84be94888739a44a8de1df, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21867,6 +21875,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   debugLog: 1
+  PlayerStoping: 0
 --- !u!82 &2019293634
 AudioSource:
   m_ObjectHideFlags: 0

@@ -50,6 +50,7 @@ public class TightropeAutoGoalMover : MonoBehaviour
     public bool IsMoving => isMoving;
     public bool HasReachedGoal => hasReachedGoal;
 
+    public bool PlayerStoping = false;//プレイヤー固定フラグ
     private void Reset()
     {
         AutoAssignReferences();
@@ -79,18 +80,31 @@ public class TightropeAutoGoalMover : MonoBehaviour
     {
         if (!isMoving || hasReachedGoal || goalPoint == null)
         {
-            SetWalkAnimation(false);
-            return;
+            if (PlayerStoping == false)
+            {
+                SetWalkAnimation(false);
+                return;
+            }
+           
+            
         }
 
         if (ropePath != null)
         {
-            MoveAlongRope();
+            if(PlayerStoping==false)
+            {
+                MoveAlongRope();
+            }
+            
         }
         else
         {
-            MoveDirectlyToGoal();
+            if (PlayerStoping == false)
+            {
+                MoveDirectlyToGoal();
+            }
         }
+               
     }
 
     public void StartMoving()
