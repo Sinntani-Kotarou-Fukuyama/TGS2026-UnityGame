@@ -6691,7 +6691,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -0.00000095367, y: -0.417}
-  m_SizeDelta: {x: 44.61476, y: 204.421}
+  m_SizeDelta: {x: 30, y: 204.421}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &713676774
 MonoBehaviour:
@@ -13863,7 +13863,7 @@ MonoBehaviour:
   resetGaugePositionOnLayoutSwitch: 1
   gaugeDirection: 0
   playMode: 0
-  pointMoveSpeed: 20
+  pointMoveSpeed: 40
   negativeKey: 276
   positiveKey: 275
   returnPointToCenter: 0
