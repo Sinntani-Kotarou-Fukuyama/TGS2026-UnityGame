@@ -147,7 +147,7 @@ public class Helicopter : MonoBehaviour
         spawnedObj.SetActive(false);
         explosionAudio.Play();
         Invoke("DinoWalk", 5.0f);
-        Invoke("Destroy", 9.8f);
+        Invoke("Destroy", 8.8f);
        
     }
 

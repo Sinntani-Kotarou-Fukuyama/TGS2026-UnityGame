@@ -10,13 +10,14 @@ public class CameraSwhich : MonoBehaviour
     [SerializeField] private CinemachineCamera dinocamera;
     [SerializeField] private CinemachineCamera eventdinocamera;
 
+    
     void Start()
     {
         Debug.Log("怪獣注目のやつEscでスキップできるよ");
         //カメラの描画優先度を変える
-        mancamera.Priority.Value = 5;
-        dinocamera.Priority.Value = 15;
-        
+        mancamera.Priority.Value = 15;
+        dinocamera.Priority.Value = 5;
+        Invoke("GameStartCamera",0.7f);
         Invoke("CameraSet", 5f);//5秒でカメラを切り替える
     }
     void Update()
@@ -36,6 +37,12 @@ public class CameraSwhich : MonoBehaviour
             
         
         }
+    }
+    void GameStartCamera()
+    {
+        //カメラの描画優先度を変える
+        mancamera.Priority.Value = 5;
+        dinocamera.Priority.Value = 15;
     }
     private void CameraSet()
     {
