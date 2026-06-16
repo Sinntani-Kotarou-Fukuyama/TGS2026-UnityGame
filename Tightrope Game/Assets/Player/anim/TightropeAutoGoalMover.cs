@@ -85,6 +85,8 @@ public class TightropeAutoGoalMover : MonoBehaviour
                 SetWalkAnimation(false);
                 return;
             }
+            
+           
            
             
         }
@@ -94,6 +96,11 @@ public class TightropeAutoGoalMover : MonoBehaviour
             if(PlayerStoping==false)
             {
                 MoveAlongRope();
+                SetWalkAnimation(true);
+            }
+            else
+            {
+                SetWalkAnimation(false);
             }
             
         }
