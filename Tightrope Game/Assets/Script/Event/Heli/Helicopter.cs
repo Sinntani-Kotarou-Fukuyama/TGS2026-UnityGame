@@ -13,11 +13,14 @@ public class Helicopter : MonoBehaviour
     [SerializeField] MessageSequencer Message;//会話を進める
     [SerializeField] CameraSwhich cam;//カメラを切り替えれるように
     [SerializeField] TightropeAutoGoalMover playerMover;//プレイヤーの動き取得
+    [SerializeField] BalanceShake balance;
     [SerializeField] AudioSource explosionAudio;//爆発音
     [SerializeField] AudioSource cameraOnAudio;//カメラ起動音
     [SerializeField] float offsetX = 10f;
     [SerializeField] float offsetZ = 10f;
     [SerializeField] float speed =1f;//ヘリの移動速度
+    [SerializeField, Header("プレイヤーの揺れの強さ")] float shake = 0.1f;
+    [SerializeField, Header("プレイヤーの揺れの切り替え時間")] float clocktime =2f;
     private GameObject spawnedObj;
     private GameObject spawneDino;
     bool Flag = false;//イベントフラグ
@@ -26,10 +29,12 @@ public class Helicopter : MonoBehaviour
     bool DinoFinishIdouFlag=false;
     bool KaiwaFlag = false;//会話フラグ
     bool DinoStoping = false;//怪獣を動かなくするフラグ
+    bool PlayerShake = false;//プレイヤーの揺れフラグ
+    float time = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-       
+        
     }
 
     // Update is called once per frame
@@ -81,6 +86,31 @@ public class Helicopter : MonoBehaviour
         {
           Dino.transform.position = new Vector3(50.0f, 0.0f, 50.0f);
         }
+
+        if(PlayerShake==true)
+        {
+            
+           
+            if (player !=null)
+            {
+                time+=Time.deltaTime;
+                
+                if (time<clocktime)
+                {
+                    player.transform.Rotate(new Vector3(0, 0, shake));
+                   // Debug.Log("time60以下");
+                }
+                if(time>clocktime)
+                {
+                    player.transform.Rotate(new Vector3(0, 0, -shake));
+                   // Debug.Log("time60以上");
+                }
+                if(time>clocktime*2)
+                {
+                    time = 0;
+                }
+            }
+        }
        
 
     }
@@ -113,7 +143,8 @@ public class Helicopter : MonoBehaviour
     void Idouflag()
     {
         HeliIdouflag = false;
-       
+        PlayerShake = true;
+        balance.ShakeOn = true;
     }
     void DinoIdouFlag()
     {
@@ -148,13 +179,17 @@ public class Helicopter : MonoBehaviour
         explosionAudio.Play();
         Invoke("DinoWalk", 5.0f);
         Invoke("Destroy", 8.8f);
-       
+        PlayerShake = false;
+        //バランスゲージを大きくゆらす
+        balance.ExplosionOn = true;
+        Invoke(nameof(ExplosionFinish), 2.0f);
     }
 
     void DinoWalk()
     {
         spawneDino.transform.eulerAngles = new Vector3(0, 90, 0);
         DinoFinishIdouFlag = true;
+        balance.ShakeOn = false;
     }
     private void Destroy()
     {
@@ -165,5 +200,9 @@ public class Helicopter : MonoBehaviour
         Dino.transform.position = new Vector3(17.0f, 0.0f, 14.0f);
         Destroy(spawnedObj);
         Destroy(spawneDino);
+    }
+   void ExplosionFinish()
+    {
+        balance.ExplosionOn = false;
     }
 }

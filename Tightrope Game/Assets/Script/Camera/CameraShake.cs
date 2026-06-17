@@ -37,11 +37,12 @@ public class CameraShake : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Y))//デバッグ用
+       /* if (Input.GetKeyDown(KeyCode.Y))//デバッグ用
         {
             Shake();
 
         }
+       */
     }
 
     public void Shake()
