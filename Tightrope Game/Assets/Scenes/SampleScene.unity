@@ -12023,6 +12023,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1515038817}
     - target: {fileID: 20523243259468201, guid: 1d7683ca59d0377419261a254cba261d, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 2019293627}
+    - target: {fileID: 20523243259468201, guid: 1d7683ca59d0377419261a254cba261d, type: 3}
       propertyPath: clocktime
       value: 1
       objectReference: {fileID: 0}

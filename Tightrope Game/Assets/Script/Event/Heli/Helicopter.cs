@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Helicopter : MonoBehaviour
 {
+    [SerializeField] Animator animator;//プレイヤーのアニメーション
     [SerializeField] Transform player;//プレイヤーの座標取得用
     [SerializeField] Transform Dino;//イベント中は怪獣を見えないところへ移動させる
     [SerializeField] GameObject helicopter;//ヘリのプレハブ用
@@ -183,6 +184,7 @@ public class Helicopter : MonoBehaviour
         //バランスゲージを大きくゆらす
         balance.ExplosionOn = true;
         Invoke(nameof(ExplosionFinish), 2.0f);
+        animator.SetBool("Reaction", true);
     }
 
     void DinoWalk()
@@ -190,6 +192,7 @@ public class Helicopter : MonoBehaviour
         spawneDino.transform.eulerAngles = new Vector3(0, 90, 0);
         DinoFinishIdouFlag = true;
         balance.ShakeOn = false;
+        animator.SetBool("Reaction", false);
     }
     private void Destroy()
     {
