@@ -1,6 +1,42 @@
 using UnityEngine;
 using UnityEngine.Events;
 
+/*
+  ◆説明
+　プレイヤーを GoalPoint へ自動移動させるスクリプトです。
+　RopePath が設定されている場合はロープ上を進み、未設定の場合は GoalPoint へ直接移動します。
+　イベント中にプレイヤーを止める / 再開する処理から呼ばれることを想定しています。
+
+　◆使い方
+　・自動移動を開始したい場合
+　　StartMoving() を呼びます。
+　　moveOnStart が true の場合は、Start 時に自動で移動開始します。
+
+　・自動移動を止めたい場合
+　　StopMoving() を呼びます。
+　　イベント演出中だけ一時停止したい場合は PlayerStoping = true にすると、移動処理を止めて歩きアニメーションも止めます。
+　　再開する場合は PlayerStoping = false に戻してください。
+
+　・ゴール到達後に再利用したい場合
+　　ResetAutoMove() を呼ぶと、ゴール到達状態を戻し、現在位置と GoalPoint から距離を計算し直します。
+　　その後、必要に応じて StartMoving() を呼んでください。
+
+　・手動移動スクリプトと切り替えたい場合
+　　SetManualMovementEnabled(false) で manualMovementBehaviours に登録した移動スクリプトを無効化します。
+　　SetManualMovementEnabled(true) で再び有効化します。
+
+　・ポーズイベントなどでプレイヤーに動きを付ける場合
+　　まず StopMoving() または PlayerStoping = true で自動移動を止めてから演出してください。
+　　演出が終わったら StartMoving() または PlayerStoping = false で再開します。
+
+　◆注意点
+　・TightropePlayerMover などの手動移動スクリプトと同時に動かすと、プレイヤー位置の制御が競合します。
+　　必要なスクリプトは manualMovementBehaviours に登録し、disableManualMovementOnStart も確認してください。
+　・Inspector で goalPoint、ropePath、animator を設定してください。
+　・歩きアニメーションは animator の walkBoolName に設定した Bool を切り替えます。
+　・PlayerStoping は既存イベントから直接使われているため、名前や使い方を変更しないでください。
+　・GoalPoint に到達すると onGoalReached が呼ばれます。
+ */
 public class TightropeAutoGoalMover : MonoBehaviour
 {
     [Header("Target")]
