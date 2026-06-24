@@ -4,6 +4,50 @@ using System.Collections;
 using TMPro;
 using UnityEngine.UI;
 
+/*
+  ◆説明
+　バランスゲージ全体を管理するスクリプトです。
+　通常ゲージ、イベント用レイアウト、スナイパー防御用ゲージ、マトリックス回避用ゲージの表示・操作・判定を担当します。
+　イベント側のスクリプトは、playMode などの内部状態を直接変更せず、public メソッドを呼んで操作してください。
+
+　◆使い方
+　・通常バランスゲージを一時停止したい場合
+　　PauseNormalBalanceGauge() を呼びます。
+　　通常バランスゲージの更新、成功/失敗判定、ダメージ処理、タイマー更新を一時停止します。
+　　スナイパーイベントだけでなく、ポーズイベント、会話イベント、演出イベント、地震イベントなどで通常ゲージを止めたい時にも使えます。
+
+　・一時停止した通常バランスゲージを再開したい場合
+　　ResumeNormalBalanceGauge() を呼びます。
+　　イベント開始時に PauseNormalBalanceGauge() を呼んだ場合は、イベント終了時に必ず ResumeNormalBalanceGauge() を呼んでください。
+　　ResumeNormalBalanceGauge() を呼び忘れると、通常ゲージが止まったままになります。
+
+　・イベント用レイアウトに切り替えたい場合
+　　SetEventVerticalLayoutActive(true) を呼ぶと、イベント用の縦表示レイアウトに切り替わります。
+　　SetEventVerticalLayoutActive(false) を呼ぶと、通常の横表示レイアウトに戻ります。
+　　個別に呼ぶ場合は SwitchToEventVerticalLayout() / SwitchToNormalHorizontalLayout() を使います。
+
+　・スナイパー防御イベントで使う場合
+　　イベント開始時に EnableSniperDefenseMode() を呼びます。
+　　狙われる位置を変える場合は SetSniperTargetPosition(0.0f～1.0f) を呼びます。
+　　撃たれたタイミングの成功/失敗判定は ResolveSniperDefenseShot() を呼びます。
+　　イベント終了時は DisableSniperDefenseMode() を呼びます。
+
+　・マトリックス回避イベントで使う場合
+　　イベント開始時に EnableMatrixAvoidMode() を呼びます。
+　　イベント終了時は DisableMatrixAvoidMode() を呼びます。
+
+　・ゲージ状態を初期化したい場合
+　　ResetBalance() を呼びます。
+　　現在ゲージ内に入っているか確認したい場合は IsInsideTarget() を使います。
+
+　◆注意点
+　・playMode、gaugeDirection などの内部状態は、イベント側から直接変更しないでください。
+　・ゲージの見た目は動かしたいが、判定だけ止めたい場合などは別仕様になるため、PauseNormalBalanceGauge() をそのまま使うべきか確認してください。
+　・Inspector で gaugeRoot / balanceBar / targetZone / balancePoint を設定してください。
+　・スナイパー防御では sniperDefenseStickTarget、マトリックス回避では Matrix Avoid Mode の各値を確認してください。
+　・成功、失敗、ダメージ連携は onBalanceSuccess / onBalanceMiss / onDamage に設定します。
+　・Animator を使う場合は animator と unbalanceBoolName を Animator Controller 側の Bool 名と合わせてください。
+ */
 public class BalanceManager : MonoBehaviour
 {
     // 将来的なイベント切り替え用。
@@ -176,6 +220,7 @@ public class BalanceManager : MonoBehaviour
     private bool hasSniperDefenseStickBasePosition;
     private bool isInsideTarget;
     private bool wasInsideTarget;
+    private bool isNormalBalancePaused;
     private Coroutine unbalanceCoroutine;
     private float nextTimerLogTime;
     private bool hasSavedHorizontalLayout;
@@ -188,6 +233,7 @@ public class BalanceManager : MonoBehaviour
     public float ChallengeRemainingTime => Mathf.Max(0f, challengeTimeLimit - challengeTimer);
     public BalanceGaugeDirection GaugeDirection => gaugeDirection;
     public BalancePlayMode PlayMode => playMode;
+    public bool IsNormalBalancePaused => isNormalBalancePaused;
 
     private void Start()
     {
@@ -245,6 +291,11 @@ public class BalanceManager : MonoBehaviour
 
     private void UpdateNormalMode()
     {
+        if (isNormalBalancePaused)
+        {
+            return;
+        }
+
         if (!useRandomTargetChallenge)
         {
             MoveTargetZone();
@@ -409,6 +460,36 @@ public class BalanceManager : MonoBehaviour
 
         outsideTimer = 0f;
         DebugLog("MatrixAvoidMode disabled.");
+    }
+
+    public void PauseNormalBalanceGauge()
+    {
+        if (isNormalBalancePaused)
+        {
+            return;
+        }
+
+        isNormalBalancePaused = true;
+        outsideTimer = 0f;
+        challengeTimer = 0f;
+        UpdateTimerText();
+        DebugLog("Normal balance gauge paused.");
+    }
+
+    public void ResumeNormalBalanceGauge()
+    {
+        if (!isNormalBalancePaused)
+        {
+            return;
+        }
+
+        isNormalBalancePaused = false;
+        outsideTimer = 0f;
+        challengeTimer = 0f;
+        UpdateBalanceState();
+        wasInsideTarget = isInsideTarget;
+        UpdateTimerText();
+        DebugLog("Normal balance gauge resumed.");
     }
 
     public bool IsInsideTarget()

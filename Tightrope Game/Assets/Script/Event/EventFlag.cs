@@ -5,6 +5,7 @@ public class EventFlag : MonoBehaviour
     // イベントマネージャー
     private EventManager eventManager;
     
+    // イベントマネージャーの中身を設定する
     public void SetManager(EventManager manager)
     {
         eventManager = manager;

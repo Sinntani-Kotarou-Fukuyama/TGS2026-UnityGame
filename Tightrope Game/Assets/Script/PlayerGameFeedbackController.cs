@@ -2,6 +2,41 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+  ◆説明
+　プレイヤーへのゲーム中フィードバックをまとめて管理するスクリプトです。
+　成功音、カウント音、失敗音、ダメージ加算、赤点滅、ゲームオーバーシーンへの遷移を担当します。
+　イベント側のスクリプトは、演出やダメージ発生時に下の public メソッドを呼んでください。
+
+　◆使い方
+　・成功音を鳴らしたい場合
+　　PlaySuccessSound() を呼びます。
+
+　・カウント音を鳴らしたい場合
+　　PlayCountSound() を呼びます。
+
+　・失敗音を鳴らしたい場合
+　　PlayMissSound() を呼びます。
+
+　・ダメージを与えたい場合
+　　AddDamage() を呼ぶと 1 ダメージ加算します。
+　　AddDamage(int amount) を呼ぶと指定した量だけダメージ加算します。
+　　ダメージ加算時には赤点滅も発生します。
+
+　・赤点滅だけ出したい場合
+　　FlashRed() を呼びます。
+
+　・ダメージ数をリセットしたい場合
+　　ResetDamage() を呼びます。
+
+　◆注意点
+　・AddDamage() / AddDamage(int) により damageCount が maxDamageCount 以上になると、gameOverSceneName のシーンへ遷移します。
+　・失敗音だけ鳴らす、赤点滅だけ出す、ダメージだけ加算するなど、イベント内容に合わせて呼ぶメソッドを使い分けてください。
+　・Inspector で audioSource、successClip、countClip、missClip を設定してください。
+　・赤点滅を使う場合は playerRenderers を設定してください。
+　・gameOverSceneName は Build Settings に登録されているシーン名と合わせてください。
+　・現在のダメージ数は DamageCount、最大ダメージ数は MaxDamageCount から読み取りできます。
+ */
 public class PlayerGameFeedbackController : MonoBehaviour
 {
     [Header("Damage")]
