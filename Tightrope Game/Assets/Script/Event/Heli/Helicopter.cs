@@ -99,12 +99,12 @@ public class Helicopter : MonoBehaviour
                 if (time<clocktime)
                 {
                     player.transform.Rotate(new Vector3(0, 0, shake));
-                   // Debug.Log("time60以下");
+                  
                 }
                 if(time>clocktime)
                 {
                     player.transform.Rotate(new Vector3(0, 0, -shake));
-                   // Debug.Log("time60以上");
+                   
                 }
                 if(time>clocktime*2)
                 {
@@ -112,6 +112,7 @@ public class Helicopter : MonoBehaviour
                 }
             }
         }
+       
        
 
     }
@@ -146,6 +147,7 @@ public class Helicopter : MonoBehaviour
         HeliIdouflag = false;
         PlayerShake = true;
         balance.ShakeOn = true;
+       
     }
     void DinoIdouFlag()
     {
@@ -174,6 +176,7 @@ public class Helicopter : MonoBehaviour
     }
    void Explosion()
     {
+        //ヘリを爆発させる
         Vector3 helipos = spawnedObj.transform.position;
         Instantiate(explosion, helipos, Quaternion.identity);
         spawnedObj.SetActive(false);
@@ -185,6 +188,8 @@ public class Helicopter : MonoBehaviour
         balance.ExplosionOn = true;
         Invoke(nameof(ExplosionFinish), 2.0f);
         animator.SetBool("Reaction", true);
+        //プレイヤーのバランスを戻す
+        player.transform.rotation = Quaternion.Euler(0, -90, 0);
     }
 
     void DinoWalk()
@@ -208,4 +213,5 @@ public class Helicopter : MonoBehaviour
     {
         balance.ExplosionOn = false;
     }
+   
 }

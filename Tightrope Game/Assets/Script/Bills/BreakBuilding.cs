@@ -4,7 +4,7 @@ public class BreakBuilding : MonoBehaviour
 {
     public BreakablePart[] parts;
     public float debrisLifetime = 3f; // ”j•Ğ‚ªc‚éŠÔi•bj
-
+    [SerializeField] float breakstr = 12f;
    
 
     public GameObject breakSoundPrefab; 
@@ -13,7 +13,7 @@ public class BreakBuilding : MonoBehaviour
     {
         foreach (var p in parts)
         {
-            p.Break(hitPos, 12f);
+            p.Break(hitPos, breakstr);
             Destroy(p.gameObject, debrisLifetime);
         }
 

@@ -6,11 +6,17 @@ public class CameraSwhich : MonoBehaviour
 {
     //CameraManagerにアタッチしてある
     //Camera1にManCamera,Camera2にDinoCameraを入れる
-    [SerializeField] private CinemachineCamera mancamera;
+    [SerializeField,Header("カメラ")] private CinemachineCamera mancamera;
     [SerializeField] private CinemachineCamera dinocamera;
     [SerializeField] private CinemachineCamera eventdinocamera;
+    [SerializeField] private CinemachineCamera posingdinocamera;
+    [SerializeField] private CinemachineCamera posingdinocamera2;
+    [SerializeField] private CinemachineCamera posingdinocamera3;
+    [SerializeField,Header("イベント用")] PosingEvent Posing;
+    [SerializeField] Transform player;//ポーズ取る用
+    [SerializeField] Transform Stick;//棒持ち上げ用
+   
 
-    
     void Start()
     {
         Debug.Log("怪獣注目のやつEscでスキップできるよ");
@@ -68,5 +74,42 @@ public class CameraSwhich : MonoBehaviour
     {
         mancamera.Priority.Value = 15;
         eventdinocamera.Priority.Value = 0;
+    }
+    public void PosingCameraSet()
+    {
+        var brain = Camera.main.GetComponent<CinemachineBrain>();
+
+        //DefaltBlendをEaseInOut(カメラをゆっくり切り替え)に変更
+        var blend = brain.DefaultBlend;
+        blend.Style = CinemachineBlendDefinition.Styles.EaseInOut;
+        blend.Time = 2f;
+        brain.DefaultBlend = blend;
+
+        mancamera.Priority.Value = 5;
+        posingdinocamera.Priority.Value = 15;
+        Invoke("PosingFinish", 6.5f);
+    }
+    void PosingFinish()
+    {
+        Posing.HahenTextTrue();
+       
+        var brain = Camera.main.GetComponent<CinemachineBrain>();
+
+        //DefaltBlendをcut(カメラを瞬時切り替え)に変更
+        var blend = brain.DefaultBlend;
+        blend.Style = CinemachineBlendDefinition.Styles.Cut;
+        blend.Time = 0f;
+        brain.DefaultBlend = blend;
+        //カメラの描画優先度を変える
+        posingdinocamera2.Priority.Value = 15;
+        posingdinocamera.Priority.Value = 0;
+        Invoke(nameof(PosingCamera2), 2.0f);
+    }
+    void PosingCamera2()
+    {
+        Posing.HahenTextFalse();
+        //カメラの描画優先度を変える
+        posingdinocamera3.Priority.Value = 15;
+        posingdinocamera2.Priority.Value = 0;
     }
 }

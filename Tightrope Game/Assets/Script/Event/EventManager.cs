@@ -24,11 +24,13 @@ public class EventManager : MonoBehaviour
     // イベントを起こすためのゲームオブジェクト
     [SerializeField,Header("地震イベントを起こすゲームオブジェクト")] private Earthquake e_earthquake;
     [SerializeField,Header("ヘリイベントを起こすゲームオブジェクト")] private Helicopter heliscript;//ヘリイベント呼び出し用
+    [SerializeField,Header("ポーズイベントを起こすゲームオブジェクト")] private PosingEvent posingscript;//ポーズイベント呼び出し用
     //イベントの種類
     public enum EventType
     {
         Earthquake,   // 地震
         Helicopter,   //ヘリ
+        Posing,       //ポーズ
     }
 
 
@@ -59,6 +61,10 @@ public class EventManager : MonoBehaviour
             // ヘリイベントの場合
             case (int)EventType.Helicopter:
                 heliscript.EventFlag(); // ヘリイベントを起こす
+                break;
+            // ポーズイベントの場合
+            case (int)EventType.Posing:
+               posingscript.EventFlag(); // ポーズイベントを起こす
                 break;
             default:
                 Debug.Log("イベントが起こりました。");
