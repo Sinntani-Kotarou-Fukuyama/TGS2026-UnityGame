@@ -40,7 +40,7 @@ public class PosingDino : MonoBehaviour
     }
     public void BreakBill()
     {
-        GameObject targetObject = GameObject.Find("”j‰ó‰Â”\Â‰©ƒrƒ‹ (3)");
+        GameObject targetObject = GameObject.Find("”j•Ğ”ò‚Î‚·ƒrƒ‹");
         if (targetObject != null)
         {
            bill = targetObject.GetComponent<BreakBuilding>();
