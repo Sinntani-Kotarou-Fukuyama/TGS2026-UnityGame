@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 4682955714724023603}
   - component: {fileID: 2464741653529898141}
   - component: {fileID: 616190195648367296}
+  - component: {fileID: 4201038215807109861}
   m_Layer: 0
   m_Name: "\u7834\u72472"
-  m_TagString: Untagged
+  m_TagString: Hahen
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -110,7 +111,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -130,12 +131,25 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.2, y: 0.099999905, z: 1.3}
-  m_Center: {x: 0.39999998, y: 3, z: -0.00000011920929}
+  m_Size: {x: 1.4001325, y: 0.099999905, z: 1.3766394}
+  m_Center: {x: 0.41499928, y: 3, z: 0.03350375}
+--- !u!114 &4201038215807109861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624264678796400858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfc25e71fc9c1fe4fb5cb110f8ef2d73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
 --- !u!1 &3261954208123468516
 GameObject:
   m_ObjectHideFlags: 0
@@ -148,7 +162,7 @@ GameObject:
   - component: {fileID: 4821790008723533780}
   m_Layer: 0
   m_Name: "\u7834\u7247"
-  m_TagString: Untagged
+  m_TagString: Hahen
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -186,6 +200,8 @@ MonoBehaviour:
   roteY: 20
   roteZ: 0
   speed: 10
+  slowspeed: 0.25
+  slow: 0
 --- !u!1 &8139043720036015439
 GameObject:
   m_ObjectHideFlags: 0
@@ -199,9 +215,10 @@ GameObject:
   - component: {fileID: 70077888126559933}
   - component: {fileID: 5933916262225227610}
   - component: {fileID: 9177549312478225505}
+  - component: {fileID: 4315791993524327850}
   m_Layer: 0
   m_Name: "\u7834\u72471"
-  m_TagString: Untagged
+  m_TagString: Hahen
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -296,7 +313,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -316,9 +333,22 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.2, y: 0.099999905, z: 1.3}
-  m_Center: {x: 0.39999998, y: 3, z: -0.00000011920929}
+  m_Size: {x: 1.4549248, y: 0.09999989, z: 1.3392733}
+  m_Center: {x: 0.41587964, y: 3.0000641, z: 0.015449336}
+--- !u!114 &4315791993524327850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8139043720036015439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfc25e71fc9c1fe4fb5cb110f8ef2d73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}

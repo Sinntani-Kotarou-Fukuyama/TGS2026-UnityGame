@@ -46,9 +46,15 @@ public class PosingDino : MonoBehaviour
            bill = targetObject.GetComponent<BreakBuilding>();
         }
         bill.Break(transform.position);//ビルを壊す
-        Vector3 pos = new Vector3(-21.144f, 2.354f, -4.095f);
+        Debug.Log("ビル破壊");
+        Vector3 pos = new Vector3(-21.144f, 2.25f, -4.15f);//+が左、-が右
         spawnedHahen=Instantiate(Hahen,pos,Quaternion.identity);
-       
+        Invoke(nameof(DestroyDino), 3.0f);
     }
-    
+   
+    void DestroyDino()
+    {
+        Destroy(gameObject);
+    }
+
 }

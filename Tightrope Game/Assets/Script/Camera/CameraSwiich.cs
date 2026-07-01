@@ -30,13 +30,7 @@ public class CameraSwhich : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            var brain = Camera.main.GetComponent<CinemachineBrain>();
-
-            //DefaltBlendをcut(カメラを瞬時切り替え)に変更
-            var blend = brain.DefaultBlend;
-            blend.Style = CinemachineBlendDefinition.Styles.Cut;
-            blend.Time = 0f;
-            brain.DefaultBlend = blend;
+            
             //カメラの描画優先度を変える
             mancamera.Priority.Value = 15;
             dinocamera.Priority.Value = 5;
@@ -50,21 +44,19 @@ public class CameraSwhich : MonoBehaviour
         mancamera.Priority.Value = 5;
         dinocamera.Priority.Value = 15;
     }
-    private void CameraSet()
+    public void CameraSet()
     {
         //カメラの描画優先度を変える
+        BlendEaseInOut();//カメラをゆっくり切り替え
         mancamera.Priority.Value = 15;
         dinocamera.Priority.Value = 5;
+        posingdinocamera.Priority.Value = 5;
+        posingdinocamera2.Priority.Value = 5;
+        posingdinocamera3.Priority.Value = 5;
     }
     public void EventCameraSet()
     {
-        var brain = Camera.main.GetComponent<CinemachineBrain>();
-
-        //DefaltBlendをEaseInOut(カメラをゆっくり切り替え)に変更
-        var blend = brain.DefaultBlend;
-        blend.Style = CinemachineBlendDefinition.Styles.EaseInOut;
-        blend.Time = 2f;
-        brain.DefaultBlend = blend;
+        BlendEaseInOut();//カメラをゆっくり切り替え
 
         mancamera.Priority.Value = 5;
         eventdinocamera.Priority.Value = 15;
@@ -77,13 +69,7 @@ public class CameraSwhich : MonoBehaviour
     }
     public void PosingCameraSet()
     {
-        var brain = Camera.main.GetComponent<CinemachineBrain>();
-
-        //DefaltBlendをEaseInOut(カメラをゆっくり切り替え)に変更
-        var blend = brain.DefaultBlend;
-        blend.Style = CinemachineBlendDefinition.Styles.EaseInOut;
-        blend.Time = 2f;
-        brain.DefaultBlend = blend;
+        BlendEaseInOut();//カメラをゆっくり切り替え
 
         mancamera.Priority.Value = 5;
         posingdinocamera.Priority.Value = 15;
@@ -92,14 +78,8 @@ public class CameraSwhich : MonoBehaviour
     void PosingFinish()
     {
         Posing.HahenTextTrue();
-       
-        var brain = Camera.main.GetComponent<CinemachineBrain>();
 
-        //DefaltBlendをcut(カメラを瞬時切り替え)に変更
-        var blend = brain.DefaultBlend;
-        blend.Style = CinemachineBlendDefinition.Styles.Cut;
-        blend.Time = 0f;
-        brain.DefaultBlend = blend;
+        BleinCut();//カメラを瞬時切り替え
         //カメラの描画優先度を変える
         posingdinocamera2.Priority.Value = 15;
         posingdinocamera.Priority.Value = 0;
@@ -111,5 +91,26 @@ public class CameraSwhich : MonoBehaviour
         //カメラの描画優先度を変える
         posingdinocamera3.Priority.Value = 15;
         posingdinocamera2.Priority.Value = 0;
+    }
+    void BlendEaseInOut()//カメラをゆっくり切り替え
+
+    {
+        var brain = Camera.main.GetComponent<CinemachineBrain>();
+
+        //DefaltBlendをEaseInOut(カメラをゆっくり切り替え)に変更
+        var blend = brain.DefaultBlend;
+        blend.Style = CinemachineBlendDefinition.Styles.EaseInOut;
+        blend.Time = 2f;
+        brain.DefaultBlend = blend;
+    }
+    void BleinCut()//カメラを瞬時切り替え
+    {
+        var brain = Camera.main.GetComponent<CinemachineBrain>();
+
+        //DefaltBlendをcut(カメラを瞬時切り替え)に変更
+        var blend = brain.DefaultBlend;
+        blend.Style = CinemachineBlendDefinition.Styles.Cut;
+        blend.Time = 0f;
+        brain.DefaultBlend = blend;
     }
 }
