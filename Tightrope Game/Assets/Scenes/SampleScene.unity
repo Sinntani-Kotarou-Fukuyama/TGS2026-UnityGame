@@ -131,10 +131,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (53)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -233,10 +229,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (51)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -480,10 +472,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (42)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -577,10 +565,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (61)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -893,21 +877,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
---- !u!4 &60359966 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7716927490021473827, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &64184353 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7836277152425606192, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &69342967 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 202316616451522153, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &76622497 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 664776767152005846, guid: 24a4954db6cc9f04288f2482040da3d3, type: 3}
@@ -1061,13 +1030,9 @@ Transform:
   - {fileID: 1194680880}
   - {fileID: 1410130572}
   - {fileID: 1478983698}
-<<<<<<< Updated upstream
   - {fileID: 1542360271}
   - {fileID: 279367932}
   - {fileID: 1197145430}
-=======
-  - {fileID: 1765126816}
->>>>>>> Stashed changes
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &101957845
@@ -1276,11 +1241,6 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 7820747144122255628, guid: f2fa07e189efb654d886ca7045692383, type: 3}
   m_PrefabInstance: {fileID: 101957845}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &116110111 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6401624799670101447, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &118453667 stripped
 Transform:
@@ -1821,10 +1781,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (8)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -1938,11 +1894,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1424373510}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &192291729 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3556021044327147972, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &196079421
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1954,10 +1905,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (15)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -2108,11 +2055,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2c3d8e967ba758a449ba6de7fa5ae517, type: 3}
   m_PrefabInstance: {fileID: 199134146}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &209432530 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 441336003480015868, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &218619799
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2261,11 +2203,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 38462bc242c05c4499c79944f8b56e78, type: 3}
---- !u!4 &224365845 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7439786354710382807, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &263164710
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2277,10 +2214,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (19)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -2577,10 +2510,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (7)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -2952,11 +2881,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
---- !u!4 &366789515 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6760425956174915683, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &369233789
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3039,11 +2963,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1510712901304232389, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
   m_PrefabInstance: {fileID: 1435427517}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &388481436 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1749936127152285896, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &391783090
 GameObject:
   m_ObjectHideFlags: 0
@@ -3101,11 +3020,6 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5140431719007091951, guid: cd9b281bc8f82e54b9c6446b1f4c5548, type: 3}
   m_PrefabInstance: {fileID: 1031576723}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &397145699 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3659750346440627852, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &400873623
 PrefabInstance:
@@ -3175,10 +3089,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (6)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -3793,10 +3703,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (21)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -3896,10 +3802,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (68)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -3993,10 +3895,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (39)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -4158,10 +4056,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (13)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -4260,10 +4154,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (65)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -4544,11 +4434,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
---- !u!4 &483804842 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4812333364201412658, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &495656386 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6288663319957966782, guid: 3efa18409f3a284408c9f34da9b2cecb, type: 3}
@@ -4565,10 +4450,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (14)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -4651,11 +4532,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
   m_PrefabInstance: {fileID: 498275994}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &498601465 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6492109090532587795, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &507934373
 PrefabInstance:
@@ -4785,11 +4661,6 @@ Transform:
   - {fileID: 1550136033}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &517269199 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8059732916437138399, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &523084729
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4991,11 +4862,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1510712901304232389, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
   m_PrefabInstance: {fileID: 930256950}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &544962293 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5010400642997810505, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &546056665 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9058432095749335609, guid: e555ffc7cc719a74c8ca8d3f395dc177, type: 3}
@@ -5140,11 +5006,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2c3d8e967ba758a449ba6de7fa5ae517, type: 3}
   m_PrefabInstance: {fileID: 548691638}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &551481673 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1989760266530555549, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &552290851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5244,11 +5105,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1481858064}
   m_SourcePrefab: {fileID: 100100000, guid: b05174020db8d804f8bdaaa57b149f20, type: 3}
---- !u!4 &558654454 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7475532003582243785, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &561488828
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5621,19 +5477,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bc505c106dc966428036817850d80c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< Updated upstream
-=======
---- !u!4 &578259462 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1602817444349381328, guid: da1c77f89405ff04ea0fc7cf0bd0d8d8, type: 3}
-  m_PrefabInstance: {fileID: 578259460}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &581038519 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2349560298825811568, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1001 &592235082
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5722,10 +5565,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (41)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -6136,20 +5975,10 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2828345539101371827, guid: 7897b8afbf7cec94c88c527d2d8ad560, type: 3}
   m_PrefabInstance: {fileID: 616626273}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &618883608 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6420379935883139287, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &626556205 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1510712901304232389, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
   m_PrefabInstance: {fileID: 1021293968}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &626849014 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5576543757694203789, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &635757450 stripped
 Transform:
@@ -6229,10 +6058,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (66)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -6354,10 +6179,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (35)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -6456,11 +6277,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3490d43bb045048b55d2edd5573a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &663752197 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2731103640238111793, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &665772766
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6472,10 +6288,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (70)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -6766,10 +6578,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (50)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -6934,10 +6742,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (34)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -7032,10 +6836,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (3)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -7118,11 +6918,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
   m_PrefabInstance: {fileID: 701741888}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &707247552 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7300410994894412768, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &713676772
 GameObject:
   m_ObjectHideFlags: 0
@@ -7198,11 +6993,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 713676772}
   m_CullTransparentMesh: 1
---- !u!4 &714626670 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5597045038865044916, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &716245110 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7820747144122255628, guid: f2fa07e189efb654d886ca7045692383, type: 3}
@@ -7422,10 +7212,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (46)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -7656,10 +7442,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (26)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -7972,11 +7754,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 760942541}
   m_CullTransparentMesh: 1
---- !u!4 &763047333 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4150104399703891883, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &766344064
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7988,10 +7765,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (48)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -8300,11 +8073,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 779297924}
   m_CullTransparentMesh: 1
---- !u!4 &782953453 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1494320191441797420, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &791351389
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8316,10 +8084,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (56)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -8721,11 +8485,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6b3adbc6acf41614d994120951dec854, type: 3}
---- !u!4 &810111975 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4175900157841205391, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &810250617 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 664776767152005846, guid: 24a4954db6cc9f04288f2482040da3d3, type: 3}
@@ -8742,10 +8501,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (33)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -9097,10 +8852,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (12)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -9216,10 +8967,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (29)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -9330,10 +9077,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (28)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -9428,10 +9171,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (38)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -9513,16 +9252,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
   m_PrefabInstance: {fileID: 839362974}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &841261241 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3141509563499752017, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &843146571 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7570942319557882368, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
   m_PrefabAsset: {fileID: 0}
 --- !u!54 &843881659 stripped
 Rigidbody:
@@ -9680,10 +9409,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (55)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -10079,10 +9804,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (45)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -10165,11 +9886,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
   m_PrefabInstance: {fileID: 886228241}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &888816444 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1671335672982487236, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &899918288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10181,10 +9897,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (54)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -10350,11 +10062,6 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 6895439021422925029, guid: 41e406a5a55dddc43bd0ce556a427c10, type: 3}
   m_PrefabInstance: {fileID: 1518865357}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &901340670 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4830692171287978217, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &906513874 stripped
 Transform:
@@ -10546,16 +10253,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2c3d8e967ba758a449ba6de7fa5ae517, type: 3}
   m_PrefabInstance: {fileID: 943055818}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &972517828 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 727470981732670910, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &974615777 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2202920995280634872, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &996324196 stripped
 GameObject:
@@ -10901,11 +10598,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 2141926560}
   m_SourcePrefab: {fileID: 100100000, guid: 5ee0d8660da4ff94c90727c228704266, type: 3}
---- !u!4 &1038177957 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2290912183598256236, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!54 &1040458820 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 9026883585941259984, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
@@ -11136,27 +10828,27 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 202316616451522153, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -32.999638
+      value: -22.358646
       objectReference: {fileID: 0}
     - target: {fileID: 202316616451522153, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 17.054115
+      value: -5.763401
       objectReference: {fileID: 0}
     - target: {fileID: 202316616451522153, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 90.935394
+      value: 86.56827
       objectReference: {fileID: 0}
     - target: {fileID: 1494320191441797420, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -30.70127
+      value: 11.312548
       objectReference: {fileID: 0}
     - target: {fileID: 1494320191441797420, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 179.7186
+      value: 179.93579
       objectReference: {fileID: 0}
     - target: {fileID: 1494320191441797420, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -178.40123
+      value: -178.7617
       objectReference: {fileID: 0}
     - target: {fileID: 1671335672982487236, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -11164,11 +10856,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1671335672982487236, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.03917538
+      value: 0.039177127
       objectReference: {fileID: 0}
     - target: {fileID: 1671335672982487236, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.023117408
+      value: -0.023117507
       objectReference: {fileID: 0}
     - target: {fileID: 1749936127152285896, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -11184,47 +10876,47 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1983495089435559984, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 17.48818
+      value: 19.549496
       objectReference: {fileID: 0}
     - target: {fileID: 1983495089435559984, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -3.5551138
+      value: -2.9086466
       objectReference: {fileID: 0}
     - target: {fileID: 1983495089435559984, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -14.320449
+      value: -11.295574
       objectReference: {fileID: 0}
     - target: {fileID: 1989760266530555549, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.49778602
+      value: -0.4977856
       objectReference: {fileID: 0}
     - target: {fileID: 1989760266530555549, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 2.3249543
+      value: 2.3249552
       objectReference: {fileID: 0}
     - target: {fileID: 2056079594521962156, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -86.53829
+      value: -87.2124
       objectReference: {fileID: 0}
     - target: {fileID: 2056079594521962156, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.027377708
+      value: -0.04526662
       objectReference: {fileID: 0}
     - target: {fileID: 2056079594521962156, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -179.97194
+      value: -179.95439
       objectReference: {fileID: 0}
     - target: {fileID: 2202920995280634872, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -56.8437
+      value: -29.961868
       objectReference: {fileID: 0}
     - target: {fileID: 2202920995280634872, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 179.9968
+      value: 0.0015150032
       objectReference: {fileID: 0}
     - target: {fileID: 2202920995280634872, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0.0032921103
+      value: 179.99817
       objectReference: {fileID: 0}
     - target: {fileID: 2233287355492931491, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalScale.x
@@ -11272,55 +10964,51 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2339926184716865076, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -3.2985983
+      value: -3.298598
       objectReference: {fileID: 0}
     - target: {fileID: 2339926184716865076, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.000001977628
+      value: -0.0000025471845
       objectReference: {fileID: 0}
     - target: {fileID: 2339926184716865076, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 19.290964
+      value: 19.290962
       objectReference: {fileID: 0}
     - target: {fileID: 2349560298825811568, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -3.462673
+      value: -3.4626718
       objectReference: {fileID: 0}
     - target: {fileID: 2349560298825811568, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 1.4408382
+      value: 1.4408373
       objectReference: {fileID: 0}
     - target: {fileID: 2349560298825811568, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 85.26372
+      value: 85.26371
       objectReference: {fileID: 0}
     - target: {fileID: 2431812330731415230, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -5.8201833
+      value: -5.8201814
       objectReference: {fileID: 0}
     - target: {fileID: 2431812330731415230, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.000030632713
+      value: 0.000030665873
       objectReference: {fileID: 0}
     - target: {fileID: 2431812330731415230, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0.0000010530232
+      value: 0.0000013562939
       objectReference: {fileID: 0}
     - target: {fileID: 2536508178097288247, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.8567099
-      objectReference: {fileID: 0}
-    - target: {fileID: 2536508178097288247, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 1.7916657
+      value: -0.8567114
       objectReference: {fileID: 0}
     - target: {fileID: 2679001261788212115, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -15.649248
+      value: -15.649249
       objectReference: {fileID: 0}
     - target: {fileID: 2679001261788212115, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.00006694134
+      value: 0.00006864232
       objectReference: {fileID: 0}
     - target: {fileID: 2679001261788212115, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -11328,7 +11016,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2696151631038749371, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 16.92954
+      value: 16.929543
       objectReference: {fileID: 0}
     - target: {fileID: 2696151631038749371, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -11336,63 +11024,59 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2731103640238111793, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -1.3635414
+      value: -1.3635416
       objectReference: {fileID: 0}
     - target: {fileID: 2731103640238111793, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.00017590048
+      value: 0.00017382545
       objectReference: {fileID: 0}
     - target: {fileID: 2731103640238111793, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -24.503498
+      value: -24.5035
       objectReference: {fileID: 0}
     - target: {fileID: 3141509563499752017, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 10.6318865
+      value: 41.893097
       objectReference: {fileID: 0}
     - target: {fileID: 3141509563499752017, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.34286594
+      value: -1.2004702
       objectReference: {fileID: 0}
     - target: {fileID: 3141509563499752017, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -1.2299153
+      value: -1.6239699
       objectReference: {fileID: 0}
     - target: {fileID: 3465510106867343354, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 37.231064
+      value: 68.77433
       objectReference: {fileID: 0}
     - target: {fileID: 3465510106867343354, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 1.0346363
+      value: 177.00162
       objectReference: {fileID: 0}
     - target: {fileID: 3465510106867343354, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 1.5182538
-      objectReference: {fileID: 0}
-    - target: {fileID: 3566025896844707471, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -12.242092
+      value: 176.65956
       objectReference: {fileID: 0}
     - target: {fileID: 3566025896844707471, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.21499258
+      value: 0.2149915
       objectReference: {fileID: 0}
     - target: {fileID: 3566025896844707471, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -1.0139017
+      value: -1.013902
       objectReference: {fileID: 0}
     - target: {fileID: 3659750346440627852, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 11.649516
+      value: 11.382178
       objectReference: {fileID: 0}
     - target: {fileID: 3659750346440627852, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 8.982489
+      value: 2.8558645
       objectReference: {fileID: 0}
     - target: {fileID: 3659750346440627852, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -4.015146
+      value: -1.2830465
       objectReference: {fileID: 0}
     - target: {fileID: 3697185708021895259, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalScale.x
@@ -11452,39 +11136,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4150104399703891883, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.00005087168
+      value: -0.00005233913
       objectReference: {fileID: 0}
     - target: {fileID: 4150104399703891883, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.00000910658
+      value: -0.0000073347437
       objectReference: {fileID: 0}
     - target: {fileID: 4175900157841205391, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.058841344
+      value: -0.05885035
       objectReference: {fileID: 0}
     - target: {fileID: 4175900157841205391, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.3093607
+      value: 0.3250058
       objectReference: {fileID: 0}
     - target: {fileID: 4175900157841205391, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.0026642175
+      value: 0.0027988288
       objectReference: {fileID: 0}
     - target: {fileID: 4527347439697673121, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -4.0710976e-13
+      value: -5.243573e-13
       objectReference: {fileID: 0}
     - target: {fileID: 4527347439697673121, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.000013660388
+      value: -0.000013200048
       objectReference: {fileID: 0}
     - target: {fileID: 4527347439697673121, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 4.85313e-20
+      value: 6.2508294e-20
       objectReference: {fileID: 0}
     - target: {fileID: 4812333364201412658, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 8.536893
+      value: 8.536892
       objectReference: {fileID: 0}
     - target: {fileID: 4812333364201412658, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -11492,11 +11176,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4953233658179957267, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 5.432858
+      value: 5.432857
       objectReference: {fileID: 0}
     - target: {fileID: 4953233658179957267, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 4.6146517
+      value: 4.6146507
       objectReference: {fileID: 0}
     - target: {fileID: 5010400642997810505, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -11504,11 +11188,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5010400642997810505, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.003054424
+      value: -0.0030551918
       objectReference: {fileID: 0}
     - target: {fileID: 5010400642997810505, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.018095896
+      value: -0.0180956
       objectReference: {fileID: 0}
     - target: {fileID: 5387073475596830727, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -11516,15 +11200,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5387073475596830727, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.10252165
+      value: 0.10252103
       objectReference: {fileID: 0}
     - target: {fileID: 5387073475596830727, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -1.6856681
+      value: -1.6856679
       objectReference: {fileID: 0}
     - target: {fileID: 5576543757694203789, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 2.812323
+      value: 2.8123248
       objectReference: {fileID: 0}
     - target: {fileID: 5576543757694203789, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -11532,7 +11216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5576543757694203789, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0.92533946
+      value: 0.92533964
       objectReference: {fileID: 0}
     - target: {fileID: 5597045038865044916, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -11540,15 +11224,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5597045038865044916, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.00001974865
+      value: 0.000021041731
       objectReference: {fileID: 0}
     - target: {fileID: 5597045038865044916, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 2.2835107
+      value: 2.2835114
       objectReference: {fileID: 0}
     - target: {fileID: 5607764297884668808, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 14.365625
+      value: 14.365623
       objectReference: {fileID: 0}
     - target: {fileID: 5607764297884668808, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -11556,23 +11240,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5667423737822132791, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 2.812327
+      value: 2.8123255
       objectReference: {fileID: 0}
     - target: {fileID: 5667423737822132791, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.14666785
+      value: -0.14666796
       objectReference: {fileID: 0}
     - target: {fileID: 5667423737822132791, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -0.9253382
+      value: -0.92533803
       objectReference: {fileID: 0}
     - target: {fileID: 5767660473159999573, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -3.462663
+      value: -3.4626632
       objectReference: {fileID: 0}
     - target: {fileID: 5767660473159999573, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -1.4408375
+      value: -1.4408363
       objectReference: {fileID: 0}
     - target: {fileID: 5767660473159999573, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -11616,51 +11300,51 @@ PrefabInstance:
       objectReference: {fileID: 2036311206}
     - target: {fileID: 6209198842646012970, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 125.671555
+      value: 125.67155
       objectReference: {fileID: 0}
     - target: {fileID: 6321084863423456316, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -4.5051928
+      value: -17.92773
       objectReference: {fileID: 0}
     - target: {fileID: 6321084863423456316, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 48.54884
+      value: 26.012196
       objectReference: {fileID: 0}
     - target: {fileID: 6321084863423456316, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -96.15556
+      value: -97.65983
       objectReference: {fileID: 0}
     - target: {fileID: 6401624799670101447, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -4.071121e-13
+      value: -5.243603e-13
       objectReference: {fileID: 0}
     - target: {fileID: 6401624799670101447, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.000068301895
+      value: 0.000070394715
       objectReference: {fileID: 0}
     - target: {fileID: 6401624799670101447, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -4.3678336e-19
+      value: -5.6257696e-19
       objectReference: {fileID: 0}
     - target: {fileID: 6420379935883139287, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 21.452198
+      value: 14.718422
       objectReference: {fileID: 0}
     - target: {fileID: 6420379935883139287, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -18.631132
+      value: -7.1271124
       objectReference: {fileID: 0}
     - target: {fileID: 6420379935883139287, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 26.572142
+      value: 24.132961
       objectReference: {fileID: 0}
     - target: {fileID: 6492109090532587795, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.8567127
+      value: -0.8567106
       objectReference: {fileID: 0}
     - target: {fileID: 6492109090532587795, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -1.7916652
+      value: -1.7916633
       objectReference: {fileID: 0}
     - target: {fileID: 7185999886079989835, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -11668,7 +11352,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7185999886079989835, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.00014097584
+      value: -0.0001420261
       objectReference: {fileID: 0}
     - target: {fileID: 7185999886079989835, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -11676,15 +11360,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7300410994894412768, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 57.51298
+      value: 61.83239
       objectReference: {fileID: 0}
     - target: {fileID: 7300410994894412768, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 178.96811
+      value: 178.01164
       objectReference: {fileID: 0}
     - target: {fileID: 7300410994894412768, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 177.84618
+      value: 178.8891
       objectReference: {fileID: 0}
     - target: {fileID: 7327116920031152673, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_AnimatePhysics
@@ -11696,11 +11380,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7439786354710382807, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 4.0241256
+      value: 4.024126
       objectReference: {fileID: 0}
     - target: {fileID: 7439786354710382807, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -3.9921198
+      value: -3.992118
       objectReference: {fileID: 0}
     - target: {fileID: 7439786354710382807, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -11708,31 +11392,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7570942319557882368, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -0.49778405
+      value: -0.49778306
       objectReference: {fileID: 0}
     - target: {fileID: 7570942319557882368, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -2.324954
+      value: -2.3249547
       objectReference: {fileID: 0}
     - target: {fileID: 7716927490021473827, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 2.3557334
+      value: 2.3557348
       objectReference: {fileID: 0}
     - target: {fileID: 7716927490021473827, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0.116574794
+      value: 0.116574116
       objectReference: {fileID: 0}
     - target: {fileID: 7716927490021473827, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0.14571683
+      value: 0.1457155
       objectReference: {fileID: 0}
     - target: {fileID: 8158979411118034609, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8253772973629899221, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -6.4222236
       objectReference: {fileID: 0}
     - target: {fileID: 8253772973629899221, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -11740,11 +11420,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644175070683436639, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: 89.98021
+      value: 89.9802
       objectReference: {fileID: 0}
     - target: {fileID: 8644175070683436639, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -0.000027320759
+      value: -0.000026400074
       objectReference: {fileID: 0}
     - target: {fileID: 8695383376980152250, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_Enabled
@@ -11752,10 +11432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 7570942319557882368, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2040285633}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 4036591394322352865, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       insertIndex: -1
@@ -11766,9 +11443,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4036591394322352865, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1452297753}
-    - targetCorrespondingSourceObject: {fileID: 4036591394322352865, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1452297756}
   m_SourcePrefab: {fileID: 100100000, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
 --- !u!1001 &1085869300
 PrefabInstance:
@@ -11781,10 +11455,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (10)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -11879,10 +11549,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (69)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -11982,11 +11648,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3490d43bb045048b55d2edd5573a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &1090431383 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2536508178097288247, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1090552163
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11998,10 +11659,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (24)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -12352,11 +12009,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3490d43bb045048b55d2edd5573a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &1106391068 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3958109231143160873, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1110649665 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8432652868403085474, guid: 59574fee94ef94f429671f06d7a5058b, type: 3}
@@ -12606,10 +12258,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (60)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -12754,11 +12402,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7305796094204931859, guid: c10cd69bea749cd4e8e3b7a6dab85933, type: 3}
   m_PrefabInstance: {fileID: 1625949831}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1141385120 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6321084863423456316, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1142815093
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12892,10 +12535,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (31)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -12989,10 +12628,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (11)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -13774,10 +13409,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (18)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -14017,10 +13648,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (22)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -14288,11 +13915,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7305796094204931859, guid: c10cd69bea749cd4e8e3b7a6dab85933, type: 3}
   m_PrefabInstance: {fileID: 571059396}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1266569388 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2431812330731415230, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1274712029
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14304,10 +13926,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (49)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -14503,10 +14121,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (32)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -14802,11 +14416,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1326837456 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2056079594521962156, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1328123896
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15239,11 +14848,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3490d43bb045048b55d2edd5573a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &1376827805 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 114295400088725228, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1389673148
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15355,11 +14959,6 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 8917726163072354006, guid: b245472f39835104d908669a14c4a374, type: 3}
   m_PrefabInstance: {fileID: 1389673148}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1399976126 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5667423737822132791, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1401820356
 PrefabInstance:
@@ -15731,11 +15330,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
---- !u!4 &1429125605 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3566025896844707471, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1429579933
 GameObject:
   m_ObjectHideFlags: 0
@@ -15945,11 +15539,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
---- !u!4 &1448898708 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 958761491592708671, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1449972505
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16171,95 +15760,14 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.47301388
-  m_Height: 2.898545
+  m_Radius: 0.9
+  m_Height: 4
   m_Direction: 1
-  m_Center: {x: 0, y: 1.3220948, z: 0.066986084}
---- !u!114 &1452297756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452297736}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  boneShape: 1
-  drawBones: 1
-  drawTripods: 0
-  boneSize: 1
-  tripodSize: 1
-  boneColor: {r: 0, g: 0, b: 1, a: 0.5}
-  m_Transforms:
-  - {fileID: 2061686454}
-  - {fileID: 810111975}
-  - {fileID: 1266569388}
-  - {fileID: 763047333}
-  - {fileID: 397145699}
-  - {fileID: 544962293}
-  - {fileID: 888816444}
-  - {fileID: 192291729}
-  - {fileID: 1459368827}
-  - {fileID: 69342967}
-  - {fileID: 618883608}
-  - {fileID: 551481673}
-  - {fileID: 224365845}
-  - {fileID: 714626670}
-  - {fileID: 1714798418}
-  - {fileID: 626849014}
-  - {fileID: 1927221080}
-  - {fileID: 60359966}
-  - {fileID: 1809452342}
-  - {fileID: 498601465}
-  - {fileID: 1602331042}
-  - {fileID: 1429125605}
-  - {fileID: 517269199}
-  - {fileID: 581038519}
-  - {fileID: 663752197}
-  - {fileID: 1606579327}
-  - {fileID: 1782956730}
-  - {fileID: 1141385120}
-  - {fileID: 1479803850}
-  - {fileID: 843146571}
-  - {fileID: 1543185739}
-  - {fileID: 388481436}
-  - {fileID: 366789515}
-  - {fileID: 1399976126}
-  - {fileID: 1780720519}
-  - {fileID: 1760561832}
-  - {fileID: 1106391068}
-  - {fileID: 1090431383}
-  - {fileID: 483804842}
-  - {fileID: 1805576144}
-  - {fileID: 64184353}
-  - {fileID: 1825615992}
-  - {fileID: 2070343364}
-  - {fileID: 972517828}
-  - {fileID: 782953453}
-  - {fileID: 841261241}
-  - {fileID: 558654454}
-  - {fileID: 707247552}
-  - {fileID: 2100049888}
-  - {fileID: 2082335945}
-  - {fileID: 1326837456}
-  - {fileID: 901340670}
-  - {fileID: 209432530}
-  - {fileID: 2023336812}
-  - {fileID: 974615777}
-  - {fileID: 1639929995}
-  - {fileID: 1448898708}
-  - {fileID: 1937997212}
-  - {fileID: 1736278950}
-  - {fileID: 1376827805}
-  - {fileID: 116110111}
-  - {fileID: 1038177957}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &1455975737
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16360,11 +15868,6 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 2828345539101371827, guid: 7897b8afbf7cec94c88c527d2d8ad560, type: 3}
   m_PrefabInstance: {fileID: 1455975737}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1459368827 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7185999886079989835, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1477155523
 PrefabInstance:
@@ -16467,11 +15970,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &1479803850 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1983495089435559984, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1480102645
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16483,10 +15981,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (59)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -16873,10 +16367,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (47)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -17425,10 +16915,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (2)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -17709,7 +17195,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 33c6ee426186e494fa3f6b89fe42b493, type: 3}
   m_PrefabInstance: {fileID: 1537786351}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
 --- !u!114 &1542360268 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6469376863843064002, guid: 16856126b1808f449b4364f90336750b, type: 3}
@@ -17725,12 +17210,6 @@ MonoBehaviour:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
   m_PrefabInstance: {fileID: 1499909595}
-=======
---- !u!4 &1543185739 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8253772973629899221, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
->>>>>>> Stashed changes
   m_PrefabAsset: {fileID: 0}
 --- !u!54 &1543426316 stripped
 Rigidbody:
@@ -17764,10 +17243,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (27)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -18092,10 +17567,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (20)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -18337,10 +17808,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (25)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -19043,7 +18510,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
-<<<<<<< Updated upstream
 --- !u!1001 &1599452991
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19141,18 +18607,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de792a76a91c76142807a0d6495e8502, type: 3}
-=======
---- !u!4 &1602331042 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2339926184716865076, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1606579327 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3886337598706568291, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!4 &1607953491 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8917726163072354006, guid: b245472f39835104d908669a14c4a374, type: 3}
@@ -19226,10 +18680,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -19339,10 +18789,6 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
-      value: RopeParts
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
@@ -19515,11 +18961,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c10cd69bea749cd4e8e3b7a6dab85933, type: 3}
---- !u!4 &1639929995 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7003673174744554797, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1640527130
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19603,10 +19044,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (43)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -19854,10 +19291,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (30)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -19956,7 +19389,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4067465997273866467, guid: 7393b9ae8fff7a1418cf208593fc545c, type: 3}
   m_PrefabInstance: {fileID: 1360537903}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
 --- !u!1001 &1714545167
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20054,13 +19486,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a773505c538c37746ae3a02c283261d3, type: 3}
-=======
---- !u!4 &1714798418 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7284080767525666438, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1001 &1716640119
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20380,11 +19805,6 @@ Transform:
   - {fileID: 810250617}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1736278950 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4527347439697673121, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1751471902
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20447,7 +19867,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2c3d8e967ba758a449ba6de7fa5ae517, type: 3}
   m_PrefabInstance: {fileID: 1751471902}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
 --- !u!1 &1754247158
 GameObject:
   m_ObjectHideFlags: 0
@@ -20584,13 +20003,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1754247158}
   m_CullTransparentMesh: 1
-=======
---- !u!4 &1760561832 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2696151631038749371, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1001 &1762215851
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20602,10 +20014,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (62)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -20705,81 +20113,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3490d43bb045048b55d2edd5573a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1765126815
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1765126816}
-  - component: {fileID: 1765126817}
-  m_Layer: 0
-  m_Name: UnderTheRope_DinoCamera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1765126816
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1765126815}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0.14059995, y: -0.84601074, z: 0.27286994, w: 0.43593532}
-  m_LocalPosition: {x: 12.213, y: 7.941, z: -0.37915492}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 98741599}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1765126817
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1765126815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Priority:
-    Enabled: 0
-    m_Value: 0
-  OutputChannel: 1
-  StandbyUpdate: 2
-  m_StreamingVersion: 20241001
-  m_LegacyPriority: 0
-  Target:
-    TrackingTarget: {fileID: 2019293630}
-    LookAtTarget: {fileID: 1452297738}
-    CustomLookAtTarget: 1
-  Lens:
-    FieldOfView: 60.000004
-    OrthographicSize: 5
-    NearClipPlane: 0.3
-    FarClipPlane: 1000
-    Dutch: 0
-    ModeOverride: 0
-    PhysicalProperties:
-      GateFit: 2
-      SensorSize: {x: 21.946, y: 16.002}
-      LensShift: {x: 0, y: 0}
-      FocusDistance: 10
-      Iso: 200
-      ShutterSpeed: 0.005
-      Aperture: 16
-      BladeCount: 5
-      Curvature: {x: 2, y: 11}
-      BarrelClipping: 0.25
-      Anamorphism: 0
-  BlendHint: 0
 --- !u!1001 &1768400528
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21054,16 +20387,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2c3d8e967ba758a449ba6de7fa5ae517, type: 3}
   m_PrefabInstance: {fileID: 1774634656}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &1780720519 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5607764297884668808, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1782956730 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2679001261788212115, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1784271877
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21157,10 +20480,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (63)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -21276,16 +20595,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3490d43bb045048b55d2edd5573a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &1805576144 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4953233658179957267, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1809452342 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3305338215224836359, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!54 &1812328272 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 9026883585941259984, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
@@ -21350,11 +20659,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3490d43bb045048b55d2edd5573a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &1825615992 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5767660473159999573, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1828614236 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7820747144122255628, guid: f2fa07e189efb654d886ca7045692383, type: 3}
@@ -21849,10 +21153,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -22265,10 +21565,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (44)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -22419,10 +21715,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (9)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -22592,17 +21884,10 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6895439021422925029, guid: 41e406a5a55dddc43bd0ce556a427c10, type: 3}
   m_PrefabInstance: {fileID: 925433073}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< Updated upstream
 --- !u!1 &1929773771 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8430255440781894859, guid: ea4a3e3ba7c6d694d84c84b4e28c9b6f, type: 3}
   m_PrefabInstance: {fileID: 406328639}
-=======
---- !u!4 &1927221080 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5387073475596830727, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
->>>>>>> Stashed changes
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1934396487
 PrefabInstance:
@@ -22721,7 +22006,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24a4954db6cc9f04288f2482040da3d3, type: 3}
-<<<<<<< Updated upstream
 --- !u!1001 &1935087974
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22807,13 +22091,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 16856126b1808f449b4364f90336750b, type: 3}
-=======
---- !u!4 &1937997212 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5983512620869925845, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1001 &1943417282
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23024,10 +22301,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (67)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -23303,10 +22576,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (52)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -23478,10 +22747,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -23940,7 +23205,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-<<<<<<< Updated upstream
 --- !u!114 &2019293635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23959,13 +23223,6 @@ MonoBehaviour:
   pose: {fileID: 675517727}
   DamageFlag: 0
   TextFlag: 1
-=======
---- !u!4 &2023336812 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5829637531013895964, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
->>>>>>> Stashed changes
 --- !u!1 &2025167754
 GameObject:
   m_ObjectHideFlags: 0
@@ -23995,7 +23252,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ecc711851570734bbdf5f4c30d539d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxDamageCount: 100
+  maxDamageCount: 5
   gameOverSceneName: GameOverScene
   audioSource: {fileID: 2019293634}
   successClip: {fileID: 8300000, guid: c35e97cbef747804da5005c6293005c5, type: 3}
@@ -24036,10 +23293,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (16)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -24172,10 +23425,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (17)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -24274,83 +23523,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3490d43bb045048b55d2edd5573a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &2040285632
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2040285633}
-  - component: {fileID: 2040285634}
-  - component: {fileID: 2040285635}
-  m_Layer: 0
-  m_Name: HandCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2040285633
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2040285632}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.27689537, w: 0.9609001}
-  m_LocalPosition: {x: -0.00155, y: 0.00215, z: 0.00048}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 843146571}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 32.15}
---- !u!135 &2040285634
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2040285632}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Radius: 0.01
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!136 &2040285635
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2040285632}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.0038893374
-  m_Height: 0.017502913
-  m_Direction: 1
-  m_Center: {x: -0.0000000021485307, y: -0.0018101342, z: 0.00045007048}
 --- !u!4 &2052810747 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5871738953386835730, guid: 3efa18409f3a284408c9f34da9b2cecb, type: 3}
@@ -24372,10 +23544,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (57)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -24532,11 +23700,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
---- !u!4 &2061686454 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8644175070683436639, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2062819699 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7376279335950549500, guid: d1dc7e08940259a4ea806373c756b152, type: 3}
@@ -24553,10 +23716,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (58)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -24656,16 +23815,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3490d43bb045048b55d2edd5573a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &2070343364 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6209198842646012970, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &2082335945 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4298159172810841585, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!54 &2083535918 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 9026883585941259984, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
@@ -24750,10 +23899,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (64)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -25109,11 +24254,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5140431719007091951, guid: cd9b281bc8f82e54b9c6446b1f4c5548, type: 3}
   m_PrefabInstance: {fileID: 361410715}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &2100049888 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3465510106867343354, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
-  m_PrefabInstance: {fileID: 1081838863}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2105480170
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25244,10 +24384,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (36)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -25357,10 +24493,6 @@ PrefabInstance:
     - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_Name
       value: RopeParts (23)
-      objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
       objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
@@ -25587,10 +24719,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (37)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -25727,10 +24855,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RopeParts (40)
       objectReference: {fileID: 0}
-    - target: {fileID: 393970311659937614, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
-      propertyPath: m_TagString
-      value: RopeParts
-      objectReference: {fileID: 0}
     - target: {fileID: 943155034941316108, guid: 5ec5a4149c4f65a468914f6ccb1abf16, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.13
@@ -25847,9 +24971,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shake: {fileID: 1481858060}
-  amplitudeGain: 10
+  amplitudeGain: 1
   frequencyGain: 1
-  shakeDuration: 20
+  shakeDuration: 1
 --- !u!114 &2141926561 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6523087148022014041, guid: 5ee0d8660da4ff94c90727c228704266, type: 3}

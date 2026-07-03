@@ -5,7 +5,6 @@ TagManager:
   serializedVersion: 3
   tags:
   - Building
-  - RopeParts
   layers:
   - Default
   - TransparentFX
