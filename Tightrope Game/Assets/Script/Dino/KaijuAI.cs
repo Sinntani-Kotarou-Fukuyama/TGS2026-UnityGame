@@ -207,4 +207,26 @@ public class KaijuAI : MonoBehaviour
         if (Vector3.Distance(transform.position, target.position) < 2.0f)
             patrolIndex = (patrolIndex + 1) % patrolPoints.Length;
     }
+
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        // ロープに当たった時
+        if (collision.gameObject.tag == "RopeParts")
+        {
+
+            anim.SetTrigger("UnderTheRope");
+            agent.speed = 0.0f;
+
+
+        }
+    }
+
+    //アニメーションイベントから呼び出される
+    public void ExitUnderTheRope()
+    {
+        // 歩くようにする
+        agent.speed = moveSpeed;
+    }
 }
