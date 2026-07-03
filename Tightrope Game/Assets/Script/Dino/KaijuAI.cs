@@ -2,6 +2,9 @@ using UnityEngine;
 using System.Linq;
 using System.Collections;
 using UnityEngine.AI;
+using System.Xml.Serialization;
+using UnityEngine.PlayerLoop;
+using System.Runtime.CompilerServices;
 
 public class KaijuAI : MonoBehaviour
 {
@@ -207,4 +210,75 @@ public class KaijuAI : MonoBehaviour
         if (Vector3.Distance(transform.position, target.position) < 2.0f)
             patrolIndex = (patrolIndex + 1) % patrolPoints.Length;
     }
+
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "RopeParts")
+        {
+
+            anim.SetTrigger("UnderTheRope");
+            agent.speed = 0.0f;
+
+
+        }
+    }
+    
+    /*
+    // 怪獣がコライダーに当たった時
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("RopeParts"))
+        {
+            
+            anim.SetTrigger("UnderTheRope");
+            agent.speed = 0.0f;
+            
+            
+        }
+    }
+    */
+    /*
+    private void OnTriggerStay(Collider other)
+    {
+        Debug.Log("衝撃を与えましたwww");
+        if (other.CompareTag("RopeParts"))
+        {
+            AnimatorStateInfo stateInfo = anim.GetCurrentAnimatorStateInfo(0);
+            if (stateInfo.IsName("UnderTheRope"))
+            {
+                Rigidbody rigidbody = other.GetComponent<Rigidbody>();
+                
+
+
+
+                if (stateInfo.normalizedTime < 0.3f)
+                {
+                    
+                }
+                else if (stateInfo.normalizedTime == 0.6f)
+                {
+                    
+                    //rigidbody.MovePosition(rigidbody.position + Vector3.up * Time.deltaTime * 50.0f);
+                    rigidbody.AddForceAtPosition(new Vector3(0.0f, 10.0f, 0.0f), rigidbody.position, ForceMode.Impulse);
+                    Debug.Log("衝撃を与えました");
+                }
+                else if (stateInfo.normalizedTime < 1.0f)
+                {
+
+                }
+            }
+        }
+        
+    }
+    */
+    //アニメーションイベントから呼び出される
+    public void ExitUnderTheRope()
+    {
+        // 歩くようにする
+        agent.speed = moveSpeed;
+    }
+    
 }
+
+
