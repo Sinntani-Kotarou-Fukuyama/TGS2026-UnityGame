@@ -3150,7 +3150,7 @@ MonoBehaviour:
   matrixAvoidBulletShooter: {fileID: 1086759354}
   matrixAvoidAnimator: {fileID: 2019293627}
   matrixAvoidTriggerName: MatrixAvoid
-  matrixAvoidAnimatorSpeed: 0.35
+  matrixAvoidAnimatorSpeed: 0.08
   restoreAnimatorSpeedOnMatrixAvoidEnd: 1
   enableDebugSniperEventHotkeys: 0
 --- !u!4 &313731665 stripped
@@ -6926,7 +6926,7 @@ MonoBehaviour:
   targetHeightOffset: 0.25
   firstWarningLaserOrigin: {fileID: 157298285}
   secondWarningLaserOrigin: {fileID: 944929740}
-  laserColor: {r: 1, g: 0, b: 0, a: 1}
+  laserColor: {r: 1, g: 0, b: 0, a: 0.6431373}
   laserWidth: 0.02
   laserMaterial: {fileID: 0}
 --- !u!4 &649669243
@@ -15221,6 +15221,7 @@ GameObject:
   - component: {fileID: 1253632516}
   - component: {fileID: 1253632515}
   - component: {fileID: 1253632514}
+  - component: {fileID: 1253632517}
   m_Layer: 5
   m_Name: SniperWarningPaper
   m_TagString: Untagged
@@ -15235,7 +15236,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1253632512}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.2419219, w: 0.9702957}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -15244,7 +15245,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -900, y: 220}
   m_SizeDelta: {x: 1800, y: 1100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1253632514
@@ -15261,6 +15262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   paperRect: {fileID: 1253632513}
   paperImage: {fileID: 1253632515}
+  paperCanvasGroup: {fileID: 1253632517}
   paperSprite: {fileID: 21300000, guid: df7d4d877d372e14eac8259823c2cd03, type: 3}
   flyInStartPosition: {x: -900, y: 220}
   stuckPosition: {x: 0, y: 40}
@@ -15312,6 +15314,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1253632512}
   m_CullTransparentMesh: 1
+--- !u!225 &1253632517
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1253632512}
+  m_Enabled: 1
+  m_Alpha: 0
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1256109212
 GameObject:
   m_ObjectHideFlags: 0
@@ -15341,25 +15355,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a46286c89a44d309d78ce85d4d96d37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTarget: {fileID: 0}
-  targetHeightOffset: 1
-  laserRightDirection: {x: 1, y: 0, z: 0}
-  laserStopBeforeTargetDistance: 0.4
+  playerTarget: {fileID: 2019293630}
+  targetHeightOffset: 0.2
+  laserRightDirection: {x: -1, y: 0, z: 0}
+  laserStopBeforeTargetDistance: 0.05
   sideViewLasers:
   - fireOrigin: {fileID: 0}
     targetPoint: {fileID: 0}
-    verticalOffset: 0.18
+    verticalOffset: 0.05
     rightDistance: 5
     leftDistance: 1.2
     lineRenderer: {fileID: 0}
   - fireOrigin: {fileID: 0}
     targetPoint: {fileID: 0}
-    verticalOffset: -0.18
+    verticalOffset: -0.05
     rightDistance: 5
     leftDistance: 1.2
     lineRenderer: {fileID: 0}
-  laserColor: {r: 1, g: 0, b: 0, a: 1}
-  laserWidth: 0.05
+  laserColor: {r: 1, g: 0, b: 0, a: 0.7176471}
+  laserWidth: 0.01
   laserMaterial: {fileID: 0}
 --- !u!4 &1256109214
 Transform:
@@ -15871,6 +15885,7 @@ MonoBehaviour:
   eventVerticalPivot: {x: 0, y: 0.5}
   eventVerticalAnchoredPosition: {x: 40, y: 0}
   eventVerticalRotationZ: 90
+  eventVerticalScale: {x: 0.6, y: 0.6, z: 1}
   resetGaugePositionOnLayoutSwitch: 1
   gaugeDirection: 0
   playMode: 0
@@ -15889,8 +15904,20 @@ MonoBehaviour:
   balanceTimerText: {fileID: 0}
   balanceTimerTmpText: {fileID: 779297926}
   timerFormat: '{0:0.0}'
-  sniperDefenseStickTarget: {fileID: 0}
-  sniperDefenseStickMoveRange: 0.5
+  sniperDefenseStickTarget: {fileID: 1973266943}
+  sniperDefenseHandFollowTargets: []
+  useSeparateHandFollowSettings: 0
+  handFollowSpace: 0
+  handFollowAxis: 2
+  handFollowMinValue: 0.8
+  handFollowMaxValue: -0.1
+  stickFollowSpace: 1
+  stickFollowAxis: 1
+  stickFollowMinValue: -0.2
+  stickFollowMaxValue: 0.11
+  stickFollowSmoothSpeed: 15
+  stickFollowUpdateTiming: 1
+  resetStickTargetOnSniperDefenseEnd: 1
   sniperDefenseDownKey: 274
   sniperDefenseUpKey: 273
   sniperDeflectAudioSource: {fileID: 1311752721}

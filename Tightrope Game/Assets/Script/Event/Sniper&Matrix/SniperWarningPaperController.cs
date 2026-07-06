@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 // Canvas上で「紙が飛んできて画面に貼り付く」演出だけを管理するスクリプトです。
 // スナイパーイベント本体やレーザー処理と分けることで、後から紙演出だけ調整しやすくしています。
+[ExecuteAlways]
 public class SniperWarningPaperController : MonoBehaviour
 {
     [Header("Paper UI")]
@@ -13,6 +14,7 @@ public class SniperWarningPaperController : MonoBehaviour
     [SerializeField] private RectTransform paperRect;
     // 紙として表示するImageです。未設定ならpaperRectから自動取得します。
     [SerializeField] private Image paperImage;
+    [SerializeField] private CanvasGroup paperCanvasGroup;
     // 紙の画像です。Inspectorから好きなSpriteを設定できます。
     [SerializeField] private Sprite paperSprite;
 
@@ -52,8 +54,20 @@ public class SniperWarningPaperController : MonoBehaviour
     private void Awake()
     {
         AutoAssignPaperParts();
+        EnsurePaperCanvasGroup();
         ApplyPaperSprite();
         HidePaperImmediately();
+    }
+
+    private void OnValidate()
+    {
+        AutoAssignPaperParts();
+        EnsurePaperCanvasGroup();
+
+        if (!Application.isPlaying)
+        {
+            SetPaperVisible(false, false);
+        }
     }
 
     private void OnDisable()
@@ -92,21 +106,22 @@ public class SniperWarningPaperController : MonoBehaviour
         StopPaperCoroutine();
         onPaperEffectFinished = null;
 
+        // このGameObjectを非アクティブにするとCoroutineを開始できなくなります。
+        // そのため、紙の見た目だけをCanvasGroupで非表示にします。
+        SetPaperVisible(false);
+
         if (paperRect == null)
         {
             return;
         }
 
-        // このGameObjectを非アクティブにするとCoroutineを開始できなくなります。
-        // そのため、紙の見た目だけをImage.enabledで非表示にします。
-        SetPaperVisible(false);
         paperRect.anchoredPosition = flyInStartPosition;
         paperRect.localRotation = Quaternion.Euler(0f, 0f, flyInStartRotation);
     }
 
     private IEnumerator PlayPaperEffectRoutine()
     {
-        // GameObjectは常にアクティブのまま、Imageだけを表示します。
+        // GameObjectは常にアクティブのまま、CanvasGroupだけを表示します。
         SetPaperVisible(true);
 
         yield return MovePaper(
@@ -125,7 +140,7 @@ public class SniperWarningPaperController : MonoBehaviour
             flyOutEndRotation,
             flyOutDuration);
 
-        SetPaperVisible(false);
+        SetPaperVisible(false, true, "Sniper warning paper hidden after effect");
         paperCoroutine = null;
         onPaperEffectFinished?.Invoke();
         onPaperEffectFinished = null;
@@ -211,6 +226,22 @@ public class SniperWarningPaperController : MonoBehaviour
         }
     }
 
+    private void EnsurePaperCanvasGroup()
+    {
+        if (paperCanvasGroup == null)
+        {
+            paperCanvasGroup = GetComponent<CanvasGroup>();
+        }
+
+        if (paperCanvasGroup != null)
+        {
+            return;
+        }
+
+        paperCanvasGroup = gameObject.AddComponent<CanvasGroup>();
+        Debug.Log("SniperWarningPaperController: CanvasGroup was missing, added automatically.", this);
+    }
+
     private void ApplyPaperSprite()
     {
         if (paperImage == null || paperSprite == null)
@@ -223,11 +254,39 @@ public class SniperWarningPaperController : MonoBehaviour
 
     private void SetPaperVisible(bool visible)
     {
-        if (paperImage == null)
+        SetPaperVisible(visible, true);
+    }
+
+    private void SetPaperVisible(bool visible, bool writeLog)
+    {
+        string message = visible
+            ? "Sniper warning paper shown"
+            : "Sniper warning paper hidden by CanvasGroup";
+
+        SetPaperVisible(visible, writeLog, message);
+    }
+
+    private void SetPaperVisible(bool visible, bool writeLog, string logMessage)
+    {
+        EnsurePaperCanvasGroup();
+
+        if (paperCanvasGroup == null)
         {
             return;
         }
 
-        paperImage.enabled = visible;
+        paperCanvasGroup.alpha = visible ? 1f : 0f;
+        paperCanvasGroup.interactable = false;
+        paperCanvasGroup.blocksRaycasts = false;
+
+        if (paperImage != null)
+        {
+            paperImage.enabled = true;
+        }
+
+        if (writeLog)
+        {
+            Debug.Log($"SniperWarningPaperController: {logMessage}.", this);
+        }
     }
 }
