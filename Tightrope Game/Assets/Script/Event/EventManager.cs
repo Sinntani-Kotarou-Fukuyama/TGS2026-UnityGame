@@ -28,8 +28,8 @@ public class EventManager : MonoBehaviour
     //イベントの種類
     public enum EventType
     {
-        Earthquake,   // 地震
-        Helicopter,   //ヘリ
+        //Earthquake,   // 地震
+       // Helicopter,   //ヘリ
         Posing,       //ポーズ
     }
 
@@ -55,13 +55,13 @@ public class EventManager : MonoBehaviour
         switch (ramdomCount)
         {
             // 地震イベントの場合
-            case (int)EventType.Earthquake:
+           /* case (int)EventType.Earthquake:
                 e_earthquake.StartEvent(); // 地震を起こす
                 break;
             // ヘリイベントの場合
             case (int)EventType.Helicopter:
                 heliscript.EventFlag(); // ヘリイベントを起こす
-                break;
+                break;*/
             // ポーズイベントの場合
             case (int)EventType.Posing:
                posingscript.EventFlag(); // ポーズイベントを起こす

@@ -5,6 +5,8 @@ public class Damage : MonoBehaviour
     [SerializeField] PlayerGameFeedbackController damage;//ダメージ用
     [SerializeField] GameObject NICEText;
     [SerializeField] GameObject NOText;
+    [SerializeField] GameObject Explosion;//爆発用
+    [SerializeField] Transform ExplosionPoint;//爆発ポイント
     [SerializeField] PosingEvent pose;//poseイベントを取得
     public bool DamageFlag = false;//ダメージを受けたか確認するフラグ
     public bool TextFlag = true;//Textを打ったか確認するフラグ
@@ -42,6 +44,9 @@ public class Damage : MonoBehaviour
             Invoke(nameof(NiceTextDestroy), 3.0f);
             //当たらなかった時のSEを入れる
             Debug.Log("NICE!");
+            //爆発させる
+            Transform point = ExplosionPoint.transform;
+            Instantiate(Explosion,point);
         }
        
     }
