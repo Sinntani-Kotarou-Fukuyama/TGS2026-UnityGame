@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PosingEvent : MonoBehaviour
 {
-    
+
     [SerializeField] GameObject PosingDino;//イベント怪獣のプレハブ用
     [SerializeField] Transform Dino;//イベント中は怪獣を見えないところへ移動させる
     [SerializeField] Transform Bill;//イベントで破壊されるビルの座標
@@ -17,7 +17,9 @@ public class PosingEvent : MonoBehaviour
     [SerializeField] float Stickspeed = 0.00000001f;//棒を持ち上げる速度
     [SerializeField] GameObject Text;
     [SerializeField] GameObject Timer;//タイマーを非表示にする用
+    [SerializeField] private Behaviour _target;//点滅させる対象
     [SerializeField] public GameObject Porsemp4;//動画
+    [SerializeField] private float _cycle = 1; // 点滅周期[秒]
     Quaternion startplayer;//最初の回転を記録する
     Quaternion startstick;//最初の回転を記録する
     Quaternion startplayerRightHund;//最初の回転を記録する
@@ -25,17 +27,19 @@ public class PosingEvent : MonoBehaviour
     Vector3 startstickposition;//最初の座標を記録する
     Vector3 startplayerRightHundposition;//最初の座標を記録する
     Vector3 startplayerLeftHubdposition;//最初の座標を記録する
+    private double _time;
     int StickOver = 0;
     bool DinoStoping = false;//怪獣を動かなくするフラグ
     bool Flag = false;
     bool DinoIdouflag = true;//怪獣移動フラグ
     bool PlayerRotation = false;
+    bool KeikokuFlag;//警告フラグ
     [SerializeField] TightropeAutoGoalMover playerMover;//プレイヤーの動き取得
     private GameObject spawneDino;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -43,8 +47,8 @@ public class PosingEvent : MonoBehaviour
     {
         if (Flag == true)//イベント開始フラグ
         {
-           PoseEvent();
-           Flag = false;
+            PoseEvent();
+            Flag = false;
         }
         if (DinoStoping == true)//怪獣を動かなくするフラグ
         {
@@ -60,31 +64,31 @@ public class PosingEvent : MonoBehaviour
             }
 
         }
-        if(PlayerRotation==true)
+        if (PlayerRotation == true)
         {
-            if(Input.GetKey(KeyCode.RightArrow))//右矢印を押したら左回転する
+            if (Input.GetKey(KeyCode.RightArrow))//右矢印を押したら左回転する
             {
                 player.transform.Rotate(new Vector3(0, -Rotatespeed, 0));
             }
-            if(Input.GetKey(KeyCode.LeftArrow))//左矢印を押したら右回転する
+            if (Input.GetKey(KeyCode.LeftArrow))//左矢印を押したら右回転する
             {
                 player.transform.Rotate(new Vector3(0, Rotatespeed, 0));
             }
-            if(Input.GetKey(KeyCode.UpArrow))//上矢印を押したら棒を持ち上げる
+            if (Input.GetKey(KeyCode.UpArrow))//上矢印を押したら棒を持ち上げる
             {
-                if(StickOver<=30)
+                if (StickOver <= 30)
                 {
                     stick.transform.Translate(0.0f, 0.0f, -Stickspeed * 0.3f * Time.deltaTime);
                     playerRightHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
                     playerLeftHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
                     StickOver++;
-                    Debug.Log("StickOverの値"+StickOver);
+                    Debug.Log("StickOverの値" + StickOver);
                 }
-                
+
             }
             if (Input.GetKey(KeyCode.DownArrow))//下矢印を押したら棒を下げる
             {
-                if(StickOver>=-25)
+                if (StickOver >= -25)
                 {
                     stick.transform.Translate(0.0f, 0.0f, Stickspeed * 0.3f * Time.deltaTime);
                     playerRightHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
@@ -92,8 +96,20 @@ public class PosingEvent : MonoBehaviour
                     StickOver--;
                     Debug.Log("StickOverの値" + StickOver);
                 }
-                
+
             }
+        }
+        if (KeikokuFlag == true)
+        {
+            // 内部時刻を経過させる
+            _time += Time.deltaTime;
+
+            // 周期cycleで繰り返す値の取得
+            // 0～cycleの範囲の値が得られる
+            var repeatValue = Mathf.Repeat((float)_time, _cycle);
+
+            // 内部時刻timeにおける明滅状態を反映
+            _target.enabled = repeatValue >= _cycle * 0.5f;
         }
     }
     public void EventFlag() //イベントマネージャーで呼び出す
@@ -130,9 +146,9 @@ public class PosingEvent : MonoBehaviour
     void DinoIdouFlag()
     {
         DinoIdouflag = false;
-       
+
     }
-   public void HahenTextTrue()
+    public void HahenTextTrue()
     {
         Text.SetActive(true);
     }
@@ -141,9 +157,13 @@ public class PosingEvent : MonoBehaviour
         Text.SetActive(false);
         PlayerRotation = true;
         Porsemp4.SetActive(true);
+        KeikokuFlag = true;
+
     }
     public void PosingFinish()
     {
+        KeikokuFlag = false;//点滅を消す
+        _target.enabled = false;
         PlayerRotation = false;//プレイヤーを回転できなくする
         cam.CameraSet();
         Invoke(nameof(GameSet), 3.0f);
@@ -157,7 +177,7 @@ public class PosingEvent : MonoBehaviour
     }
     void GameSet()
     {
-        
+
         Timer.SetActive(true);//タイマーを表示にする
         playerMover.PlayerStoping = false;//プレイヤーを動けるように
         DinoStoping = false;//怪獣を動けるように
