@@ -15876,16 +15876,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28e8f2a9e0a6bc64bb9f0c1e2c235657, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gaugeRoot: {fileID: 0}
+  gaugeRoot: {fileID: 1515038813}
   balanceBar: {fileID: 529686860}
   targetZone: {fileID: 713676773}
   balancePoint: {fileID: 760942542}
   eventVerticalAnchorMin: {x: 0, y: 0.5}
   eventVerticalAnchorMax: {x: 0, y: 0.5}
   eventVerticalPivot: {x: 0, y: 0.5}
-  eventVerticalAnchoredPosition: {x: 40, y: 0}
+  eventVerticalAnchoredPosition: {x: -100, y: -450}
   eventVerticalRotationZ: 90
-  eventVerticalScale: {x: 0.6, y: 0.6, z: 1}
+  eventVerticalScale: {x: 0.5, y: 0.6, z: 1}
   resetGaugePositionOnLayoutSwitch: 1
   gaugeDirection: 0
   playMode: 0

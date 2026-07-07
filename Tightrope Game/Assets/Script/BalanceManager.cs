@@ -490,6 +490,8 @@ public class BalanceManager : MonoBehaviour
         challengeTimer = 0f;
         nextSniperDefenseFollowLogTime = 0f;
         SetGaugeDirection(BalanceGaugeDirection.Horizontal);
+        SaveHorizontalLayoutIfNeeded();
+        ApplyEventVerticalLayout();
         hasSniperDefenseStickBasePosition = false;
         hasSniperDefenseHandBasePositions = false;
         SaveSniperDefenseStickBasePosition();
@@ -518,6 +520,8 @@ public class BalanceManager : MonoBehaviour
         outsideTimer = 0f;
         challengeTimer = 0f;
         SetGaugeDirection(BalanceGaugeDirection.Horizontal);
+        SaveHorizontalLayoutIfNeeded();
+        ApplyEventVerticalLayout();
         SetMatrixAvoidTargetPosition();
         pointAxisPosition = targetAxisPosition;
         ApplyAllUiPositions();
@@ -1476,9 +1480,10 @@ public class BalanceManager : MonoBehaviour
             return;
         }
 
-        if (gaugeRoot != null)
+        RectTransform root = GetEventVerticalLayoutRoot(false);
+        if (root != null)
         {
-            savedGaugeRootLayout = new RectTransformLayout(gaugeRoot);
+            savedGaugeRootLayout = new RectTransformLayout(root);
         }
 
         if (balanceBar != null)
@@ -1501,16 +1506,71 @@ public class BalanceManager : MonoBehaviour
 
     private void ApplyEventVerticalLayout()
     {
-        RectTransform root = gaugeRoot != null ? gaugeRoot : balanceBar;
-        if (root != null)
+        RectTransform root = GetEventVerticalLayoutRoot(true);
+        if (root == null)
         {
-            root.anchorMin = eventVerticalAnchorMin;
-            root.anchorMax = eventVerticalAnchorMax;
-            root.pivot = eventVerticalPivot;
-            root.anchoredPosition = eventVerticalAnchoredPosition;
-            root.localRotation = Quaternion.Euler(0f, 0f, eventVerticalRotationZ);
-            root.localScale = eventVerticalScale;
+            Debug.LogWarning("[BalanceManager] ApplyEventVerticalLayout skipped because gaugeRoot is None and no safe fallback root was found.", this);
+            return;
         }
+
+        Vector2 beforePosition = root.anchoredPosition;
+
+        root.anchorMin = eventVerticalAnchorMin;
+        root.anchorMax = eventVerticalAnchorMax;
+        root.pivot = eventVerticalPivot;
+        root.anchoredPosition = eventVerticalAnchoredPosition;
+        root.localRotation = Quaternion.Euler(0f, 0f, eventVerticalRotationZ);
+        root.localScale = eventVerticalScale;
+
+        Debug.Log($"[BalanceManager] ApplyEventVerticalLayout target={root.name} before={FormatVector2(beforePosition)} after={FormatVector2(root.anchoredPosition)} setting={FormatVector2(eventVerticalAnchoredPosition)}", this);
+    }
+
+    private RectTransform GetEventVerticalLayoutRoot(bool logWarning)
+    {
+        if (gaugeRoot != null)
+        {
+            return gaugeRoot;
+        }
+
+        gaugeRoot = GetParentRectTransform(balanceBar);
+        if (gaugeRoot != null)
+        {
+            return gaugeRoot;
+        }
+
+        gaugeRoot = GetParentRectTransform(targetZone);
+        if (gaugeRoot != null)
+        {
+            return gaugeRoot;
+        }
+
+        gaugeRoot = GetParentRectTransform(balancePoint);
+        if (gaugeRoot != null)
+        {
+            return gaugeRoot;
+        }
+
+        if (logWarning)
+        {
+            Debug.LogWarning("[BalanceManager] gaugeRoot is None. Assign Canvas > BalanceGauge to Gauge Root so Event Vertical Layout can move the whole gauge.", this);
+        }
+
+        return null;
+    }
+
+    private RectTransform GetParentRectTransform(RectTransform child)
+    {
+        if (child == null)
+        {
+            return null;
+        }
+
+        return child.parent as RectTransform;
+    }
+
+    private string FormatVector2(Vector2 value)
+    {
+        return $"({value.x:F2}, {value.y:F2})";
     }
 
     private void RestoreHorizontalLayout()
