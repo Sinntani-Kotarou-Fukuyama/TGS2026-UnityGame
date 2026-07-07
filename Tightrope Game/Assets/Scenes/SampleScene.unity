@@ -10583,7 +10583,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_IsGlobal: 1
-  priority: 88888
+  priority: 0
   blendDistance: 0
   weight: 1
   sharedProfile: {fileID: 11400000, guid: ba5645c14b60db5418a6e06c5434100f, type: 2}
@@ -18984,7 +18984,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -22264,6 +22264,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1919166457}
+  - component: {fileID: 1919166458}
   m_Layer: 0
   m_Name: ExplosionPoint
   m_TagString: Untagged
@@ -22286,6 +22287,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1919166458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919166456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c00bb4eab75edf0469fb356fcb0be176, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volume: {fileID: 993899691}
 --- !u!4 &1919200344 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3659750346440627852, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
@@ -23818,8 +23832,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.40000007, y: 1.9, z: 0.3648389}
-  m_Center: {x: -7.1640776e-17, y: 0.90000004, z: 0.01535781}
+  m_Size: {x: 0.40000007, y: 1.9, z: 0.341653}
+  m_Center: {x: -1.6213534e-17, y: 0.90000004, z: 0.0037648326}
 --- !u!54 &2019293632
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -23988,8 +24002,9 @@ MonoBehaviour:
   damage: {fileID: 2025167755}
   NICEText: {fileID: 913073938}
   NOText: {fileID: 1411898879}
-  Explosion: {fileID: 1121192042590650, guid: e1b08032bec16ba4eb1ae23cbd572664, type: 3}
+  Explosion: {fileID: 1121192042590650, guid: cdbdd5516ad50fe4cb7751e32cbe9aa0, type: 3}
   ExplosionPoint: {fileID: 1919166457}
+  flash: {fileID: 1919166458}
   pose: {fileID: 675517727}
   DamageFlag: 0
   TextFlag: 1

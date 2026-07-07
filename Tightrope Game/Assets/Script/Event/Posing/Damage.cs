@@ -7,6 +7,7 @@ public class Damage : MonoBehaviour
     [SerializeField] GameObject NOText;
     [SerializeField] GameObject Explosion;//爆発用
     [SerializeField] Transform ExplosionPoint;//爆発ポイント
+    [SerializeField] ExplosionFlash flash;//爆発の光
     [SerializeField] PosingEvent pose;//poseイベントを取得
     public bool DamageFlag = false;//ダメージを受けたか確認するフラグ
     public bool TextFlag = true;//Textを打ったか確認するフラグ
@@ -47,6 +48,7 @@ public class Damage : MonoBehaviour
             //爆発させる
             Transform point = ExplosionPoint.transform;
             Instantiate(Explosion,point);
+            flash.Flash();
         }
        
     }
