@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class Damage : MonoBehaviour
 {
+    [SerializeField] Animator animator;//プレイヤーのアニメーション
     [SerializeField] PlayerGameFeedbackController damage;//ダメージ用
     [SerializeField] GameObject NICEText;
     [SerializeField] GameObject NOText;
     [SerializeField] GameObject Explosion;//爆発用
     [SerializeField] Transform ExplosionPoint;//爆発ポイント
+    [SerializeField] Transform ExplosionPoint2;//爆発ポイント2(プレイヤー)
     [SerializeField] ExplosionFlash flash;//爆発の光
     [SerializeField] PosingEvent pose;//poseイベントを取得
     public bool DamageFlag = false;//ダメージを受けたか確認するフラグ
@@ -29,6 +31,14 @@ public class Damage : MonoBehaviour
                 NOText.SetActive(true);
                 TextFlag = false;
                 Invoke(nameof(NoTextDestroy), 3.0f);
+                Debug.Log("NICE!");
+                //爆発させる
+                Transform point = ExplosionPoint2.transform;
+                Instantiate(Explosion, point);
+                flash.Flash();
+                //吹き飛びそうな動作をする
+                animator.SetBool("Reaction", true);
+                Invoke(nameof(ReactionReset), 3.0f);
             }
            
         }
@@ -49,6 +59,9 @@ public class Damage : MonoBehaviour
             Transform point = ExplosionPoint.transform;
             Instantiate(Explosion,point);
             flash.Flash();
+            //引き飛びそうな動作をする
+            animator.SetBool("Reaction", true);
+            Invoke(nameof(ReactionReset), 3.0f);
         }
        
     }
@@ -63,5 +76,10 @@ public class Damage : MonoBehaviour
         NOText.SetActive(false);
         pose.Porsemp4.SetActive(false);//動画を非表示にする
         pose.PosingFinish();
+    }
+
+    void ReactionReset()
+    {
+        animator.SetBool("Reaction", false);
     }
 }

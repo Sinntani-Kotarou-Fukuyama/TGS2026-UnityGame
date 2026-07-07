@@ -892,9 +892,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7127661169502311845, guid: 1101d3f535c783e4d80ac06f6b000dda, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7127661169502311845, guid: 1101d3f535c783e4d80ac06f6b000dda, type: 3}
+      propertyPath: m_fontColor.g
+      value: 0.43111297
+      objectReference: {fileID: 0}
+    - target: {fileID: 7127661169502311845, guid: 1101d3f535c783e4d80ac06f6b000dda, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.26981127
+      objectReference: {fileID: 0}
+    - target: {fileID: 7127661169502311845, guid: 1101d3f535c783e4d80ac06f6b000dda, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294929989
+      objectReference: {fileID: 0}
     - target: {fileID: 8889542602994939315, guid: 1101d3f535c783e4d80ac06f6b000dda, type: 3}
       propertyPath: m_Name
       value: NO!
+      objectReference: {fileID: 0}
+    - target: {fileID: 8889542602994939315, guid: 1101d3f535c783e4d80ac06f6b000dda, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -21372,6 +21392,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: NICE!
       objectReference: {fileID: 0}
+    - target: {fileID: 8181334232838782702, guid: a773505c538c37746ae3a02c283261d3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808756927756330730, guid: a773505c538c37746ae3a02c283261d3, type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808756927756330730, guid: a773505c538c37746ae3a02c283261d3, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808756927756330730, guid: a773505c538c37746ae3a02c283261d3, type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.21044326
+      objectReference: {fileID: 0}
+    - target: {fileID: 8808756927756330730, guid: a773505c538c37746ae3a02c283261d3, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278255414
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -25138,8 +25178,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.40000007, y: 1.9, z: 0.341653}
-  m_Center: {x: -1.6213534e-17, y: 0.90000004, z: 0.0037648326}
+  m_Size: {x: 0.57673764, y: 1.9, z: 0.341653}
+  m_Center: {x: 0.004165208, y: 0.90000004, z: 0.0037648324}
 --- !u!54 &2019293632
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -25305,11 +25345,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34864519707966d448dc0a43c6bfb0b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 2019293627}
   damage: {fileID: 2025167755}
   NICEText: {fileID: 913073938}
   NOText: {fileID: 1411898879}
   Explosion: {fileID: 1121192042590650, guid: cdbdd5516ad50fe4cb7751e32cbe9aa0, type: 3}
   ExplosionPoint: {fileID: 1919166457}
+  ExplosionPoint2: {fileID: 2019293630}
   flash: {fileID: 1919166458}
   pose: {fileID: 675517727}
   DamageFlag: 0
