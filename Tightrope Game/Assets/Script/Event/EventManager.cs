@@ -26,11 +26,13 @@ public class EventManager : MonoBehaviour
     [SerializeField,Header("ヘリイベントを起こすゲームオブジェクト")] private Helicopter heliscript;//ヘリイベント呼び出し用
     [SerializeField,Header("ポーズイベントを起こすゲームオブジェクト")] private PosingEvent posingscript;//ポーズイベント呼び出し用
     [SerializeField, Header("スナイパーイベントを起こすゲームオブジェクト")] private SniperEventManager sniperEventManager;//スナイパーイベント呼び出し用
+
+    bool PosingFlag = false;//ポーズイベントのフラグ（１ゲーム一回限定にするため）
     //イベントの種類
     public enum EventType
     {
-        //Earthquake,   // 地震
-       // Helicopter,   //ヘリ
+        Earthquake,   // 地震
+        Helicopter,   //ヘリ
         Posing,       //ポーズ
         Sniper,       //スナイパー
     }
@@ -57,16 +59,23 @@ public class EventManager : MonoBehaviour
         switch (ramdomCount)
         {
             // 地震イベントの場合
-           /* case (int)EventType.Earthquake:
+            case (int)EventType.Earthquake:
                 e_earthquake.StartEvent(); // 地震を起こす
                 break;
             // ヘリイベントの場合
             case (int)EventType.Helicopter:
                 heliscript.EventFlag(); // ヘリイベントを起こす
-                break;*/
+                break;
             // ポーズイベントの場合
             case (int)EventType.Posing:
-               posingscript.EventFlag(); // ポーズイベントを起こす
+                if(PosingFlag==true)
+                {
+                    RandomEvent();//ポーズイベントをやったことがあったらもう一回イベント抽選する
+                    Debug.Log("再抽選");
+                    break;
+                }
+                posingscript.EventFlag(); // ポーズイベントを起こす
+                PosingFlag = true;
                 break;
             // スナイパーイベントの場合
             case (int)EventType.Sniper:
