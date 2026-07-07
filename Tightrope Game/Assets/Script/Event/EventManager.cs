@@ -25,12 +25,14 @@ public class EventManager : MonoBehaviour
     [SerializeField,Header("地震イベントを起こすゲームオブジェクト")] private Earthquake e_earthquake;
     [SerializeField,Header("ヘリイベントを起こすゲームオブジェクト")] private Helicopter heliscript;//ヘリイベント呼び出し用
     [SerializeField,Header("ポーズイベントを起こすゲームオブジェクト")] private PosingEvent posingscript;//ポーズイベント呼び出し用
+    [SerializeField, Header("スナイパーイベントを起こすゲームオブジェクト")] private SniperEventManager sniperEventManager;//スナイパーイベント呼び出し用
     //イベントの種類
     public enum EventType
     {
         //Earthquake,   // 地震
        // Helicopter,   //ヘリ
         Posing,       //ポーズ
+        Sniper,       //スナイパー
     }
 
 
@@ -65,6 +67,16 @@ public class EventManager : MonoBehaviour
             // ポーズイベントの場合
             case (int)EventType.Posing:
                posingscript.EventFlag(); // ポーズイベントを起こす
+                break;
+            // スナイパーイベントの場合
+            case (int)EventType.Sniper:
+                if (sniperEventManager == null)
+                {
+                    Debug.LogWarning("EventManager: SniperEventManager が設定されていません。");
+                    break;
+                }
+
+                sniperEventManager.StartSniperEvent();
                 break;
             default:
                 Debug.Log("イベントが起こりました。");
