@@ -21,6 +21,7 @@ public class KaijuAI : MonoBehaviour
     [Header("Patrol")]
     public Transform[] patrolPoints;
 
+
     Animator anim;
     NavMeshAgent agent;
 
@@ -218,11 +219,10 @@ public class KaijuAI : MonoBehaviour
             //Apply Root Motionを無効にする
             anim.applyRootMotion = false;
 
+            // ロープをくぐるアニメーション発生
             anim.SetTrigger("UnderTheRope");
             agent.speed = 0.0f;
             
-
-
         }
     }
 
