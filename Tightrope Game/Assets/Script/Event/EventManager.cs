@@ -17,6 +17,11 @@ using UnityEngine;
  */
 public class EventManager : MonoBehaviour
 {
+    [SerializeField,Header("任意のイベントだけを引き起こせます,Falseで無し")]
+                     bool Earthquake = true;
+    [SerializeField] bool Helicopter = true;
+    [SerializeField] bool Posing = true;
+    [SerializeField] bool Sniper = true;
     [SerializeField] private GameObject player;//プレイヤーの座標取得用
     private int ramdomCount; // ランダムな数字
     [SerializeField]EventFlag eventFlag;  // イベントフラグのprefab
@@ -60,14 +65,29 @@ public class EventManager : MonoBehaviour
         {
             // 地震イベントの場合
             case (int)EventType.Earthquake:
+                if(Earthquake==false)
+                {
+                    RandomEvent();
+                    break;
+                }
                 e_earthquake.StartEvent(); // 地震を起こす
                 break;
             // ヘリイベントの場合
             case (int)EventType.Helicopter:
+                if(Helicopter==false)
+                {
+                    RandomEvent();
+                    break;
+                }
                 heliscript.EventFlag(); // ヘリイベントを起こす
                 break;
             // ポーズイベントの場合
             case (int)EventType.Posing:
+                if(Posing==false)
+                {
+                    RandomEvent();
+                    break;
+                }
                 if(PosingFlag==true)
                 {
                     RandomEvent();//ポーズイベントをやったことがあったらもう一回イベント抽選する
@@ -79,6 +99,11 @@ public class EventManager : MonoBehaviour
                 break;
             // スナイパーイベントの場合
             case (int)EventType.Sniper:
+                if(Sniper==false)
+                { 
+                    RandomEvent();
+                    break;
+                }
                 if (sniperEventManager == null)
                 {
                     Debug.LogWarning("EventManager: SniperEventManager が設定されていません。");
