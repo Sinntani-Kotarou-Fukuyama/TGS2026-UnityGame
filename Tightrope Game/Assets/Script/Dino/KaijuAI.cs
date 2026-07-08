@@ -21,11 +21,17 @@ public class KaijuAI : MonoBehaviour
     [Header("Patrol")]
     public Transform[] patrolPoints;
 
+    [Header("カメラを操作する用"), SerializeField] 
+    private CameraSwhich cameraSwhich;
+
+
     Animator anim;
     NavMeshAgent agent;
 
     GameObject targetBuilding;
     BreakBuilding targetBreakScript;
+
+    
 
     float attackTimer = 0f;
     bool isAttacking = false;
@@ -216,9 +222,10 @@ public class KaijuAI : MonoBehaviour
         if (collision.gameObject.tag == "RopeParts")
         {
 
+            // ロープをくぐるモーションを発動する
             anim.SetTrigger("UnderTheRope");
             agent.speed = 0.0f;
-
+            //cameraSwhich.DinoUnderRopeCameraSet();
 
         }
     }

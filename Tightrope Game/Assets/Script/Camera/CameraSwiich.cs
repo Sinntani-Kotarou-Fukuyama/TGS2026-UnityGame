@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Cinemachine;
+using UnityEngine.Accessibility;
 
 
 public class CameraSwhich : MonoBehaviour
@@ -12,6 +13,7 @@ public class CameraSwhich : MonoBehaviour
     [SerializeField] private CinemachineCamera posingdinocamera;
     [SerializeField] private CinemachineCamera posingdinocamera2;
     [SerializeField] private CinemachineCamera posingdinocamera3;
+    [SerializeField]private CinemachineCamera dinounderropecamera;
     [SerializeField,Header("イベント用")] PosingEvent Posing;
     [SerializeField] Transform player;//ポーズ取る用
     [SerializeField] Transform Stick;//棒持ち上げ用
@@ -53,6 +55,7 @@ public class CameraSwhich : MonoBehaviour
         posingdinocamera.Priority.Value = 5;
         posingdinocamera2.Priority.Value = 5;
         posingdinocamera3.Priority.Value = 5;
+        dinounderropecamera .Priority.Value = 2;
     }
     public void EventCameraSet()
     {
@@ -91,6 +94,19 @@ public class CameraSwhich : MonoBehaviour
         //カメラの描画優先度を変える
         posingdinocamera3.Priority.Value = 15;
         posingdinocamera2.Priority.Value = 0;
+    }
+    public void DinoUnderRopeCameraSet()
+    {
+        BleinCut();//カメラを瞬時切り替え
+        //カメラの描画優先度を変える
+        mancamera.Priority.Value = 5;
+        dinounderropecamera.Priority.Value = 15;
+        Invoke("DinoUnderRopeFinish", 8.0f);
+    }
+    void DinoUnderRopeFinish()
+    {
+        mancamera.Priority.Value = 15;
+        dinounderropecamera.Priority.Value = 0;
     }
     void BlendEaseInOut()//カメラをゆっくり切り替え
 
