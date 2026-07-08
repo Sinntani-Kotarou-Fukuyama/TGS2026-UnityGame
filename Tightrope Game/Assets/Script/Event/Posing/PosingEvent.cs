@@ -166,7 +166,7 @@ public class PosingEvent : MonoBehaviour
         _target.enabled = false;
         PlayerRotation = false;//ƒvƒŒƒCƒ„[‚ğ‰ñ“]‚Å‚«‚È‚­‚·‚é
         cam.CameraSet();
-        Invoke(nameof(GameSet), 3.0f);
+        Invoke(nameof(GameSet), 3.5f);
         player.transform.rotation = startplayer;//‰ñ“]‚ğŒ³‚É–ß‚·
         stick.transform.rotation = startstick;//‰ñ“]‚ğŒ³‚É–ß‚·
         stick.transform.position = startstickposition;//À•W‚ğŒ³‚É–ß‚·
