@@ -215,9 +215,12 @@ public class KaijuAI : MonoBehaviour
         // ロープに当たった時
         if (collision.gameObject.tag == "RopeParts")
         {
+            //Apply Root Motionを無効にする
+            anim.applyRootMotion = false;
 
             anim.SetTrigger("UnderTheRope");
             agent.speed = 0.0f;
+            
 
 
         }
@@ -226,6 +229,8 @@ public class KaijuAI : MonoBehaviour
     //アニメーションイベントから呼び出される
     public void ExitUnderTheRope()
     {
+        //Apply Root Motionを有効にする
+        anim.applyRootMotion = true;
         // 歩くようにする
         agent.speed = moveSpeed;
     }

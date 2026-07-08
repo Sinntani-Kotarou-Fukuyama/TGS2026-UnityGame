@@ -51,8 +51,4 @@ public class UnderTheRope : StateMachineBehaviour
     //    // Implement code that sets up animation IK (inverse kinematics)
     //}
 
-    public void sisis()
-    {
-        Debug.Log("konnnitiha");
-    }
 }
