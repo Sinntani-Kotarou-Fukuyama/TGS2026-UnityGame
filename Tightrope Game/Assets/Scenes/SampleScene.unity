@@ -5246,6 +5246,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a047f4764f79c09469a7065d5b6e8dd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Earthquake: 1
+  Helicopter: 1
+  Posing: 1
+  Sniper: 1
   player: {fileID: 2019293626}
   eventFlag: {fileID: 8885386143651873786, guid: d13e83037361b574ab911282b4faa680, type: 3}
   e_earthquake: {fileID: 1550136032}
@@ -18124,15 +18128,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.3496017
+      value: 13.794397
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.775873
+      value: 6.421873
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3.5041547
+      value: 0.5908451
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalRotation.w
