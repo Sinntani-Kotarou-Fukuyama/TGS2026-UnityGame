@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Damage : MonoBehaviour
 {
+    [SerializeField] AudioSource keikokuAudio;//警告音
     [SerializeField] Animator animator;//プレイヤーのアニメーション
     [SerializeField] PlayerGameFeedbackController damage;//ダメージ用
     [SerializeField] GameObject NICEText;
@@ -39,6 +40,7 @@ public class Damage : MonoBehaviour
                 //吹き飛びそうな動作をする
                 animator.SetBool("Reaction", true);
                 Invoke(nameof(ReactionReset), 3.0f);
+                keikokuAudio.Stop();//警告音を止める
             }
            
         }
@@ -62,6 +64,7 @@ public class Damage : MonoBehaviour
             //引き飛びそうな動作をする
             animator.SetBool("Reaction", true);
             Invoke(nameof(ReactionReset), 3.0f);
+            keikokuAudio.Stop();//警告音を止める
         }
        
     }

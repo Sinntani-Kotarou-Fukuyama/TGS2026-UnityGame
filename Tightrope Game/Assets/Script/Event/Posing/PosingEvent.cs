@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PosingEvent : MonoBehaviour
 {
-
+    [SerializeField] public AudioSource keikokuAudio;//警告音
     [SerializeField] GameObject PosingDino;//イベント怪獣のプレハブ用
     [SerializeField] Transform Dino;//イベント中は怪獣を見えないところへ移動させる
     [SerializeField] Transform Bill;//イベントで破壊されるビルの座標
@@ -158,10 +158,11 @@ public class PosingEvent : MonoBehaviour
         PlayerRotation = true;
         Porsemp4.SetActive(true);
         KeikokuFlag = true;
-
+        keikokuAudio.Play();
     }
     public void PosingFinish()
     {
+       
         KeikokuFlag = false;//点滅を消す
         _target.enabled = false;
         PlayerRotation = false;//プレイヤーを回転できなくする
