@@ -44,6 +44,7 @@ public class PlayerGameFeedbackController : MonoBehaviour
     [SerializeField] private int maxDamageCount = 5;
     // ゲームオーバー時に遷移するScene名です。
     [SerializeField] private string gameOverSceneName = "GameOverScene";
+    [SerializeField] private string clearSceneName = "ClearScene";
 
     [Header("Audio")]
     // SEを再生するAudioSourceです。
@@ -126,6 +127,27 @@ public class PlayerGameFeedbackController : MonoBehaviour
         DebugLog("Damage reset.");
     }
 
+    public void LoadClearScene()
+    {
+        if (string.IsNullOrEmpty(clearSceneName))
+        {
+            DebugLog("Clear scene name is empty. Scene load skipped.");
+            return;
+        }
+
+        if (damageCount >= maxDamageCount)
+        {
+            DebugLog($"Clear scene load skipped because damageCount={damageCount}/{maxDamageCount}. GameOver should handle this state.");
+            return;
+        }
+
+        ClearResultManager.ClearRank clearRank = CalculateClearRank();
+        ClearResultData.SetResult(clearRank, damageCount);
+
+        DebugLog($"Loading clear scene: {clearSceneName}, rank={clearRank}, missCount={damageCount}");
+        SceneManager.LoadScene(clearSceneName);
+    }
+
     public void FlashRed()
     {
         if (redFlashCoroutine != null)
@@ -160,6 +182,21 @@ public class PlayerGameFeedbackController : MonoBehaviour
 
         DebugLog($"Loading game over scene: {gameOverSceneName}");
         SceneManager.LoadScene(gameOverSceneName);
+    }
+
+    private ClearResultManager.ClearRank CalculateClearRank()
+    {
+        if (damageCount <= 1)
+        {
+            return ClearResultManager.ClearRank.S;
+        }
+
+        if (damageCount == 2)
+        {
+            return ClearResultManager.ClearRank.A;
+        }
+
+        return ClearResultManager.ClearRank.B;
     }
 
     private void PlayOneShot(AudioClip clip, string label)

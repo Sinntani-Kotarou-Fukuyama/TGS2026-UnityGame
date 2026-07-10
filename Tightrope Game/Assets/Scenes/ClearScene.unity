@@ -3430,6 +3430,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3453637439810788991, guid: f03767948ef560947beeaad563aa01bd, type: 3}
   m_PrefabInstance: {fileID: 149591903}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &154759565
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 154759567}
+  - component: {fileID: 154759566}
+  m_Layer: 0
+  m_Name: ClearSceneButtonController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &154759566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154759565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc7b7ef0daee134b801859a0ce1d983, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  retrySceneName: SampleScene
+  titleSceneName: TitleScene
+  retryResetTargets: []
+--- !u!4 &154759567
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154759565}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.1889566, y: 2.735931, z: -1.4254371}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &157392802
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7752,7 +7799,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
   m_AnchoredPosition: {x: -600, y: 600}
-  m_SizeDelta: {x: 600, y: 300}
+  m_SizeDelta: {x: 600, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &446766085
 MonoBehaviour:
@@ -11417,13 +11464,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 737552787}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.24388346, y: -0.23037112, z: 0.05973763, w: -0.94014966}
-  m_LocalPosition: {x: -8.53, y: 5.49, z: -11.03}
+  m_LocalRotation: {x: -0.25167683, y: -0.09127616, z: 0.005880093, w: -0.96347964}
+  m_LocalPosition: {x: -0.5, y: 5.34, z: -11.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 45, y: -45, z: 0}
+  m_LocalEulerAnglesHint: {x: 29.081, y: 11.412, z: 2.27}
 --- !u!114 &737552791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23562,7 +23609,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1094649478}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 154759566}
+        m_TargetAssemblyTypeName: ClearSceneButtonController, Assembly-CSharp
+        m_MethodName: OnRetryButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1495988941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25264,7 +25323,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1607198549}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 154759566}
+        m_TargetAssemblyTypeName: ClearSceneButtonController, Assembly-CSharp
+        m_MethodName: OnTitleButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1600147355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33193,3 +33264,4 @@ SceneRoots:
   - {fileID: 1237537836}
   - {fileID: 1642542949}
   - {fileID: 318371510}
+  - {fileID: 154759567}

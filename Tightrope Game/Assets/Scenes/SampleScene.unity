@@ -25638,7 +25638,19 @@ MonoBehaviour:
   walkBoolName: catwalk
   onGoalReached:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2025167755}
+        m_TargetAssemblyTypeName: PlayerGameFeedbackController, Assembly-CSharp
+        m_MethodName: LoadClearScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   debugLog: 1
   PlayerStoping: 0
 --- !u!82 &2019293634
@@ -25793,6 +25805,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxDamageCount: 5
   gameOverSceneName: GameOverScene
+  clearSceneName: ClearScene
   audioSource: {fileID: 2019293634}
   successClip: {fileID: 8300000, guid: c35e97cbef747804da5005c6293005c5, type: 3}
   countClip: {fileID: 8300000, guid: d05b67bf8d3d1ab4d8d3d585df3a3e86, type: 3}
