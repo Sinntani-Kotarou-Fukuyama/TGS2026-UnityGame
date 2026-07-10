@@ -46,9 +46,13 @@ public class EventManager : MonoBehaviour
     private void Start()
     {
         EventFlag e;
-
+        
         // イベントフラグの生成、設定
-        e = Instantiate(eventFlag);
+        e = Instantiate(eventFlag,new Vector3(-0.7f,3.0f,-4.0f),Quaternion.identity);//１個目のイベント
+        e.SetManager(this);
+        e = Instantiate(eventFlag, new Vector3(-3.0f, 3.0f, -4.0f), Quaternion.identity);//2個目のイベント
+        e.SetManager(this);
+        e = Instantiate(eventFlag, new Vector3(-6.5f, 3.0f, -4.0f), Quaternion.identity);//3個目のイベント
         e.SetManager(this);
 
     }
