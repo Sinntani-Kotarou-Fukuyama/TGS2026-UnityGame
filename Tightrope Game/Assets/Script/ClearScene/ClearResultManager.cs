@@ -32,6 +32,13 @@ public class ClearResultManager : MonoBehaviour
 
     private void Start()
     {
+        if (ClearResultData.HasResult)
+        {
+            Debug.Log($"{nameof(ClearResultManager)}: Applying clear result. rank={ClearResultData.LastClearRank}, missCount={ClearResultData.LastMissCount}", this);
+            ApplyResult(ClearResultData.LastClearRank);
+            return;
+        }
+
         ApplyResult(testRank);
     }
 
@@ -146,19 +153,19 @@ public class ClearResultManager : MonoBehaviour
             case ClearRank.S:
                 return new ClearResultText(
                     "S",
-        　　　　　　"謎の組織加入END",
-        　　　　　　"謎のボス「待っていたよ、A君。試験突破おめでとう。」");
-
+        "謎の組織加入END",
+        "謎のボス「待っていたよ、A君。試験突破おめでとう。」");
             case ClearRank.A:
                 return new ClearResultText(
-                   "A",
-        　　　　　 "出世END",
-        　　　　　 "上司「君みたいな人材はめったにいないよ。次はもっと大きな仕事をしてみないか？」");
+                    "A",
+        "出世END",
+        "君みたいな人材はめったにいないよ。次はもっと大きな仕事をしてみないか？");
+
             case ClearRank.B:
                 return new ClearResultText(
-                   "B",
-                   "通常END",
-                   "謎の人物「……くそっ、仕留めそこなったか。」");
+                    "B",
+        "通常END",
+        "……くそっ、仕留めそこなったか。");
             default:
                 Debug.LogWarning($"{nameof(ClearResultManager)}: Unsupported clear rank {rank}.", this);
                 return ClearResultText.Empty;
