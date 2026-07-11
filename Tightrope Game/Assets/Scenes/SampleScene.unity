@@ -3273,6 +3273,11 @@ MonoBehaviour:
   matrixAvoidCamera: {fileID: 10507517}
   matrixAvoidCameraPriority: 30
   matrixAvoidInactiveCameraPriority: 0
+  normalPlayerCamera: {fileID: 1481858067}
+  normalPlayerCameraName: ManCamera
+  dinoCameraNamesToLowerOnRestore:
+  - DinoCamera
+  - EventDinoCamera
   matrixAvoidBulletShooter: {fileID: 1086759354}
   matrixAvoidAnimator: {fileID: 2019293627}
   matrixAvoidTriggerName: MatrixAvoid

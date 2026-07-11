@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Unity.Cinemachine;
 
@@ -65,6 +66,14 @@ public class SniperEventManager : MonoBehaviour
     [Tooltip("マトリックス回避カメラを使わない時のPriorityです。")]
     [SerializeField] private int matrixAvoidInactiveCameraPriority = 0;
 
+    [Header("Normal Camera Restore")]
+    [Tooltip("スナイパーイベント終了後に戻す通常プレイヤー用カメラです。通常はManCameraを設定してください。")]
+    [SerializeField] private CinemachineCamera normalPlayerCamera;
+    [Tooltip("Normal Player Cameraが未設定の場合、この名前のCinemachine Cameraを自動検索します。")]
+    [SerializeField] private string normalPlayerCameraName = "ManCamera";
+    [Tooltip("スナイパーイベント終了時に、プレイヤーカメラより優先度を下げる怪獣系カメラ名です。")]
+    [SerializeField] private string[] dinoCameraNamesToLowerOnRestore = { "DinoCamera", "EventDinoCamera" };
+
     [Header("Matrix Avoid Bullets")]
     // マトリックス回避フェーズで、4発同時に飛ぶ弾を管理するShooterです。
     [SerializeField] private MatrixAvoidBulletShooter matrixAvoidBulletShooter;
@@ -98,6 +107,20 @@ public class SniperEventManager : MonoBehaviour
     private bool hasPlayedSniperWarningSound;
     private bool hasPlayedPaperStickSound;
     private bool hasReturnedToNormalGameplay;
+    private readonly List<SavedCameraPriority> savedSniperEventCameraPriorities = new List<SavedCameraPriority>();
+    private bool hasSavedSniperEventCameraState;
+
+    private struct SavedCameraPriority
+    {
+        public CinemachineCamera Camera;
+        public int Priority;
+
+        public SavedCameraPriority(CinemachineCamera camera)
+        {
+            Camera = camera;
+            Priority = camera.Priority.Value;
+        }
+    }
 
     // 外からイベント中か確認するための読み取り専用プロパティです。
     public bool IsSniperEventActive => isSniperEventActive;
@@ -193,6 +216,7 @@ public class SniperEventManager : MonoBehaviour
         hasReturnedToNormalGameplay = false;
         hasPlayedSniperWarningSound = false;
         hasPlayedPaperStickSound = false;
+        SaveSniperEventCameraState();
         StopPlayerAutoMove();
         OnSniperEventStarted();
     }
@@ -284,6 +308,7 @@ public class SniperEventManager : MonoBehaviour
 
         EndSideViewPhase();
         RestoreMatrixAvoidCameraPriority();
+        RestoreNormalPlayerCameraState();
         RestoreMatrixAvoidAnimatorSpeed();
         StopMatrixAvoidBullets();
         ReturnBalanceManagerToNormalState();
@@ -352,6 +377,152 @@ public class SniperEventManager : MonoBehaviour
         matrixAvoidBulletShooter = FindFirstObjectByType<MatrixAvoidBulletShooter>();
     }
 
+    private void AutoFindNormalPlayerCamera(CinemachineCamera[] sceneCameras)
+    {
+        if (normalPlayerCamera != null)
+        {
+            return;
+        }
+
+        if (string.IsNullOrEmpty(normalPlayerCameraName))
+        {
+            return;
+        }
+
+        for (int i = 0; i < sceneCameras.Length; i++)
+        {
+            CinemachineCamera sceneCamera = sceneCameras[i];
+            if (sceneCamera != null && sceneCamera.name == normalPlayerCameraName)
+            {
+                normalPlayerCamera = sceneCamera;
+                return;
+            }
+        }
+    }
+
+    private void SaveSniperEventCameraState()
+    {
+        savedSniperEventCameraPriorities.Clear();
+
+        CinemachineCamera[] sceneCameras = FindObjectsByType<CinemachineCamera>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        AutoFindNormalPlayerCamera(sceneCameras);
+
+        for (int i = 0; i < sceneCameras.Length; i++)
+        {
+            CinemachineCamera sceneCamera = sceneCameras[i];
+            if (sceneCamera == null)
+            {
+                continue;
+            }
+
+            savedSniperEventCameraPriorities.Add(new SavedCameraPriority(sceneCamera));
+        }
+
+        hasSavedSniperEventCameraState = true;
+        Debug.Log($"SniperEventManager: Sniper event camera state saved. cameraCount={savedSniperEventCameraPriorities.Count}", this);
+    }
+
+    private void RestoreNormalPlayerCameraState()
+    {
+        if (!hasSavedSniperEventCameraState)
+        {
+            Debug.LogWarning("SniperEventManager: スナイパーイベント開始前のカメラ状態が保存されていません。カメラ復元をスキップします。", this);
+            return;
+        }
+
+        Debug.Log("SniperEventManager: Restoring normal player camera.", this);
+
+        for (int i = 0; i < savedSniperEventCameraPriorities.Count; i++)
+        {
+            SavedCameraPriority savedCameraPriority = savedSniperEventCameraPriorities[i];
+            if (savedCameraPriority.Camera == null)
+            {
+                continue;
+            }
+
+            savedCameraPriority.Camera.Priority.Value = savedCameraPriority.Priority;
+        }
+
+        CinemachineCamera[] sceneCameras = FindObjectsByType<CinemachineCamera>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        AutoFindNormalPlayerCamera(sceneCameras);
+
+        if (normalPlayerCamera == null)
+        {
+            Debug.LogWarning("SniperEventManager: 通常プレイヤーカメラが見つかりません。Normal Player Camera に ManCamera を設定してください。", this);
+            savedSniperEventCameraPriorities.Clear();
+            hasSavedSniperEventCameraState = false;
+            return;
+        }
+
+        int playerPriority = Mathf.Max(normalPlayerCamera.Priority.Value, 15);
+        normalPlayerCamera.Priority.Value = playerPriority;
+
+        LowerDinoCamerasBelowPlayer(sceneCameras, playerPriority);
+
+        int highestOtherPriority = GetHighestCameraPriorityExcept(sceneCameras, normalPlayerCamera);
+        if (normalPlayerCamera.Priority.Value <= highestOtherPriority)
+        {
+            normalPlayerCamera.Priority.Value = highestOtherPriority + 1;
+        }
+
+        Debug.Log($"SniperEventManager: {normalPlayerCamera.name} priority restored to {normalPlayerCamera.Priority.Value}.", this);
+
+        savedSniperEventCameraPriorities.Clear();
+        hasSavedSniperEventCameraState = false;
+    }
+
+    private void LowerDinoCamerasBelowPlayer(CinemachineCamera[] sceneCameras, int playerPriority)
+    {
+        for (int i = 0; i < sceneCameras.Length; i++)
+        {
+            CinemachineCamera sceneCamera = sceneCameras[i];
+            if (sceneCamera == null || sceneCamera == normalPlayerCamera || !ShouldLowerDinoCamera(sceneCamera.name))
+            {
+                continue;
+            }
+
+            sceneCamera.Priority.Value = Mathf.Min(sceneCamera.Priority.Value, playerPriority - 1);
+            Debug.Log($"SniperEventManager: {sceneCamera.name} priority lowered to {sceneCamera.Priority.Value}.", this);
+        }
+    }
+
+    private bool ShouldLowerDinoCamera(string cameraName)
+    {
+        if (dinoCameraNamesToLowerOnRestore == null)
+        {
+            return false;
+        }
+
+        for (int i = 0; i < dinoCameraNamesToLowerOnRestore.Length; i++)
+        {
+            string dinoCameraName = dinoCameraNamesToLowerOnRestore[i];
+            if (!string.IsNullOrEmpty(dinoCameraName) && cameraName == dinoCameraName)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private int GetHighestCameraPriorityExcept(CinemachineCamera[] sceneCameras, CinemachineCamera excludedCamera)
+    {
+        int highestPriority = int.MinValue;
+
+        for (int i = 0; i < sceneCameras.Length; i++)
+        {
+            CinemachineCamera sceneCamera = sceneCameras[i];
+            if (sceneCamera == null || sceneCamera == excludedCamera)
+            {
+                continue;
+            }
+
+            highestPriority = Mathf.Max(highestPriority, sceneCamera.Priority.Value);
+        }
+
+        return highestPriority == int.MinValue ? 0 : highestPriority;
+    }
+
     private void AutoFindBalanceManager()
     {
         balanceManager = FindFirstObjectByType<BalanceManager>();
@@ -377,7 +548,6 @@ public class SniperEventManager : MonoBehaviour
 
         balanceManager.ResumeNormalBalanceGauge();
     }
-
 
     private void HideNormalCountUiForSniperEvent()
     {
@@ -834,7 +1004,6 @@ public class SniperEventManager : MonoBehaviour
         StartMatrixAvoidBullets();
     }
 
-
     private void StartMatrixAvoidGauge()
     {
         if (balanceManager == null)
@@ -923,6 +1092,7 @@ public class SniperEventManager : MonoBehaviour
         matrixAvoidBulletShooter.StopShooting();
         Debug.Log("SniperEventManager: MatrixAvoid bullets cleared.", this);
     }
+
     private void SwitchToMatrixAvoidCamera()
     {
         if (matrixAvoidCamera == null)
@@ -960,6 +1130,7 @@ public class SniperEventManager : MonoBehaviour
         }
 
         isMatrixAvoidCameraActive = false;
+        Debug.Log($"SniperEventManager: MatrixAvoidCamera priority restored to {matrixAvoidCamera.Priority.Value}.", this);
         Debug.Log("SniperEventManager: Normal camera restored.", this);
     }
 
