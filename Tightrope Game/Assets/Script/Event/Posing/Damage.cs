@@ -12,6 +12,7 @@ public class Damage : MonoBehaviour
     [SerializeField] Transform ExplosionPoint2;//爆発ポイント2(プレイヤー)
     [SerializeField] ExplosionFlash flash;//爆発の光
     [SerializeField] PosingEvent pose;//poseイベントを取得
+    [SerializeField] CameraShake shake;//カメラを揺らす
     public bool DamageFlag = false;//ダメージを受けたか確認するフラグ
     public bool TextFlag = true;//Textを打ったか確認するフラグ
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -40,6 +41,7 @@ public class Damage : MonoBehaviour
                 //吹き飛びそうな動作をする
                 animator.SetBool("Reaction", true);
                 Invoke(nameof(ReactionReset), 3.0f);
+                shake.Shake();//カメラを揺らす
                 keikokuAudio.Stop();//警告音を止める
             }
            
@@ -57,13 +59,13 @@ public class Damage : MonoBehaviour
             Invoke(nameof(NiceTextDestroy), 3.0f);
             //当たらなかった時のSEを入れる
             Debug.Log("NICE!");
-            //爆発させる
-            Transform point = ExplosionPoint.transform;
-            Instantiate(Explosion,point);
+           
+           
             flash.Flash();
             //引き飛びそうな動作をする
             animator.SetBool("Reaction", true);
             Invoke(nameof(ReactionReset), 3.0f);
+            shake.Shake();//カメラを揺らす
             keikokuAudio.Stop();//警告音を止める
         }
        
@@ -84,5 +86,14 @@ public class Damage : MonoBehaviour
     void ReactionReset()
     {
         animator.SetBool("Reaction", false);
+    }
+    public void Explo()
+    {
+        if (DamageFlag == false)
+        {
+            //爆発させる
+            Transform point = ExplosionPoint.transform;
+            Instantiate(Explosion, point);
+        }
     }
 }

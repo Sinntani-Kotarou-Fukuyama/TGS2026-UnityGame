@@ -9,7 +9,7 @@ public class HahenCollider : MonoBehaviour
     {
         player = GameObject.Find("SuitMan");
         damage=player.GetComponent<Damage>();
-        Invoke(nameof(DamageFlag), 13f);
+       // Invoke(nameof(DamageFlag), 13f);
         Invoke(nameof(Destroy), 15f);
     }
 
@@ -27,11 +27,17 @@ public class HahenCollider : MonoBehaviour
             damage.EventDamage();
             damage.DamageFlag = true;
         }
+        if (t.gameObject.tag =="Explosion")
+        {
+            Debug.Log("ExplosionPointに当たった");
+            damage.Explo();
+            damage.NoDamage();
+        }
     }
-    void DamageFlag()
-    {
-        damage.NoDamage();//破片がプレイヤーに当たらなかったら
-    }
+   // void DamageFlag()
+   // {
+    //    damage.NoDamage();//破片がプレイヤーに当たらなかったら
+   // }
     private void Destroy()
     {
         Destroy(this.gameObject);

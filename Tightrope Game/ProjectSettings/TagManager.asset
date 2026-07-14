@@ -8,6 +8,7 @@ TagManager:
   - Hahen
   - RopeParts
   - Kaiju
+  - Explosion
   layers:
   - Default
   - TransparentFX

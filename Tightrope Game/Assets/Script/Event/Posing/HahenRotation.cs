@@ -40,11 +40,16 @@ public class HahenRotation : MonoBehaviour
     {
         slow = true;
         Debug.Log("ÉXÉçÅ[");
-        Invoke(nameof(HahenPositionReset), 3.0f);       
+        Invoke(nameof(HahenPositionReset), 5.0f);       
     }
    void HahenPositionReset()
     {
         Vector3 pos = new Vector3(-21.144f, 2.3f, -4.15f);
         transform.position = pos;
+        Invoke(nameof(SlowFinish), 3.0f);
+    }
+    void SlowFinish()
+    {
+        slow = false;
     }
 }

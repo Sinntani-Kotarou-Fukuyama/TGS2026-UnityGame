@@ -20,6 +20,7 @@ public class PosingEvent : MonoBehaviour
     [SerializeField] private Behaviour _target;//“_–Å‚³‚¹‚é‘ÎÛ
     [SerializeField] public GameObject Porsemp4;//“®‰æ
     [SerializeField] private float _cycle = 1; // “_–ÅüŠú[•b]
+    [SerializeField] ParentKaizyo exoloOarentReset;//e‰ğœ
     Quaternion startplayer;//Å‰‚Ì‰ñ“]‚ğ‹L˜^‚·‚é
     Quaternion startstick;//Å‰‚Ì‰ñ“]‚ğ‹L˜^‚·‚é
     Quaternion startplayerRightHund;//Å‰‚Ì‰ñ“]‚ğ‹L˜^‚·‚é
@@ -119,6 +120,7 @@ public class PosingEvent : MonoBehaviour
 
     void PoseEvent()
     {
+        exoloOarentReset.ParentReset();
         DinoStoping = true;//‰öb‚ğŒÅ’è
         playerMover.PlayerStoping = true;//ƒvƒŒƒCƒ„[‚ğŒÅ’è
         startplayer = player.transform.rotation;//ƒCƒxƒ“ƒg‘O‚Ì‰ñ“]‚ğŠi”[

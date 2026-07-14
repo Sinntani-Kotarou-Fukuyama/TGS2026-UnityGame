@@ -75,9 +75,8 @@ public class CameraSwhich : MonoBehaviour
 
         mancamera.Priority.Value = 5;
         posingdinocamera.Priority.Value = 15;
-        Invoke("PosingFinish", 6.5f);
     }
-    void PosingFinish()
+    public void PosingFinish()
     {
         Posing.HahenTextTrue();
 
