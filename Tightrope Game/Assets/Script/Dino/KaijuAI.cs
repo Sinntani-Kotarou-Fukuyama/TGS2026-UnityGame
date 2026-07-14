@@ -20,7 +20,7 @@ public class KaijuAI : MonoBehaviour
 
     [Header("Patrol")]
     public Transform[] patrolPoints;
-
+    [SerializeField] Transform player;//プレイヤーの座標を検知
 
     Animator anim;
     NavMeshAgent agent;
@@ -124,8 +124,9 @@ public class KaijuAI : MonoBehaviour
             return;
         }
 
+        //プレイヤーの近くの建物をセットする
         targetBuilding = buildings
-            .OrderBy(b => Vector3.Distance(transform.position, b.transform.position))
+            .OrderBy(b => Vector3.Distance(player.position, b.transform.position))
             .FirstOrDefault();
 
         targetBreakScript = targetBuilding?.GetComponent<BreakBuilding>();

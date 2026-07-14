@@ -13024,6 +13024,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: bills2 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8109276619464694892, guid: 24a4954db6cc9f04288f2482040da3d3, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14249,6 +14253,14 @@ PrefabInstance:
     - target: {fileID: 49027065308233354, guid: 41e406a5a55dddc43bd0ce556a427c10, type: 3}
       propertyPath: m_Name
       value: Bills1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168177696726237861, guid: 41e406a5a55dddc43bd0ce556a427c10, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 4593386886343142024, guid: 41e406a5a55dddc43bd0ce556a427c10, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 6895439021422925029, guid: 41e406a5a55dddc43bd0ce556a427c10, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16167,6 +16179,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1452297742}
     - target: {fileID: 5919532609706824771, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 2019293630}
+    - target: {fileID: 5919532609706824771, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -17192,6 +17208,10 @@ PrefabInstance:
     - target: {fileID: 7937794985292019113, guid: c10cd69bea749cd4e8e3b7a6dab85933, type: 3}
       propertyPath: m_Name
       value: "\u7834\u58CA\u53EF\u80FD\u30AA\u30EC\u30F3\u30B8\u5BB6 (4)"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7937794985292019113, guid: c10cd69bea749cd4e8e3b7a6dab85933, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18907,10 +18927,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 668b8a9e6e5d81b409f43347beec68f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shake: {fileID: 0}
-  amplitudeGain: 5
-  frequencyGain: 5
-  shakeDuration: 4
+  shake: {fileID: 1197145434}
+  amplitudeGain: 3
+  frequencyGain: 10
+  shakeDuration: 2.5
+--- !u!114 &1197145434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 103887620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bb026fafb42b14791938953eaace77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  NoiseProfile: {fileID: 11400000, guid: 46965f9cbaf525742a6da4c2172a99cd, type: 2}
+  PivotOffset: {x: 0, y: 0, z: 0}
+  AmplitudeGain: 1
+  FrequencyGain: 1
+  m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!4 &1208847642 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7729173914471424540, guid: 3efa18409f3a284408c9f34da9b2cecb, type: 3}
@@ -20046,6 +20083,10 @@ PrefabInstance:
     - target: {fileID: 8109276619464694892, guid: b245472f39835104d908669a14c4a374, type: 3}
       propertyPath: m_Name
       value: "\u7834\u58CA\u53EF\u80FD\u7DD1\u30D3\u30EB (5)"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8109276619464694892, guid: b245472f39835104d908669a14c4a374, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8264047465107442084, guid: b245472f39835104d908669a14c4a374, type: 3}
       propertyPath: rolloffMode
@@ -22572,6 +22613,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: "\u7834\u58CA\u53EF\u80FD\u7DD1\u30D3\u30EB (2)"
       objectReference: {fileID: 0}
+    - target: {fileID: 8109276619464694892, guid: b245472f39835104d908669a14c4a374, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 8264047465107442084, guid: b245472f39835104d908669a14c4a374, type: 3}
       propertyPath: rolloffMode
       value: 1
@@ -25003,6 +25048,10 @@ PrefabInstance:
       value: "\u7834\u58CA\u53EF\u80FD\u30AA\u30EC\u30F3\u30B8\u7DD1\u30D3\u30EB
         (2)"
       objectReference: {fileID: 0}
+    - target: {fileID: 3429275889885649769, guid: 38462bc242c05c4499c79944f8b56e78, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -26517,6 +26566,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8713226846898930203, guid: 16856126b1808f449b4364f90336750b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1197145434}
     - targetCorrespondingSourceObject: {fileID: 8713226846898930203, guid: 16856126b1808f449b4364f90336750b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1197145433}
@@ -30018,6 +30070,10 @@ PrefabInstance:
     - target: {fileID: 5484728785165166165, guid: cd9b281bc8f82e54b9c6446b1f4c5548, type: 3}
       propertyPath: m_Name
       value: "\u7834\u58CA\u53EF\u80FD\u9752\u9EC4\u30D3\u30EB (1)"
+      objectReference: {fileID: 0}
+    - target: {fileID: 5484728785165166165, guid: cd9b281bc8f82e54b9c6446b1f4c5548, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 6481160808182214217, guid: cd9b281bc8f82e54b9c6446b1f4c5548, type: 3}
       propertyPath: rolloffMode
@@ -34398,6 +34454,18 @@ PrefabInstance:
     - target: {fileID: 6246005274639155593, guid: 24a4954db6cc9f04288f2482040da3d3, type: 3}
       propertyPath: m_Name
       value: bills2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7937794985292019113, guid: 24a4954db6cc9f04288f2482040da3d3, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 8109276619464694892, guid: 24a4954db6cc9f04288f2482040da3d3, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 9139603310299696882, guid: 24a4954db6cc9f04288f2482040da3d3, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
