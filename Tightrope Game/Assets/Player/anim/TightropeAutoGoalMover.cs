@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -68,8 +69,10 @@ public class TightropeAutoGoalMover : MonoBehaviour
 
     [Header("Animator")]
     // 既存Animatorを使って歩きモーションを切り替えたい場合に入れます。
+    [Tooltip("プレイヤーのAnimatorです。未設定の場合は同じGameObjectまたは子から自動取得します。")]
     [SerializeField] private Animator animator;
     // Animator側の歩きbool名です。
+    [Tooltip("歩きアニメーションへ切り替えるBool Parameter名です。")]
     [SerializeField] private string walkBoolName = "catwalk";
 
     [Header("Events")]
@@ -82,9 +85,15 @@ public class TightropeAutoGoalMover : MonoBehaviour
     private float goalDistanceAlongRope;
     private bool isMoving;
     private bool hasReachedGoal;
+    private bool isRouteControlled;
+    private bool isRouteSegmentActive;
+    private bool invokeGoalOnRouteSegmentReached;
 
     public bool IsMoving => isMoving;
     public bool HasReachedGoal => hasReachedGoal;
+
+    // TightropeRouteControllerが、1区間の移動完了を受け取るための通知です。
+    public event Action RouteSegmentReached;
 
     public bool PlayerStoping = false;//プレイヤー固定フラグ
     private void Reset()
@@ -106,7 +115,7 @@ public class TightropeAutoGoalMover : MonoBehaviour
 
         InitializePathDistances();
 
-        if (moveOnStart)
+        if (moveOnStart && !isRouteControlled)
         {
             StartMoving();
         }
@@ -114,40 +123,22 @@ public class TightropeAutoGoalMover : MonoBehaviour
 
     private void Update()
     {
-        if (!isMoving || hasReachedGoal || goalPoint == null)
+        // 停止中は必ず歩きBoolをOFFにします。
+        // PlayerStopingはイベント側から変更されるため、ルート移動中でもここで毎フレーム確認します。
+        if (!isMoving || hasReachedGoal || goalPoint == null || PlayerStoping)
         {
-            if (PlayerStoping == false)
-            {
-                SetWalkAnimation(false);
-                return;
-            }
-            
-           
-           
-            
+            SetWalkAnimation(false);
+            return;
         }
 
         if (ropePath != null)
         {
-            if(PlayerStoping==false)
-            {
-                MoveAlongRope();
-                SetWalkAnimation(true);
-            }
-            else
-            {
-                SetWalkAnimation(false);
-            }
-            
+            MoveAlongRope();
         }
         else
         {
-            if (PlayerStoping == false)
-            {
-                MoveDirectlyToGoal();
-            }
+            MoveDirectlyToGoal();
         }
-               
     }
 
     public void StartMoving()
@@ -165,6 +156,56 @@ public class TightropeAutoGoalMover : MonoBehaviour
     {
         isMoving = false;
         SetWalkAnimation(false);
+    }
+
+    /// <summary>
+    /// 外部のルート管理スクリプトから移動を制御する時に呼びます。
+    /// Awakeで呼ぶと、既存のmoveOnStartによる自動開始を安全に止められます。
+    /// </summary>
+    public void EnableRouteControl()
+    {
+        isRouteControlled = true;
+        isRouteSegmentActive = false;
+        hasReachedGoal = false;
+        StopMoving();
+    }
+
+    /// <summary>
+    /// 指定した開始Transformから終了Transformまで、座標間移動を開始します。
+    /// 最終区間だけinvokeGoalWhenReachedをtrueにすると、既存のonGoalReachedも呼ばれます。
+    /// </summary>
+    public bool StartDirectRouteSegment(
+        Transform startPoint,
+        Transform endPoint,
+        float segmentMoveSpeed,
+        bool invokeGoalWhenReached)
+    {
+        if (startPoint == null || endPoint == null)
+        {
+            Debug.LogWarning("TightropeAutoGoalMover: ルート区間の開始点または終了点が設定されていません。", this);
+            return false;
+        }
+
+        if (segmentMoveSpeed <= 0f)
+        {
+            Debug.LogWarning("TightropeAutoGoalMover: ルート移動速度は0より大きい値にしてください。", this);
+            return false;
+        }
+
+        isRouteControlled = true;
+        isRouteSegmentActive = true;
+        invokeGoalOnRouteSegmentReached = invokeGoalWhenReached;
+        hasReachedGoal = false;
+
+        // 今回のルート制はRopePathではなく、Transform間の直線移動を使用します。
+        ropePath = null;
+        goalPoint = endPoint;
+        moveSpeed = segmentMoveSpeed;
+
+        // 各区間の開始点へ移動します。ロープ間の屋上部分もこの処理で瞬間移動できます。
+        transform.SetPositionAndRotation(startPoint.position, startPoint.rotation);
+        StartMoving();
+        return true;
     }
 
     public void SetManualMovementEnabled(bool enabled)
@@ -240,7 +281,8 @@ public class TightropeAutoGoalMover : MonoBehaviour
             RotateTowards(moveDirection);
         }
 
-        SetWalkAnimation(moveDirection.sqrMagnitude > 0.0001f);
+        // 低速移動では1フレームの移動量が小さいため、Mathf.Epsilonで実際に動いたかだけを判定します。
+        SetWalkAnimation(moveDirection.sqrMagnitude > Mathf.Epsilon);
 
         if (Vector3.Distance(transform.position, targetPosition) <= goalStopDistance)
         {
@@ -266,9 +308,34 @@ public class TightropeAutoGoalMover : MonoBehaviour
             return;
         }
 
+        bool reachedRouteSegment = isRouteSegmentActive;
+        bool shouldInvokeGoal = invokeGoalOnRouteSegmentReached;
+
+        if (reachedRouteSegment && goalPoint != null)
+        {
+            // 分岐地点やGoalで誤差が残らないよう、区間終了時だけ終了Transformへ正確に合わせます。
+            transform.position = goalPoint.position;
+        }
+
         hasReachedGoal = true;
         isMoving = false;
+        isRouteSegmentActive = false;
+        invokeGoalOnRouteSegmentReached = false;
         SetWalkAnimation(false);
+
+        if (reachedRouteSegment)
+        {
+            DebugLog("Route segment reached.");
+            RouteSegmentReached?.Invoke();
+
+            if (shouldInvokeGoal)
+            {
+                onGoalReached?.Invoke();
+            }
+
+            return;
+        }
+
         DebugLog("Goal reached.");
         onGoalReached?.Invoke();
     }
