@@ -32517,6 +32517,16 @@ MonoBehaviour:
   redFlashDuration: 0.2
   redFlashColor: {r: 1, g: 0, b: 0, a: 1}
   redEmissionIntensity: 2
+  playerTransform: {fileID: 2019293630}
+  playerAnimator: {fileID: 2019293627}
+  walkBoolName: catwalk
+  fallTriggerName: fall
+  fallDuration: 2
+  fallDistance: 2.42
+  gameOverDelay: 2.5
+  balanceManager: {fileID: 1311752719}
+  tightropeAutoGoalMover: {fileID: 2019293633}
+  tightropeRouteController: {fileID: 2019293636}
   debugLog: 1
 --- !u!4 &2025167756
 Transform:
