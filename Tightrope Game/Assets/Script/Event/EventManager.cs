@@ -47,15 +47,18 @@ public class EventManager : MonoBehaviour
     private void Start()
     {
         EventFlag e;
-        
-        // イベントフラグの生成、設定
-        e = Instantiate(eventFlag,new Vector3(-1.2f,3.0f,-4.0f),Quaternion.identity);//１個目のイベント
-        e.SetManager(this);
-        e = Instantiate(eventFlag, new Vector3(-3.5f, 3.0f, -4.0f), Quaternion.identity);//2個目のイベント
-        e.SetManager(this);
-        e = Instantiate(eventFlag, new Vector3(-6.5f, 3.0f, -4.0f), Quaternion.identity);//3個目のイベント
-        e.SetManager(this);
 
+        // イベントフラグの生成、設定
+        /* e = Instantiate(eventFlag,new Vector3(-1.2f,3.0f,-4.0f),Quaternion.identity);//１個目のイベント
+         e.SetManager(this);
+         e = Instantiate(eventFlag, new Vector3(-3.5f, 3.0f, -4.0f), Quaternion.identity);//2個目のイベント
+         e.SetManager(this);
+         e = Instantiate(eventFlag, new Vector3(-6.5f, 3.0f, -4.0f), Quaternion.identity);//3個目のイベント
+         e.SetManager(this);*/
+        e = Instantiate(eventFlag, new Vector3(12.74f, 3.0f, -2.66f), Quaternion.identity);//１個目のイベント
+        e.SetManager(this);
+        e = Instantiate(eventFlag, new Vector3(5.086f, 3.0f, -2.376f), Quaternion.identity);//2個目のイベント
+        e.SetManager(this);
     }
 
     // イベントフラグがプレイヤーにあたると呼び出されるメソッド

@@ -22,7 +22,7 @@ public class Helicopter : MonoBehaviour
     [SerializeField] float speed =1f;//ƒwƒŠ‚ÌˆÚ“®‘¬“x
     [SerializeField, Header("ƒvƒŒƒCƒ„[‚Ì—h‚ê‚Ì‹­‚³")] float shake = 0.1f;
     [SerializeField, Header("ƒvƒŒƒCƒ„[‚Ì—h‚ê‚ÌØ‚è‘Ö‚¦ŠÔ")] float clocktime =2f;
-    private GameObject spawnedObj;
+    public GameObject spawnedObj;
     private GameObject spawneDino;
     bool Flag = false;//ƒCƒxƒ“ƒgƒtƒ‰ƒO
     bool HeliIdouflag = true;//ƒwƒŠˆÚ“®ƒtƒ‰ƒO
@@ -41,7 +41,8 @@ public class Helicopter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(KaiwaFlag==true)
+        
+        if (KaiwaFlag==true)
         {
             KaiwaFlag = false;
             Invoke("KaiwaNext", 5.0f);//5•b‚²‚Æ‚É‰ï˜b‚ği‚ß‚é
@@ -57,20 +58,22 @@ public class Helicopter : MonoBehaviour
         if(HeliIdouflag==true)
         {
             //ƒwƒŠ‚ÌˆÚ“®
-            Vector3 move = new Vector3(0.0f, 0.0f, -1.0f) * speed * Time.deltaTime;
+            //Vector3 move = new Vector3(0.0f, 0.0f, -1.0f) * speed * Time.deltaTime;
             if(spawnedObj!=null)
             {
-                spawnedObj.transform.position += move;
+                // spawnedObj.transform.position += move;
+                spawnedObj.transform.Translate(Vector3.forward * 1.0f * Time.deltaTime);
             }
            
         }
         if (DinoIdouflag == true)
         {
             //‰öb‚ÌˆÚ“®
-            Vector3 move = new Vector3(-1.0f, 0.0f, 0.0f) * speed * Time.deltaTime;
+            //Vector3 move = new Vector3(-1.0f, 0.0f, 0.0f) * speed * Time.deltaTime;
             if(spawneDino!=null)
             {
-                spawneDino.transform.position += move;
+                //spawneDino.transform.position += move;
+                spawneDino.transform.Translate(Vector3.forward * 1.0f * Time.deltaTime);
             }
            
         }
@@ -120,12 +123,13 @@ public class Helicopter : MonoBehaviour
     {
         DinoStoping = true;//‰öb‚ğŒÅ’è
         playerMover.PlayerStoping = true;//ƒvƒŒƒCƒ„[‚ğŒÅ’è
-        Quaternion rotation = Quaternion.Euler(0, 170, 0);//ƒwƒŠ‚ÌŒü‚«
+        Quaternion rotation = Quaternion.Euler(0, 0, 0);//ƒwƒŠ‚ÌŒü‚«
         //ƒvƒŒƒCƒ„[‚Ì‰E‚ÉƒwƒŠ‚ğ¶¬
         Vector3 playerpos = player.transform.position + player.right * offsetX + player.forward * offsetZ;
         spawnedObj=Instantiate(helicopter, playerpos, rotation);
-        //‚R•bŒã‚ÉƒwƒŠ‚ğ’â~
-        Invoke("Idouflag", 3.0f);
+       
+        //3.2•bŒã‚ÉƒwƒŠ‚ğ’â~
+        Invoke("Idouflag", 3.2f);
         Invoke("CameraOn", 22.0f);
         Invoke("DinoEvent", 27.0f);//27•b‚É‰öbƒCƒxƒ“ƒg‚ğn‚ß‚é
         Invoke("Explosion", 35.0f);//35•bŒã‚É”š”­‚³‚¹‚é
@@ -168,8 +172,16 @@ public class Helicopter : MonoBehaviour
     {
         Quaternion rotation = Quaternion.Euler(0, -90, 0);//‰öb‚ÌŒü‚«
         //ƒwƒŠ‚Ì‰¡‚É‰öb‚ğ¶¬
-        Vector3 helipos = spawnedObj.transform.position + new Vector3(5.0f, -3.18f, 0.0f);
+        //Vector3 helipos = spawnedObj.transform.position + new Vector3(5.0f, -3.18f, 0.0f);
+        Transform Obj = spawnedObj.transform;
+        Vector3 leftDirection = -Obj.right;
+        Vector3 YDirection =new Vector3(0, -2.8f, 0);
+        Vector3 helipos = spawnedObj.transform.position + leftDirection * 5.0f+YDirection;
         spawneDino = Instantiate(EventDino,helipos,rotation);
+        spawneDino.transform.LookAt(spawnedObj.transform);
+        Vector3 currentRotation =spawneDino.transform.eulerAngles;
+        currentRotation.x = 0;
+        spawneDino.transform.eulerAngles = currentRotation;
         //‚R•bŒã‚É‰öb‚ğ’â~
         Invoke("DinoIdouFlag", 3.0f);
         
