@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -77,6 +78,9 @@ public class PlayerGameFeedbackController : MonoBehaviour
     public int DamageCount => damageCount;
     public int MaxDamageCount => maxDamageCount;
 
+    // 体幹メーターなど、ダメージ数の表示だけを担当するUIへ変更後の値を通知します。
+    public event Action<int> DamageCountChanged;
+
     private void Awake()
     {
         if (audioSource == null)
@@ -113,6 +117,8 @@ public class PlayerGameFeedbackController : MonoBehaviour
         damageCount += addAmount;
         DebugLog($"Damage added. damageCount={damageCount}/{maxDamageCount}");
 
+        // GameOver判定より先に通知し、5回目も既存Scene遷移前に最新値へ更新できるようにします。
+        DamageCountChanged?.Invoke(damageCount);
         FlashRed();
 
         if (damageCount >= maxDamageCount)
@@ -125,6 +131,7 @@ public class PlayerGameFeedbackController : MonoBehaviour
     {
         damageCount = 0;
         DebugLog("Damage reset.");
+        DamageCountChanged?.Invoke(damageCount);
     }
 
     public void LoadClearScene()
