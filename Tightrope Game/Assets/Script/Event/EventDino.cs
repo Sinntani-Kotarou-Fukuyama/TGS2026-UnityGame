@@ -65,7 +65,7 @@ public class EventDino : MonoBehaviour
        
         anim.speed = 0.2f;
         anim.SetTrigger("Attack");
-        Quaternion rotation = Quaternion.Euler(-48, -90, 0);//レーザーの向き
+        Quaternion rotation = Quaternion.Euler(0, 0, 0);//レーザーの向き
         //怪獣の座標を計算
         Vector3 dinopos =transform.position;
         //怪獣の口らへんにレーザーを召喚
@@ -78,8 +78,9 @@ public class EventDino : MonoBehaviour
              
 
         dinopos.y = OffsetY;
-        spawnraser = Instantiate(raser, ebentdino.position, rotation);
+        spawnraser = Instantiate(raser, ebentdino.position, ebentdino.rotation);
         spawnraser.transform.LookAt(heli.spawnedObj.transform);
+        spawnraser.transform.position = ebentdino.transform.position;
         beamChargeAudio.Play();
         Invoke("Beam", 2.0f);
     }

@@ -356,7 +356,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 828edb3c3c400444690b8b12271223f2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 15.265717
+      value: 11.665043
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 828edb3c3c400444690b8b12271223f2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -364,7 +364,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 828edb3c3c400444690b8b12271223f2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.83530784
+      value: -5.388223
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 828edb3c3c400444690b8b12271223f2, type: 3}
       propertyPath: m_LocalRotation.w
@@ -950,7 +950,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d41bc7c09173284e97f70291927d3c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raser: {fileID: 7836250239736369590, guid: c1e7e0fcec6b780428d410b66aeee205, type: 3}
+  raser: {fileID: 8870858514466055043, guid: 8153eb3583e92d24cbbcfe46217fe7f5, type: 3}
   ebentdino: {fileID: 4570345268613344466}
   heli: {fileID: 0}
   beamAudio: {fileID: 8570349744640450321}

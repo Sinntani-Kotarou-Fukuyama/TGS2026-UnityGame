@@ -6,7 +6,7 @@ public class CameraSwhich : MonoBehaviour
 {
     //CameraManagerにアタッチしてある
     //Camera1にManCamera,Camera2にDinoCameraを入れる
-    [SerializeField,Header("カメラ")] private CinemachineCamera mancamera;
+    [SerializeField,Header("カメラ")] public CinemachineCamera mancamera;
     [SerializeField] private CinemachineCamera dinocamera;
     [SerializeField] private CinemachineCamera eventdinocamera;
     [SerializeField] private CinemachineCamera posingdinocamera;

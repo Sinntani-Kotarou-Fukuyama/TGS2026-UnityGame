@@ -83,7 +83,7 @@ public class Helicopter : MonoBehaviour
             Vector3 move = new Vector3(1.0f, 0.0f, 0.0f) * speed * Time.deltaTime;
             if (spawneDino != null)
             {
-                spawneDino.transform.position += move;
+                spawneDino.transform.Translate(Vector3.forward * 1.0f * Time.deltaTime);
             }
         }
         if(DinoStoping==true)
@@ -206,7 +206,7 @@ public class Helicopter : MonoBehaviour
 
     void DinoWalk()
     {
-        spawneDino.transform.eulerAngles = new Vector3(0, 90, 0);
+        spawneDino.transform.eulerAngles = new Vector3(0, 180, 0);
         DinoFinishIdouFlag = true;
         balance.ShakeOn = false;
         animator.SetBool("Reaction", false);
@@ -217,7 +217,10 @@ public class Helicopter : MonoBehaviour
         playerMover.PlayerStoping = false;
         panel.SetActive(false);
         cameraFrame.SetActive(false);
-        Dino.transform.position = new Vector3(17.0f, 0.0f, 14.0f);
+        //Dino.transform.position = new Vector3(17.0f, 0.0f, 14.0f);
+        Vector3 pos = cam.mancamera.transform.position - cam.mancamera.transform.forward*3;//カメラから3座標後ろにワープさせる
+        pos.y = 0;
+       // Dino.transform.position = pos;
         Destroy(spawnedObj);
         Destroy(spawneDino);
     }
