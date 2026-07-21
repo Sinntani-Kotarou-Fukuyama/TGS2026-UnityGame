@@ -55,9 +55,15 @@ public class EventManager : MonoBehaviour
          e.SetManager(this);
          e = Instantiate(eventFlag, new Vector3(-6.5f, 3.0f, -4.0f), Quaternion.identity);//3個目のイベント
          e.SetManager(this);*/
-        e = Instantiate(eventFlag, new Vector3(12.74f, 3.0f, -2.66f), Quaternion.identity);//１個目のイベント
+        e = Instantiate(eventFlag, new Vector3(12.74f, 3.0f, -2.0f), Quaternion.identity);//１個目のイベント
         e.SetManager(this);
-        e = Instantiate(eventFlag, new Vector3(5.086f, 3.0f, -2.376f), Quaternion.identity);//2個目のイベント
+        e = Instantiate(eventFlag, new Vector3(6.057f, 3.0f, 3.082f), Quaternion.identity);//2個目のイベント
+        e.SetManager(this);
+        e = Instantiate(eventFlag, new Vector3(5.55f, 3.0f, 5.33f), Quaternion.identity);//3個目のイベント
+        e.SetManager(this);
+        e = Instantiate(eventFlag, new Vector3(-4.66f, 3.0f, 6.96f), Quaternion.identity);//4個目のイベント
+        e.SetManager(this);
+        e = Instantiate(eventFlag, new Vector3(-4.44f, 3.0f, 3.58f), Quaternion.identity);//5個目のイベント
         e.SetManager(this);
     }
 

@@ -6983,9 +6983,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Earthquake: 1
-  Helicopter: 1
-  Posing: 1
-  Sniper: 1
+  Helicopter: 0
+  Posing: 0
+  Sniper: 0
   player: {fileID: 2019293626}
   eventFlag: {fileID: 8885386143651873786, guid: d13e83037361b574ab911282b4faa680, type: 3}
   e_earthquake: {fileID: 1550136032}
