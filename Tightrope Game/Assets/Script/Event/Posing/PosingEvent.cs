@@ -121,6 +121,11 @@ public class PosingEvent : MonoBehaviour
     void PoseEvent()
     {
         exoloOarentReset.ParentReset();
+        //プレイヤーの向きを調整する
+        player.transform.LookAt(Bill.transform);
+        Vector3 currentRotation = player.transform.eulerAngles;
+        currentRotation.x = 0f;
+        player.transform.eulerAngles = currentRotation;
         DinoStoping = true;//怪獣を固定
         playerMover.PlayerStoping = true;//プレイヤーを固定
         startplayer = player.transform.rotation;//イベント前の回転を格納
