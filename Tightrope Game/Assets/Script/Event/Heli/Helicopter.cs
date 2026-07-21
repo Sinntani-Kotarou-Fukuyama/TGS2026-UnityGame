@@ -220,7 +220,7 @@ public class Helicopter : MonoBehaviour
         //Dino.transform.position = new Vector3(17.0f, 0.0f, 14.0f);
         Vector3 pos = cam.mancamera.transform.position - cam.mancamera.transform.forward*3;//カメラから3座標後ろにワープさせる
         pos.y = 0;
-       // Dino.transform.position = pos;
+        Dino.transform.position = pos;
         Destroy(spawnedObj);
         Destroy(spawneDino);
     }
