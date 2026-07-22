@@ -24,6 +24,8 @@ public class Helicopter : MonoBehaviour
     [SerializeField, Header("プレイヤーの揺れの切り替え時間")] float clocktime =2f;
     public GameObject spawnedObj;
     private GameObject spawneDino;
+    private GameObject StartHeli;
+    
     bool Flag = false;//イベントフラグ
     bool HeliIdouflag = true;//ヘリ移動フラグ
     bool DinoIdouflag = true;//怪獣移動フラグ
@@ -51,7 +53,8 @@ public class Helicopter : MonoBehaviour
        
         if (Flag == true)
         {
-            HeliEvent();
+            HeliEventStart();
+           // HeliEvent();
             Flag = false;
         }
 
@@ -116,11 +119,28 @@ public class Helicopter : MonoBehaviour
             }
         }
        
+        if(StartHeli!=null)
+        {
+            //最初のヘリの移動
+            StartHeli.transform.Translate(Vector3.forward * 5.0f * Time.deltaTime);
+        }
        
 
     }
+    void HeliEventStart()
+    {
+        Quaternion rotation = Quaternion.Euler(0, 70, 0);//ヘリの向き
+        Vector3 playerpos = player.transform.position + -player.right * 9f + player.forward * 1.5f+-player.up*6f;
+        StartHeli = Instantiate(helicopter, playerpos, rotation);
+        LockRotation Lock;
+        Lock =StartHeli.GetComponent<LockRotation>();
+        Lock.enabled = false;
+        Invoke(nameof(HeliEvent), 5.0f);
+        
+    }
     void HeliEvent()
     {
+        Destroy(StartHeli);//初めのヘリを削除
         DinoStoping = true;//怪獣を固定
         playerMover.PlayerStoping = true;//プレイヤーを固定
         Quaternion rotation = Quaternion.Euler(0, 0, 0);//ヘリの向き
