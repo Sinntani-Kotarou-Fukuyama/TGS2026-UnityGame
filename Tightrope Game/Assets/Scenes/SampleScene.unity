@@ -1162,6 +1162,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1319,6 +1323,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1568,6 +1576,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1665,6 +1677,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2469,6 +2485,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2970,6 +2990,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3250,6 +3274,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3420,6 +3448,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3529,6 +3561,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4022,6 +4058,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4397,6 +4437,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4492,6 +4536,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4915,6 +4963,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5759,6 +5811,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6158,6 +6214,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6768,6 +6828,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6987,6 +7051,7 @@ MonoBehaviour:
   Posing: 1
   Sniper: 1
   player: {fileID: 2019293626}
+  ramdomCount: 0
   eventFlag: {fileID: 8885386143651873786, guid: d13e83037361b574ab911282b4faa680, type: 3}
   e_earthquake: {fileID: 1550136032}
   heliscript: {fileID: 1625703891}
@@ -7342,6 +7407,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8120,6 +8189,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8329,6 +8402,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8424,6 +8501,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8719,6 +8800,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9158,6 +9243,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9439,6 +9528,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -10604,6 +10697,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11598,6 +11695,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11703,6 +11804,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11934,6 +12039,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14001,6 +14110,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14184,6 +14297,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14279,6 +14396,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14560,6 +14681,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14670,6 +14795,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14820,6 +14949,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14972,6 +15105,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15310,6 +15447,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -15829,6 +15970,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16002,6 +16147,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17626,6 +17775,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -17888,6 +18041,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -18289,6 +18446,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19180,6 +19341,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19408,6 +19573,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -19674,6 +19843,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20018,6 +20191,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21285,6 +21462,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -21612,6 +21793,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22216,6 +22401,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -22541,6 +22730,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -23303,6 +23496,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -23901,6 +24098,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -24309,6 +24510,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -24639,6 +24844,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -25913,6 +26122,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -27045,6 +27258,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -27532,6 +27749,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -28587,6 +28808,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -28811,6 +29036,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -28952,6 +29181,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -29503,6 +29736,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -29855,6 +30092,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -30301,6 +30542,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -30402,7 +30647,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: -0.68, y: 1.864785, z: -63.08}
-  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_LocalScale: {x: 5, y: 20, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2019293630}
@@ -30965,15 +31210,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.17095
+      value: -2.85
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.5
+      value: 8.55
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.20298
+      value: 3.81
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalRotation.w
@@ -30985,11 +31230,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.95125127
+      value: 0.95125127
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.16773124
+      value: -0.16773124
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -30997,7 +31242,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -150
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -31438,6 +31683,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -31625,6 +31874,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -32072,6 +32325,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -33336,6 +33593,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -33468,6 +33729,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -34260,6 +34525,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: RopeParts
       objectReference: {fileID: 0}
+    - target: {fileID: 5847713128311920299, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: cff2b2942446bed4faed2517b78b4d76, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
