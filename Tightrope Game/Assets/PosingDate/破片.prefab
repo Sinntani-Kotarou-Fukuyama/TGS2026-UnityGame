@@ -198,6 +198,7 @@ MonoBehaviour:
   slowspeed: 0.25
   player: {fileID: 0}
   rotation: {fileID: 7456431706121393829}
+  cam: {fileID: 0}
   slowmove: 0
   reset: 0
 --- !u!1 &8139043720036015439

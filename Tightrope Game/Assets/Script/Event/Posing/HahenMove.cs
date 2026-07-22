@@ -7,6 +7,7 @@ public class HahenMove : MonoBehaviour
     [SerializeField, Header("破片の飛ぶスピード")] float slowspeed = 0.25f;
     [SerializeField] Transform player;
     [SerializeField] HahenRotation rotation;
+    [SerializeField] GameObject cam;
     public bool slowmove = false;
     public bool reset = false;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -15,6 +16,8 @@ public class HahenMove : MonoBehaviour
         GameObject play = GameObject.Find("SuitMan");
         player = play.GetComponent<Transform>();
         transform.LookAt(player.transform);
+        cam = GameObject.Find("PosingCamera3");
+        
     }
 
     // Update is called once per frame
@@ -32,6 +35,7 @@ public class HahenMove : MonoBehaviour
        if(reset==true)
         {
             reset = false;
+            
             Vector3 playerPos = player.position;
             float playerXPos = playerPos.x;
             float playerYPos = playerPos.y-0.7f;
@@ -41,9 +45,12 @@ public class HahenMove : MonoBehaviour
             Vector3 currentRotation = transform.eulerAngles;
             currentRotation.x = 0f;
             transform.eulerAngles = currentRotation;
+            //カメラから見てプレイヤーの右に破片が来るようにする
+            Vector3 leftDir = cam.transform.right * 0.2f;
             Vector3 pos = transform.position;
             pos.y = playerYPos;
-            transform.position = pos;
+            transform.position = pos+leftDir;
+           
             Invoke(nameof(SlowFinish), 3.0f);
         }
     }
