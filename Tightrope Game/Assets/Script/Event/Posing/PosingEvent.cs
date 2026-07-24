@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PosingEvent : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class PosingEvent : MonoBehaviour
     [SerializeField] public GameObject Porsemp4;//動画
     [SerializeField] private float _cycle = 1; // 点滅周期[秒]
     [SerializeField] ParentKaizyo exoloOarentReset;//親解除
+    [SerializeField] NavMeshAgent agent;
     Quaternion startplayer;//最初の回転を記録する
     Quaternion startstick;//最初の回転を記録する
     Quaternion startplayerRightHund;//最初の回転を記録する
@@ -53,7 +55,8 @@ public class PosingEvent : MonoBehaviour
         }
         if (DinoStoping == true)//怪獣を動かなくするフラグ
         {
-            Dino.transform.position = new Vector3(50.0f, 0.0f, 50.0f);
+            agent.Warp(new Vector3(-20.8f, 0.0f, -15.0f));
+           // Dino.transform.position = new Vector3(50.0f, 0.0f, 50.0f);
         }
         if (DinoIdouflag == true)
         {
@@ -120,6 +123,7 @@ public class PosingEvent : MonoBehaviour
 
     void PoseEvent()
     {
+        cam.RopeCameraCansel = true;
         //1秒後に爆発ポイントを子じゃなくする
         Invoke(nameof(ParentReset),1f);
         Vector3 currentRotation = player.transform.eulerAngles;
@@ -189,11 +193,12 @@ public class PosingEvent : MonoBehaviour
     }
     void GameSet()
     {
-
+        cam.RopeCameraCansel = false;
         Timer.SetActive(true);//タイマーを表示にする
         playerMover.PlayerStoping = false;//プレイヤーを動けるように
         DinoStoping = false;//怪獣を動けるように
-        Dino.transform.position = new Vector3(-18.05f, 0.1f, 8.0f); //ビルの横に怪獣を移動
+        agent.Warp(new Vector3(-18.05f, 0.1f, 8.0f));
+        //Dino.transform.position = new Vector3(-18.05f, 0.1f, 8.0f); //ビルの横に怪獣を移動
         balance.ResumeNormalBalanceGauge();
     }
 }

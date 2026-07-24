@@ -57,6 +57,7 @@ public class EventManager : MonoBehaviour
          e.SetManager(this);*/
 
         //任意のイベントを付けたいときはSetEvent(EventType.イベント名)でできるよ
+        //ランダムにしたい場合はSetEventを呼ばない
 
         e = Instantiate(eventFlag, new Vector3(12.74f, 3.0f, -2.0f), Quaternion.identity);//１個目のイベント
         e.SetManager(this);
@@ -70,7 +71,7 @@ public class EventManager : MonoBehaviour
         e = Instantiate(eventFlag, new Vector3(-4.66f, 3.0f, 6.96f), Quaternion.identity);//4個目のイベント
         e.SetManager(this);
         e.SetEvent(EventType.Helicopter);//4個目はヘリを起こす
-        e = Instantiate(eventFlag, new Vector3(-4.44f, 3.0f, 3.58f), Quaternion.identity);//5個目のイベント
+        e = Instantiate(eventFlag, new Vector3(-4.44f, 3.0f, 3.08f), Quaternion.identity);//5個目のイベント
         e.SetManager(this);
         e.SetEvent(EventType.Helicopter);//5個目はヘリを起こす
     }

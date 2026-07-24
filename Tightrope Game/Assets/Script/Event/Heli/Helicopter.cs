@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Helicopter : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class Helicopter : MonoBehaviour
     [SerializeField] BalanceShake balance;
     [SerializeField] AudioSource explosionAudio;//爆発音
     [SerializeField] AudioSource cameraOnAudio;//カメラ起動音
+    [SerializeField] KaijuAI AI;//怪獣の動きを取得
+    [SerializeField] NavMeshAgent agent;
     [SerializeField] float offsetX = 10f;
     [SerializeField] float offsetZ = 10f;
     [SerializeField] float speed =1f;//ヘリの移動速度
@@ -91,7 +94,8 @@ public class Helicopter : MonoBehaviour
         }
         if(DinoStoping==true)
         {
-          Dino.transform.position = new Vector3(50.0f, 0.0f, 50.0f);
+            agent.Warp(new Vector3(17.0f, 0.0f, 10.0f));
+            //Dino.transform.position = new Vector3(50.0f, 0.0f, 50.0f);
         }
 
         if(PlayerShake==true)
@@ -135,6 +139,7 @@ public class Helicopter : MonoBehaviour
         LockRotation Lock;
         Lock =StartHeli.GetComponent<LockRotation>();
         Lock.enabled = false;
+        cam.RopeCameraCansel = true;
         Invoke(nameof(HeliEvent), 5.0f);
         
     }
@@ -233,16 +238,19 @@ public class Helicopter : MonoBehaviour
     }
     private void Destroy()
     {
-        DinoStoping = false;
-        playerMover.PlayerStoping = false;
         panel.SetActive(false);
         cameraFrame.SetActive(false);
+        playerMover.PlayerStoping = false;
+        DinoStoping = false;
+        Vector3 pos = cam.mancamera.transform.position - cam.mancamera.transform.forward * 3;//カメラから3座標後ろにワープさせる
+        pos.y = 0.1f;
+        agent.Warp(pos);
+        //Dino.transform.position = pos;
         //Dino.transform.position = new Vector3(17.0f, 0.0f, 14.0f);
-        Vector3 pos = cam.mancamera.transform.position - cam.mancamera.transform.forward*3;//カメラから3座標後ろにワープさせる
-        pos.y = 0;
-        Dino.transform.position = pos;
+        cam.RopeCameraCansel = false;
         Destroy(spawnedObj);
         Destroy(spawneDino);
+        AI.PointReset();
     }
    void ExplosionFinish()
     {

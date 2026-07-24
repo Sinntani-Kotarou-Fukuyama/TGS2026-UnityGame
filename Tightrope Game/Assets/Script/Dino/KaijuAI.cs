@@ -235,4 +235,15 @@ public class KaijuAI : MonoBehaviour
         // •à‚­‚æ‚¤‚É‚·‚é
         agent.speed = moveSpeed;
     }
+
+    public void PointReset()
+    {
+        // NavMesh ã‚È‚ç–Ú“I’n‚ğÄİ’è
+        if (agent.isOnNavMesh && targetBuilding != null)
+        {
+            agent.SetDestination(targetBuilding.transform.position);
+        }
+    }
+    
+
 }

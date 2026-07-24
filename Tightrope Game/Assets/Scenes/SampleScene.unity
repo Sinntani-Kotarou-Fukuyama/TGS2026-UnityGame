@@ -9810,6 +9810,7 @@ MonoBehaviour:
   Porsemp4: {fileID: 616518437}
   _cycle: 0.3
   exoloOarentReset: {fileID: 1919166459}
+  agent: {fileID: 1452297750}
   playerMover: {fileID: 2019293633}
 --- !u!4 &675517728
 Transform:
@@ -18474,6 +18475,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 515014402}
     m_Modifications:
     - target: {fileID: 20523243259468201, guid: 1d7683ca59d0377419261a254cba261d, type: 3}
+      propertyPath: AI
+      value: 
+      objectReference: {fileID: 1452297757}
+    - target: {fileID: 20523243259468201, guid: 1d7683ca59d0377419261a254cba261d, type: 3}
       propertyPath: cam
       value: 
       objectReference: {fileID: 2141926561}
@@ -18485,6 +18490,10 @@ PrefabInstance:
       propertyPath: Head
       value: 
       objectReference: {fileID: 616056365}
+    - target: {fileID: 20523243259468201, guid: 1d7683ca59d0377419261a254cba261d, type: 3}
+      propertyPath: agent
+      value: 
+      objectReference: {fileID: 1452297750}
     - target: {fileID: 20523243259468201, guid: 1d7683ca59d0377419261a254cba261d, type: 3}
       propertyPath: panel
       value: 
@@ -23315,6 +23324,17 @@ MonoBehaviour:
   - {fileID: 1397383609}
   - {fileID: 944878229}
   - {fileID: 75364872}
+--- !u!114 &1452297757 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5919532609706824771, guid: 6571bbbccee7f2d45bb86da3391f3d61, type: 3}
+  m_PrefabInstance: {fileID: 1081838863}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1452297736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40333f7c63112374e81ab60e2452fc2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1455975737
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25429,6 +25449,7 @@ MonoBehaviour:
   AlarmSound: {fileID: 8300000, guid: 134c7b3fb0ec5f24c805c4aac285456d, type: 3}
   earthquakeSound: {fileID: 8300000, guid: 427e9457d65861f4bb84068ea0b9569b, type: 3}
   cameara: {fileID: 2141926560}
+  cam: {fileID: 2141926561}
   activetime: 6
   addforce: 100
   count: 5

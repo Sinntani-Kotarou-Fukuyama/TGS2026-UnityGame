@@ -16,6 +16,7 @@ public class CameraSwhich : MonoBehaviour
     [SerializeField,Header("イベント用")] PosingEvent Posing;
     [SerializeField] Transform player;//ポーズ取る用
     [SerializeField] Transform Stick;//棒持ち上げ用
+    public bool RopeCameraCansel = false;//イベント時にロープをくぐるカメラをつけない
    
 
     void Start()
@@ -104,18 +105,26 @@ public class CameraSwhich : MonoBehaviour
 
     public void DinoUnderRopeCameraSet()
     {
-        BleinCut();//カメラを瞬時切り替え
-        //カメラの描画優先度を変える
-        mancamera.Priority.Value = 5;
-        dinounderropecamera.Priority.Value = 15;
-        Invoke("DinoUnderRopeFinish", 8.0f);
-        Debug.Log("DinoUnderRopeCameraSetカメラ実行");
+        if(RopeCameraCansel==false)
+        {
+            BleinCut();//カメラを瞬時切り替え
+                       //カメラの描画優先度を変える
+            mancamera.Priority.Value = 5;
+            dinounderropecamera.Priority.Value = 15;
+            Invoke("DinoUnderRopeFinish", 8.0f);
+            Debug.Log("DinoUnderRopeCameraSetカメラ実行");
+        }
+       
     }
     void DinoUnderRopeFinish()
     {
-        mancamera.Priority.Value = 15;
-        dinounderropecamera.Priority.Value = 0;
-        Debug.Log("DinoUnderRopeFinishカメラ実行");
+        if(RopeCameraCansel==false)
+        {
+            mancamera.Priority.Value = 15;
+            dinounderropecamera.Priority.Value = 0;
+            Debug.Log("DinoUnderRopeFinishカメラ実行");
+        }
+       
     }
 
     void BlendEaseInOut()//カメラをゆっくり切り替え
