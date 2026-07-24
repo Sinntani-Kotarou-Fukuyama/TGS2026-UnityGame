@@ -11,6 +11,7 @@ public class Earthquake : MonoBehaviour
     [SerializeField] private AudioClip AlarmSound;
     [SerializeField] private AudioClip earthquakeSound;
     [SerializeField] private CameraShake cameara;
+    [SerializeField] private CameraSwhich cam;
 
     [SerializeField, Header("テロップが消えるまでの時間")] private float activetime = 6.0f;
     [SerializeField, Header("ロープに与える力")] private float addforce = 100;
@@ -36,6 +37,7 @@ public class Earthquake : MonoBehaviour
             return;
         }
 
+        cam.RopeCameraCansel = true;
         StartCoroutine("Telop_Earthquake");
     }
 
@@ -88,7 +90,7 @@ public class Earthquake : MonoBehaviour
 
             if (--cnt <= 0)
             {
-                
+                cam.RopeCameraCansel = false;
                 Debug.Log("終わりました。");
                 yield break;
             }
