@@ -21,7 +21,9 @@ public class KaijuAI : MonoBehaviour
     [Header("Patrol")]
     public Transform[] patrolPoints;
     [SerializeField] Transform player;//プレイヤーの座標を検知
-
+    [Header("ロープクールタイム")]
+    [SerializeField] public float RopeCoolTime = 3.0f;
+    private float CoolTime=0.0f;
     Animator anim;
     NavMeshAgent agent;
 
@@ -52,6 +54,8 @@ public class KaijuAI : MonoBehaviour
 
     void Update()
     {
+        CoolTime-= Time.deltaTime * 1;
+
         transform.Rotate(0, 50 * Time.deltaTime, 0);
 
         anim.speed = 0.7f;
@@ -217,12 +221,16 @@ public class KaijuAI : MonoBehaviour
         // ロープに当たった時
         if (collision.gameObject.tag == "RopeParts")
         {
-            //Apply Root Motionを無効にする
-            anim.applyRootMotion = false;
+            if(CoolTime<=0)
+            {
+                //Apply Root Motionを無効にする
+                anim.applyRootMotion = false;
 
-            // ロープをくぐるアニメーション発生
-            anim.SetTrigger("UnderTheRope");
-            agent.speed = 0.0f;
+                // ロープをくぐるアニメーション発生
+                anim.SetTrigger("UnderTheRope");
+                agent.speed = 0.0f;
+            }
+            
             
         }
     }
@@ -234,6 +242,8 @@ public class KaijuAI : MonoBehaviour
         anim.applyRootMotion = true;
         // 歩くようにする
         agent.speed = moveSpeed;
+        //クールタイムを設定
+        CoolTime = RopeCoolTime;
     }
 
     public void PointReset()
