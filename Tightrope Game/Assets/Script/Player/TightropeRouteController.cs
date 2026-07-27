@@ -1,5 +1,4 @@
 using System.Collections;
-using TMPro;
 using UnityEngine;
 
 /*
@@ -20,6 +19,13 @@ public class TightropeRouteController : MonoBehaviour
         WaitingForBranch,
         MovingSelectedRoute,
         Completed
+    }
+
+    private enum PendingRouteSelection
+    {
+        None,
+        Left,
+        Right
     }
 
     [Header("移動担当")]
@@ -49,12 +55,12 @@ public class TightropeRouteController : MonoBehaviour
     [Tooltip("右ルートを選ぶキーです。分岐待機中だけ判定します。")]
     [SerializeField] private KeyCode rightRouteKey = KeyCode.RightArrow;
 
-    [Header("分岐案内（任意）")]
-    [Tooltip("未設定でも動作します。設定した場合は分岐待機中だけ表示します。")]
-    [SerializeField] private TMP_Text branchGuideText;
+    [Tooltip("選択中のルートを決定するキーです。")]
+    [SerializeField] private KeyCode confirmRouteKey = KeyCode.Space;
 
-    [Tooltip("分岐地点で表示する文章です。")]
-    [SerializeField] private string branchGuideMessage = "左キーで左ルート / 右キーで右ルート";
+    [Header("ルート選択UI")]
+    [Tooltip("RouteSelectPanelに付けたRouteSelectUIControllerを設定します。未設定でもキーによる選択と決定は動作します。")]
+    [SerializeField] private RouteSelectUIController routeSelectUIController;
 
     [Header("BalanceManager連携（任意）")]
     [Tooltip("分岐待機中だけ通常ゲージを止めたい場合に設定します。未設定でもルート移動は動作します。")]
@@ -67,6 +73,7 @@ public class TightropeRouteController : MonoBehaviour
     private Transform[] activeRoutePoints;
     private int currentSegmentStartIndex;
     private bool balancePausedByThisController;
+    private PendingRouteSelection pendingRouteSelection = PendingRouteSelection.None;
 
     public bool IsWaitingForBranch => state == RouteState.WaitingForBranch;
     public bool HasCompletedRoute => state == RouteState.Completed;
@@ -89,7 +96,7 @@ public class TightropeRouteController : MonoBehaviour
             playerMover.EnableRouteControl();
         }
 
-        SetBranchGuideVisible(false);
+        HideRouteSelectionUI();
     }
 
     private void OnEnable()
@@ -122,16 +129,21 @@ public class TightropeRouteController : MonoBehaviour
         if (leftPressed && rightPressed)
         {
             Debug.LogWarning("TightropeRouteController: 左右キーが同時に押されました。どちらか一方を押してください。", this);
-            return;
         }
-
-        if (leftPressed)
+        else if (leftPressed)
         {
-            SelectRoute(leftRoutePoints, "左");
+            pendingRouteSelection = PendingRouteSelection.Left;
+            routeSelectUIController?.ShowLeftSelected();
         }
         else if (rightPressed)
         {
-            SelectRoute(rightRoutePoints, "右");
+            pendingRouteSelection = PendingRouteSelection.Right;
+            routeSelectUIController?.ShowRightSelected();
+        }
+
+        if (Input.GetKeyDown(confirmRouteKey))
+        {
+            ConfirmSelectedRoute();
         }
     }
 
@@ -144,7 +156,7 @@ public class TightropeRouteController : MonoBehaviour
         }
 
         ResumeBalanceIfNeeded();
-        SetBranchGuideVisible(false);
+        HideRouteSelectionUI();
     }
 
     /// <summary>
@@ -176,7 +188,8 @@ public class TightropeRouteController : MonoBehaviour
         }
 
         ResumeBalanceIfNeeded();
-        SetBranchGuideVisible(false);
+        pendingRouteSelection = PendingRouteSelection.None;
+        HideRouteSelectionUI();
         playerMover.EnableRouteControl();
 
         state = RouteState.MovingCommonRoute;
@@ -194,9 +207,8 @@ public class TightropeRouteController : MonoBehaviour
         activeRoutePoints = selectedRoutePoints;
         currentSegmentStartIndex = 0;
 
-        SetBranchGuideVisible(false);
-        // 選択キーとBalanceManagerの左右入力が同じフレームで競合しないよう、
-        // 通常ゲージの再開は入力処理が終わった後まで1フレーム遅らせます。
+        HideRouteSelectionUI();
+        // ルート確定処理がすべて終わってから通常ゲージへ戻すため、1フレーム遅らせます。
         StartCoroutine(ResumeBalanceAfterBranchInput());
 
         Debug.Log($"[TightropeRouteController] {routeLabel}ルートを選択しました。", this);
@@ -252,10 +264,28 @@ public class TightropeRouteController : MonoBehaviour
     private void EnterBranchSelection()
     {
         state = RouteState.WaitingForBranch;
-        SetBranchGuideVisible(true);
+        pendingRouteSelection = PendingRouteSelection.None;
         PauseBalanceIfPossible();
+        ShowRouteSelectionUI();
 
-        Debug.Log($"[TightropeRouteController] 分岐地点に到着しました。{branchGuideMessage}", this);
+        Debug.Log("[TightropeRouteController] 分岐地点に到着しました。左右キーでルートを選び、Spaceキーで決定してください。", this);
+    }
+
+    private void ConfirmSelectedRoute()
+    {
+        if (pendingRouteSelection == PendingRouteSelection.None)
+        {
+            Debug.Log("左右キーでルートを選択してください", this);
+            return;
+        }
+
+        if (pendingRouteSelection == PendingRouteSelection.Left)
+        {
+            SelectRoute(leftRoutePoints, "左");
+            return;
+        }
+
+        SelectRoute(rightRoutePoints, "右");
     }
 
     private bool ValidateRoutePoints(Transform[] routePoints, string fieldName)
@@ -324,18 +354,22 @@ public class TightropeRouteController : MonoBehaviour
         balancePausedByThisController = false;
     }
 
-    private void SetBranchGuideVisible(bool visible)
+    private void ShowRouteSelectionUI()
     {
-        if (branchGuideText == null)
+        if (routeSelectUIController == null)
         {
+            Debug.LogWarning("TightropeRouteController: Route Select UI Controllerが未設定です。UI表示なしでルート選択を続けます。", this);
             return;
         }
 
-        if (visible)
-        {
-            branchGuideText.text = branchGuideMessage;
-        }
+        routeSelectUIController.ShowRouteSelection();
+    }
 
-        branchGuideText.gameObject.SetActive(visible);
+    private void HideRouteSelectionUI()
+    {
+        if (routeSelectUIController != null)
+        {
+            routeSelectUIController.HideRouteSelection();
+        }
     }
 }
