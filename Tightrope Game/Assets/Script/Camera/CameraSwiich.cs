@@ -37,7 +37,7 @@ public class CameraSwhich : MonoBehaviour
     }
     void RopeFlagSet()
     {
-        RopeCameraCansel = false;//次からはイベント時にだけつけない
+        RopeCameraCansel = false;//次からはイベント時にだけしかつけない
         move.StartMoving();//プレイヤーを動かす
         balance.ResumeNormalBalanceGauge();//バランスゲージを動かす
     }

@@ -15995,6 +15995,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6523087148022014041, guid: 5ee0d8660da4ff94c90727c228704266, type: 3}
+      propertyPath: move
+      value: 
+      objectReference: {fileID: 2019293633}
+    - target: {fileID: 6523087148022014041, guid: 5ee0d8660da4ff94c90727c228704266, type: 3}
       propertyPath: slow
       value: 
       objectReference: {fileID: 4821790008723533780, guid: e8ad2e798b4023848b44b09cbe1affb2, type: 3}
@@ -16010,6 +16014,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 2019293630}
+    - target: {fileID: 6523087148022014041, guid: 5ee0d8660da4ff94c90727c228704266, type: 3}
+      propertyPath: balance
+      value: 
+      objectReference: {fileID: 1311752719}
     - target: {fileID: 6523087148022014041, guid: 5ee0d8660da4ff94c90727c228704266, type: 3}
       propertyPath: camera1
       value: 
