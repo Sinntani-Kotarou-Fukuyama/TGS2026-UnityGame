@@ -24,6 +24,7 @@ public class KaijuAI : MonoBehaviour
     [Header("ロープクールタイム")]
     [SerializeField] public float RopeCoolTime = 3.0f;
     private float CoolTime=0.0f;
+    [SerializeField] float spawnRadius = 30f; // ランダム範囲
     Animator anim;
     NavMeshAgent agent;
 
@@ -33,11 +34,16 @@ public class KaijuAI : MonoBehaviour
     float attackTimer = 0f;
     bool isAttacking = false;
     int patrolIndex = 0;
+    bool RopeMove = false;
 
     void Start()
     {
         anim = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+
+        Vector3 randomPos = GetRandomNavMeshPosition(transform.position, spawnRadius);
+
+        agent.Warp(randomPos);
 
         agent.speed = moveSpeed;
         agent.angularSpeed = rotateSpeed * 100f;
@@ -54,6 +60,12 @@ public class KaijuAI : MonoBehaviour
 
     void Update()
     {
+        if(RopeMove==true)
+        {
+            Vector3 forward = transform.forward * 0.1f;
+            agent.velocity = forward;
+        }
+        
         CoolTime-= Time.deltaTime * 1;
 
         transform.Rotate(0, 50 * Time.deltaTime, 0);
@@ -102,6 +114,21 @@ public class KaijuAI : MonoBehaviour
         anim.SetFloat("Speed", v);
 
     }
+    Vector3 GetRandomNavMeshPosition(Vector3 center, float radius)
+    {
+        Vector3 randomDirection = Random.insideUnitSphere * radius;
+        randomDirection += center;
+
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(randomDirection, out hit, radius, NavMesh.AllAreas))
+        {
+            return hit.position; // NavMesh上の安全な位置
+        }
+
+        return center; // 見つからなかったら元の位置
+    }
+
+
 
     void StartAttack()
     {
@@ -223,6 +250,11 @@ public class KaijuAI : MonoBehaviour
         {
             if(CoolTime<=0)
             {
+                //自動回転をオフにする
+                //agent.updateRotation = false;
+                //agent.updatePosition = true;
+                //くぐりながら歩く
+                //RopeMove = true;
                 //Apply Root Motionを無効にする
                 anim.applyRootMotion = false;
 
@@ -244,6 +276,9 @@ public class KaijuAI : MonoBehaviour
         agent.speed = moveSpeed;
         //クールタイムを設定
         CoolTime = RopeCoolTime;
+        //自動回転をオンにする
+        //agent.updateRotation = true;
+        //agent.updatePosition = false;
     }
 
     public void PointReset()
