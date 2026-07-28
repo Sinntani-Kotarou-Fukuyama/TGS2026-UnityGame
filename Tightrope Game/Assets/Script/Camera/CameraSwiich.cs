@@ -16,8 +16,8 @@ public class CameraSwhich : MonoBehaviour
     [SerializeField,Header("イベント用")] PosingEvent Posing;
     [SerializeField] Transform player;//ポーズ取る用
     [SerializeField] Transform Stick;//棒持ち上げ用
-    public bool RopeCameraCansel = false;//イベント時にロープをくぐるカメラをつけない
-   
+    public bool RopeCameraCansel = true;//最初の恐竜カメラズーム時にロープをくぐるカメラをつけない
+
 
     void Start()
     {
@@ -27,7 +27,12 @@ public class CameraSwhich : MonoBehaviour
         dinocamera.Priority.Value = 5;
         Invoke("GameStartCamera",0.7f);
         Invoke("CameraSet", 5f);//5秒でカメラを切り替える
+        Invoke(nameof(RopeFlagSet), 7.0f);
         Debug.Log("startカメラ実行");
+    }
+    void RopeFlagSet()
+    {
+        RopeCameraCansel = false;//次からはイベント時にだけつけない
     }
     void Update()
     {
@@ -118,13 +123,12 @@ public class CameraSwhich : MonoBehaviour
     }
     void DinoUnderRopeFinish()
     {
-        if(RopeCameraCansel==false)
-        {
+        
             mancamera.Priority.Value = 15;
             dinounderropecamera.Priority.Value = 0;
             Debug.Log("DinoUnderRopeFinishカメラ実行");
-        }
-       
+        
+      
     }
 
     void BlendEaseInOut()//カメラをゆっくり切り替え

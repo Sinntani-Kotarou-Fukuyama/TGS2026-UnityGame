@@ -10041,13 +10041,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 98741599}
     m_Modifications:
+    - target: {fileID: 883278794714418676, guid: 4c52200cec170c649895d8466c9decf2, type: 3}
+      propertyPath: FollowOffset.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 883278794714418676, guid: 4c52200cec170c649895d8466c9decf2, type: 3}
+      propertyPath: FollowOffset.y
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 883278794714418676, guid: 4c52200cec170c649895d8466c9decf2, type: 3}
+      propertyPath: FollowOffset.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 1418539954428159759, guid: 4c52200cec170c649895d8466c9decf2, type: 3}
       propertyPath: m_Name
       value: DinoCamera
       objectReference: {fileID: 0}
     - target: {fileID: 3704667015061727503, guid: 4c52200cec170c649895d8466c9decf2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.094397545
+      value: 3.0943975
       objectReference: {fileID: 0}
     - target: {fileID: 3704667015061727503, guid: 4c52200cec170c649895d8466c9decf2, type: 3}
       propertyPath: m_LocalPosition.y
@@ -10055,23 +10067,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3704667015061727503, guid: 4c52200cec170c649895d8466c9decf2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 15.770845
+      value: 11.770845
       objectReference: {fileID: 0}
     - target: {fileID: 3704667015061727503, guid: 4c52200cec170c649895d8466c9decf2, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.21807072
+      value: 0.55230594
       objectReference: {fileID: 0}
     - target: {fileID: 3704667015061727503, guid: 4c52200cec170c649895d8466c9decf2, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.07232953
+      value: 0.19194862
       objectReference: {fileID: 0}
     - target: {fileID: 3704667015061727503, guid: 4c52200cec170c649895d8466c9decf2, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.92376244
+      value: -0.7662836
       objectReference: {fileID: 0}
     - target: {fileID: 3704667015061727503, guid: 4c52200cec170c649895d8466c9decf2, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.30639282
+      value: 0.26631457
       objectReference: {fileID: 0}
     - target: {fileID: 3704667015061727503, guid: 4c52200cec170c649895d8466c9decf2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -33828,7 +33840,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -150}
+  m_AnchoredPosition: {x: 0, y: -170}
   m_SizeDelta: {x: 1000, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2037000012
@@ -33881,13 +33893,13 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 140
+  m_fontSizeBase: 140
   m_fontWeight: 700
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -34114,7 +34126,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 160}
+  m_AnchoredPosition: {x: 0, y: 200}
   m_SizeDelta: {x: 1000, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2037000042
@@ -34167,7 +34179,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
