@@ -16,23 +16,30 @@ public class CameraSwhich : MonoBehaviour
     [SerializeField,Header("イベント用")] PosingEvent Posing;
     [SerializeField] Transform player;//ポーズ取る用
     [SerializeField] Transform Stick;//棒持ち上げ用
-    public bool RopeCameraCansel = true;//最初の恐竜カメラズーム時にロープをくぐるカメラをつけない
+    [SerializeField,Header("Player関連")] TightropeAutoGoalMover move;
+    [SerializeField] BalanceManager balance;
+    public bool RopeCameraCansel;//最初の恐竜カメラズーム時にロープをくぐるカメラをつけない
 
 
     void Start()
     {
+        move.StopMoving();//プレイヤーの動きを止める
+        balance.PauseNormalBalanceGauge();//バランスゲージを止める
+        RopeCameraCansel = true;//最初の恐竜カメラズーム時にロープをくぐるカメラをつけない
         Debug.Log("怪獣注目のやつEscでスキップできるよ");
         //カメラの描画優先度を変える
         mancamera.Priority.Value = 15;
         dinocamera.Priority.Value = 5;
         Invoke("GameStartCamera",0.7f);
         Invoke("CameraSet", 5f);//5秒でカメラを切り替える
-        Invoke(nameof(RopeFlagSet), 7.0f);
+        Invoke(nameof(RopeFlagSet), 7.0f);//カメラを切り替え終わってから実行
         Debug.Log("startカメラ実行");
     }
     void RopeFlagSet()
     {
         RopeCameraCansel = false;//次からはイベント時にだけつけない
+        move.StartMoving();//プレイヤーを動かす
+        balance.ResumeNormalBalanceGauge();//バランスゲージを動かす
     }
     void Update()
     {

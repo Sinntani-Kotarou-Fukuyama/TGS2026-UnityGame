@@ -108,6 +108,7 @@ public class TightropeAutoGoalMover : MonoBehaviour
 
     private void Start()
     {
+        
         if (disableManualMovementOnStart)
         {
             SetManualMovementEnabled(false);
