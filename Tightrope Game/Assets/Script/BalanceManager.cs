@@ -198,6 +198,12 @@ public class BalanceManager : MonoBehaviour
     [SerializeField] private float stickFollowSmoothSpeed = 15f;
     [SerializeField] private StickFollowUpdateTiming stickFollowUpdateTiming = StickFollowUpdateTiming.LateUpdate;
     [SerializeField] private bool resetStickTargetOnSniperDefenseEnd = true;
+    [Tooltip("PosingEventと同じく、棒0.3に対して左右の手Targetを逆方向へ1.0動かすための倍率です。1で同じ比率になります。")]
+    [SerializeField] private float sniperDefenseHandAdditionalFollowMultiplier = 1f;
+    [Tooltip("防御判定に使う棒のWorld Y補正です。棒のPivotが見た目の中心からずれている場合だけ調整します。")]
+    [SerializeField] private float sniperDefenseStickWorldYOffset = 0f;
+    [Tooltip("棒と赤いレーザーのWorld Y差がこの値以内なら防御成功です。")]
+    [SerializeField, Min(0f)] private float sniperDefenseHeightTolerance = 0.2f;
     // スナイパー防御中に白球を下へ動かすキーです。
     [SerializeField] private KeyCode sniperDefenseDownKey = KeyCode.DownArrow;
     // スナイパー防御中に白球を上へ動かすキーです。
@@ -268,6 +274,10 @@ public class BalanceManager : MonoBehaviour
     private Vector3[] sniperDefenseHandBasePositions;
     private bool hasSniperDefenseStickBasePosition;
     private bool hasSniperDefenseHandBasePositions;
+    private bool hasSavedSniperDefenseGaugeState;
+    private bool sniperDefenseGaugeWasActive;
+    private bool hasSavedMatrixAvoidGaugeState;
+    private bool matrixAvoidGaugeWasActive;
     private bool isInsideTarget;
     private bool wasInsideTarget;
     private float nextSniperDefenseFollowLogTime;
@@ -495,6 +505,7 @@ public class BalanceManager : MonoBehaviour
         hasSniperDefenseStickBasePosition = false;
         hasSniperDefenseHandBasePositions = false;
         SaveSniperDefenseStickBasePosition();
+        HideGaugeForSniperDefense();
         LogSniperDefenseFollowSetup();
         ApplyAllUiPositions();
         UpdateBalanceState();
@@ -504,6 +515,7 @@ public class BalanceManager : MonoBehaviour
     public void DisableSniperDefenseMode()
     {
         RestoreSniperDefenseStickPosition();
+        RestoreGaugeAfterSniperDefense();
 
         if (playMode == BalancePlayMode.SniperDefense)
         {
@@ -519,20 +531,15 @@ public class BalanceManager : MonoBehaviour
         playMode = BalancePlayMode.MatrixAvoid;
         outsideTimer = 0f;
         challengeTimer = 0f;
-        SetGaugeDirection(BalanceGaugeDirection.Horizontal);
-        SaveHorizontalLayoutIfNeeded();
-        ApplyEventVerticalLayout();
-        SetMatrixAvoidTargetPosition();
-        pointAxisPosition = targetAxisPosition;
-        ApplyAllUiPositions();
-        UpdateBalanceState();
-        wasInsideTarget = isInsideTarget;
+        HideGaugeForMatrixAvoid();
         UpdateTimerText();
         DebugLog("MatrixAvoidMode enabled.");
     }
 
     public void DisableMatrixAvoidMode()
     {
+        RestoreGaugeAfterMatrixAvoid();
+
         if (playMode == BalancePlayMode.MatrixAvoid)
         {
             playMode = BalancePlayMode.Normal;
@@ -642,7 +649,28 @@ public class BalanceManager : MonoBehaviour
     public bool ResolveSniperDefenseShot()
     {
         UpdateBalanceState();
-        bool success = isInsideTarget;
+        return ApplySniperDefenseShotResult(isInsideTarget);
+    }
+
+    // 弾が棒付近へ到達した瞬間の、棒と使用中レーザーの高さで防御を判定します。
+    public bool ResolveSniperDefenseShot(float laserWorldY)
+    {
+        if (sniperDefenseStickTarget == null)
+        {
+            Debug.LogWarning("BalanceManager: Sniper Defense Stick Target が未設定のため、高さ判定は失敗として扱います。", this);
+            return ApplySniperDefenseShotResult(false);
+        }
+
+        float stickWorldY = sniperDefenseStickTarget.position.y + sniperDefenseStickWorldYOffset;
+        float heightDifference = Mathf.Abs(stickWorldY - laserWorldY);
+        bool success = heightDifference <= Mathf.Max(0f, sniperDefenseHeightTolerance);
+
+        DebugLog($"Sniper defense height check. stickY={stickWorldY:F3}, laserY={laserWorldY:F3}, difference={heightDifference:F3}, tolerance={sniperDefenseHeightTolerance:F3}");
+        return ApplySniperDefenseShotResult(success);
+    }
+
+    private bool ApplySniperDefenseShotResult(bool success)
+    {
 
         if (success)
         {
@@ -656,6 +684,48 @@ public class BalanceManager : MonoBehaviour
 
         DebugLog($"Sniper defense shot resolved. success={success}");
         return success;
+    }
+
+    private void HideGaugeForSniperDefense()
+    {
+        if (gaugeRoot == null)
+        {
+            Debug.LogWarning("BalanceManager: Gauge Root が未設定のため、スナイパー防御中のゲージ非表示をスキップします。", this);
+            return;
+        }
+
+        if (transform == gaugeRoot || transform.IsChildOf(gaugeRoot))
+        {
+            Debug.LogWarning("BalanceManager: Gauge Root にBalanceManager自身が含まれるため、GameObjectの無効化をスキップします。UIだけの親Objectを設定してください。", this);
+            return;
+        }
+
+        if (!hasSavedSniperDefenseGaugeState)
+        {
+            sniperDefenseGaugeWasActive = gaugeRoot.gameObject.activeSelf;
+            hasSavedSniperDefenseGaugeState = true;
+        }
+
+        gaugeRoot.gameObject.SetActive(false);
+    }
+
+    private void RestoreGaugeAfterSniperDefense()
+    {
+        if (!hasSavedSniperDefenseGaugeState)
+        {
+            return;
+        }
+
+        if (gaugeRoot != null)
+        {
+            gaugeRoot.gameObject.SetActive(sniperDefenseGaugeWasActive);
+        }
+        else
+        {
+            Debug.LogWarning("BalanceManager: Gauge Root が見つからないため、スナイパー防御前の表示状態へ戻せません。", this);
+        }
+
+        hasSavedSniperDefenseGaugeState = false;
     }
 
     private void PlaySniperDeflectSound()
@@ -737,6 +807,12 @@ public class BalanceManager : MonoBehaviour
 
     private void UpdateMatrixAvoidMode()
     {
+        // Matrix回避中の判定はMatrixAvoidBulletShooterの下キー連打で行います。
+    }
+
+    // 旧バランスゲージ方式を互換用に残します。連打方式では呼び出しません。
+    private void UpdateLegacyMatrixAvoidGaugeMode()
+    {
         SetMatrixAvoidTargetPosition();
         pointAxisPosition += matrixAvoidAutoRiseSpeed * Time.deltaTime;
 
@@ -809,10 +885,65 @@ public class BalanceManager : MonoBehaviour
         FinishMatrixAvoidPhase();
     }
 
+    // 下キー連打が時間切れになった時、既存の失敗・ダメージ処理を1回だけ実行します。
+    public void FailMatrixAvoidByMash()
+    {
+        if (playMode != BalancePlayMode.MatrixAvoid)
+        {
+            return;
+        }
+
+        DebugLog("MatrixAvoid failed by mash input timeout.");
+        ApplyBalanceMissReaction(true);
+        DisableMatrixAvoidMode();
+    }
+
     private void FinishMatrixAvoidPhase()
     {
         DebugLog("MatrixAvoid succeeded.");
         DisableMatrixAvoidMode();
+    }
+
+    private void HideGaugeForMatrixAvoid()
+    {
+        if (gaugeRoot == null)
+        {
+            Debug.LogWarning("BalanceManager: Gauge Root が未設定のため、Matrix回避中のゲージ非表示をスキップします。", this);
+            return;
+        }
+
+        if (transform == gaugeRoot || transform.IsChildOf(gaugeRoot))
+        {
+            Debug.LogWarning("BalanceManager: Gauge Root にBalanceManager自身が含まれるため、GameObjectの無効化をスキップします。UIだけの親Objectを設定してください。", this);
+            return;
+        }
+
+        if (!hasSavedMatrixAvoidGaugeState)
+        {
+            matrixAvoidGaugeWasActive = gaugeRoot.gameObject.activeSelf;
+            hasSavedMatrixAvoidGaugeState = true;
+        }
+
+        gaugeRoot.gameObject.SetActive(false);
+    }
+
+    private void RestoreGaugeAfterMatrixAvoid()
+    {
+        if (!hasSavedMatrixAvoidGaugeState)
+        {
+            return;
+        }
+
+        if (gaugeRoot != null)
+        {
+            gaugeRoot.gameObject.SetActive(matrixAvoidGaugeWasActive);
+        }
+        else
+        {
+            Debug.LogWarning("BalanceManager: Gauge Root が見つからないため、Matrix回避前の表示状態へ戻せません。", this);
+        }
+
+        hasSavedMatrixAvoidGaugeState = false;
     }
 
     private void SaveSniperDefenseStickBasePosition()
@@ -836,35 +967,29 @@ public class BalanceManager : MonoBehaviour
 
         float normalizedPoint = GetNormalizedPointPosition01();
         float stickOffset = Mathf.Lerp(stickFollowMinValue, stickFollowMaxValue, normalizedPoint);
-        float handOffset = useSeparateHandFollowSettings
-            ? Mathf.Lerp(handFollowMinValue, handFollowMaxValue, normalizedPoint)
-            : stickOffset;
         float smoothSpeed = Mathf.Max(0f, stickFollowSmoothSpeed);
-        StickFollowSpace activeHandSpace = GetActiveHandFollowSpace();
-        StickFollowAxis activeHandAxis = GetActiveHandFollowAxis();
         bool logThisFrame = ShouldLogSniperDefenseFollow();
 
         if (logThisFrame)
         {
-            DebugLog($"UpdateSniperDefenseStickPosition called. source={updateSource}, timing={stickFollowUpdateTiming}, normalized={normalizedPoint:F3}, stickOffset={stickOffset:F4}, handOffset={handOffset:F4}, useSeparateHandFollowSettings={useSeparateHandFollowSettings}, stickSpace={stickFollowSpace}, stickAxis={stickFollowAxis}, handSpace={activeHandSpace}, handAxis={activeHandAxis}, handTargets={GetValidHandFollowTargetCount()}");
+            DebugLog($"UpdateSniperDefenseStickPosition called. source={updateSource}, timing={stickFollowUpdateTiming}, normalized={normalizedPoint:F3}, stickOffset={stickOffset:F4}, stickSpace={stickFollowSpace}, stickAxis={stickFollowAxis}, handTargets={GetValidHandFollowTargetCount()}");
         }
 
         UpdateFollowTarget(sniperDefenseStickTarget, sniperDefenseStickBasePosition, hasSniperDefenseStickBasePosition, stickOffset, smoothSpeed, stickFollowSpace, stickFollowAxis, logThisFrame);
-        UpdateSniperDefenseHandFollowTargets(handOffset, smoothSpeed, activeHandSpace, activeHandAxis, logThisFrame);
+        float actualStickMovement = GetSniperDefenseStickMovementFromBase();
+        UpdateSniperDefenseHandFollowTargets(actualStickMovement, logThisFrame);
     }
 
     private void RestoreSniperDefenseStickPosition()
     {
-        if (!resetStickTargetOnSniperDefenseEnd)
-        {
-            return;
-        }
-
-        if (sniperDefenseStickTarget != null && hasSniperDefenseStickBasePosition)
+        if (resetStickTargetOnSniperDefenseEnd
+            && sniperDefenseStickTarget != null
+            && hasSniperDefenseStickBasePosition)
         {
             SetFollowPosition(sniperDefenseStickTarget, sniperDefenseStickBasePosition, stickFollowSpace);
         }
 
+        // 棒の復元設定に関係なく、左右の手Targetは防御開始前の握り位置へ戻します。
         RestoreSniperDefenseHandFollowTargets();
     }
 
@@ -872,9 +997,7 @@ public class BalanceManager : MonoBehaviour
     {
         int targetCount = sniperDefenseHandFollowTargets != null ? sniperDefenseHandFollowTargets.Length : 0;
         sniperDefenseHandBasePositions = new Vector3[targetCount];
-        StickFollowSpace activeHandSpace = GetActiveHandFollowSpace();
-
-        DebugLog($"SniperDefense hand base save start. targetCount={targetCount}, useSeparateHandFollowSettings={useSeparateHandFollowSettings}, activeSpace={activeHandSpace}");
+        DebugLog($"SniperDefense hand base save start. targetCount={targetCount}, followSpace=Local");
 
         for (int i = 0; i < targetCount; i++)
         {
@@ -885,14 +1008,15 @@ public class BalanceManager : MonoBehaviour
                 continue;
             }
 
-            sniperDefenseHandBasePositions[i] = GetFollowPosition(followTarget, activeHandSpace);
+            // 棒の子として動く前の握り位置を、親基準のLocal座標で保存します。
+            sniperDefenseHandBasePositions[i] = followTarget.localPosition;
             DebugLog($"SniperDefense hand base saved. index={i}, target={followTarget.name}, local={FormatVector(followTarget.localPosition)}, world={FormatVector(followTarget.position)}, saved={FormatVector(sniperDefenseHandBasePositions[i])}");
         }
 
         hasSniperDefenseHandBasePositions = true;
     }
 
-    private void UpdateSniperDefenseHandFollowTargets(float targetOffset, float smoothSpeed, StickFollowSpace followSpace, StickFollowAxis followAxis, bool logThisFrame)
+    private void UpdateSniperDefenseHandFollowTargets(float actualStickMovement, bool logThisFrame)
     {
         if (sniperDefenseHandFollowTargets == null || sniperDefenseHandBasePositions == null)
         {
@@ -904,14 +1028,59 @@ public class BalanceManager : MonoBehaviour
         }
 
         int targetCount = Mathf.Min(sniperDefenseHandFollowTargets.Length, sniperDefenseHandBasePositions.Length);
+        // PosingEventでは、棒0.3に対して手Targetを逆方向へ1.0動かしています。
+        // 毎フレームの加算ではなく、開始時の位置から絶対値を計算して位置ずれの蓄積を防ぎます。
+        const float posingStickMovementRatio = 0.3f;
+        float handAdditionalMovement = -actualStickMovement
+            * (sniperDefenseHandAdditionalFollowMultiplier / posingStickMovementRatio);
+
         if (logThisFrame)
         {
-            DebugLog($"Hand follow update entered. targetCount={targetCount}, offset={targetOffset:F4}, space={followSpace}, axis={followAxis}");
+            DebugLog($"Hand follow update entered. targetCount={targetCount}, actualStickMovement={actualStickMovement:F4}, localZAdditionalMovement={handAdditionalMovement:F4}");
         }
 
         for (int i = 0; i < targetCount; i++)
         {
-            UpdateFollowTarget(sniperDefenseHandFollowTargets[i], sniperDefenseHandBasePositions[i], true, targetOffset, smoothSpeed, followSpace, followAxis, logThisFrame);
+            UpdateSniperDefenseHandFollowTarget(
+                sniperDefenseHandFollowTargets[i],
+                sniperDefenseHandBasePositions[i],
+                handAdditionalMovement,
+                logThisFrame);
+        }
+    }
+
+    private void UpdateSniperDefenseHandFollowTarget(
+        Transform handTarget,
+        Vector3 baseLocalPosition,
+        float additionalMovement,
+        bool logThisFrame)
+    {
+        if (handTarget == null)
+        {
+            return;
+        }
+
+        Transform parent = handTarget.parent;
+        Vector3 baseWorldPosition = parent != null
+            ? parent.TransformPoint(baseLocalPosition)
+            : baseLocalPosition;
+
+        // Transform.Translate(..., Space.Self)と同じく、手Target自身のLocal Z方向を使います。
+        Vector3 localZDirection = handTarget.TransformDirection(Vector3.forward).normalized;
+        Vector3 targetWorldPosition = baseWorldPosition + localZDirection * additionalMovement;
+
+        if (parent != null)
+        {
+            handTarget.localPosition = parent.InverseTransformPoint(targetWorldPosition);
+        }
+        else
+        {
+            handTarget.position = targetWorldPosition;
+        }
+
+        if (logThisFrame)
+        {
+            DebugLog($"Posing-style hand follow updated. target={handTarget.name}, baseLocal={FormatVector(baseLocalPosition)}, localAfter={FormatVector(handTarget.localPosition)}, additionalMovement={additionalMovement:F4}");
         }
     }
 
@@ -922,7 +1091,6 @@ public class BalanceManager : MonoBehaviour
             return;
         }
 
-        StickFollowSpace activeHandSpace = GetActiveHandFollowSpace();
         int targetCount = Mathf.Min(sniperDefenseHandFollowTargets.Length, sniperDefenseHandBasePositions.Length);
         for (int i = 0; i < targetCount; i++)
         {
@@ -932,8 +1100,21 @@ public class BalanceManager : MonoBehaviour
                 continue;
             }
 
-            SetFollowPosition(followTarget, sniperDefenseHandBasePositions[i], activeHandSpace);
+            // 防御開始時に保存した握り位置へ正確に戻します。
+            followTarget.localPosition = sniperDefenseHandBasePositions[i];
         }
+    }
+
+    private float GetSniperDefenseStickMovementFromBase()
+    {
+        if (sniperDefenseStickTarget == null || !hasSniperDefenseStickBasePosition)
+        {
+            return 0f;
+        }
+
+        Vector3 currentPosition = GetFollowPosition(sniperDefenseStickTarget, stickFollowSpace);
+        return GetAxisValue(currentPosition, stickFollowAxis)
+            - GetAxisValue(sniperDefenseStickBasePosition, stickFollowAxis);
     }
 
     private StickFollowSpace GetActiveHandFollowSpace()
@@ -1081,9 +1262,9 @@ public class BalanceManager : MonoBehaviour
     private void LogSniperDefenseFollowSetup()
     {
         int handTargetCount = GetValidHandFollowTargetCount();
-        string handMode = useSeparateHandFollowSettings ? "Separate" : "SameAsStick";
+        string legacyHandSettings = $"enabled={useSeparateHandFollowSettings}, space={handFollowSpace}, axis={handFollowAxis}, min={handFollowMinValue:F4}, max={handFollowMaxValue:F4}";
 
-        DebugLog($"SniperDefense follow setup. StickTarget={(sniperDefenseStickTarget != null ? sniperDefenseStickTarget.name : "None")}, HandTargets={handTargetCount}, HandMode={handMode}");
+        DebugLog($"SniperDefense follow setup. StickTarget={(sniperDefenseStickTarget != null ? sniperDefenseStickTarget.name : "None")}, HandTargets={handTargetCount}, HandMode=PosingStyleLocalZ, HandMultiplier={sniperDefenseHandAdditionalFollowMultiplier:F3}, LegacyHandMinMaxIgnored=({legacyHandSettings})");
 
         if (sniperDefenseStickTarget == null)
         {

@@ -14,6 +14,10 @@ public class SniperEventManager : MonoBehaviour
     // 通常バランス停止、縦ゲージ切り替え、防御判定に使います。
     [SerializeField] private BalanceManager balanceManager;
 
+    [Header("Gameplay BGM")]
+    [Tooltip("通常BGMとスナイパーイベント専用BGMを切り替えるControllerです。")]
+    [SerializeField] private GameplayBgmController gameplayBgmController;
+
     [Header("Warning Laser")]
     // 通常視点で見せる警告レーザーです。
     [SerializeField] private SniperWarningLaserController warningLaserController;
@@ -129,6 +133,7 @@ public class SniperEventManager : MonoBehaviour
     {
         AutoFindPlayerMover();
         AutoFindBalanceManager();
+        AutoFindGameplayBgmController();
         AutoFindWarningLaserController();
         AutoFindWarningPaperController();
         AutoFindSideViewControllers();
@@ -150,6 +155,11 @@ public class SniperEventManager : MonoBehaviour
         if (balanceManager == null)
         {
             AutoFindBalanceManager();
+        }
+
+        if (gameplayBgmController == null)
+        {
+            AutoFindGameplayBgmController();
         }
 
         if (warningPaperController == null)
@@ -180,6 +190,11 @@ public class SniperEventManager : MonoBehaviour
 
     private void OnDisable()
     {
+        if (isSniperEventActive && gameplayBgmController != null)
+        {
+            gameplayBgmController.EndSniperEventBgm();
+        }
+
         UnsubscribeBulletShooterEvents();
         UnsubscribeMatrixAvoidBulletShooterEvents();
     }
@@ -216,6 +231,7 @@ public class SniperEventManager : MonoBehaviour
         hasReturnedToNormalGameplay = false;
         hasPlayedSniperWarningSound = false;
         hasPlayedPaperStickSound = false;
+        StartSniperEventBgm();
         SaveSniperEventCameraState();
         StopPlayerAutoMove();
         OnSniperEventStarted();
@@ -251,6 +267,7 @@ public class SniperEventManager : MonoBehaviour
         hasPlayedPaperStickSound = false;
         ResumePlayerAutoMove();
         OnSniperEventEnded();
+        EndSniperEventBgm();
         Debug.Log("SniperEventManager: Sniper event finished.", this);
     }
 
@@ -341,6 +358,35 @@ public class SniperEventManager : MonoBehaviour
         if (playerMover == null)
         {
             playerMover = FindFirstObjectByType<TightropeAutoGoalMover>();
+        }
+    }
+
+    private void AutoFindGameplayBgmController()
+    {
+        gameplayBgmController = FindFirstObjectByType<GameplayBgmController>();
+    }
+
+    private void StartSniperEventBgm()
+    {
+        if (gameplayBgmController == null)
+        {
+            AutoFindGameplayBgmController();
+        }
+
+        if (gameplayBgmController == null)
+        {
+            Debug.LogWarning("SniperEventManager: Gameplay Bgm Controllerが未設定のため、スナイパーイベントBGMを開始できません。", this);
+            return;
+        }
+
+        gameplayBgmController.StartSniperEventBgm();
+    }
+
+    private void EndSniperEventBgm()
+    {
+        if (gameplayBgmController != null)
+        {
+            gameplayBgmController.EndSniperEventBgm();
         }
     }
 
