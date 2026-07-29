@@ -47,6 +47,7 @@ public class Helicopter : MonoBehaviour
     void Update()
     {
         
+
         if (KaiwaFlag==true)
         {
             KaiwaFlag = false;
@@ -247,7 +248,8 @@ public class Helicopter : MonoBehaviour
         agent.Warp(pos);
         //Dino.transform.position = pos;
         //Dino.transform.position = new Vector3(17.0f, 0.0f, 14.0f);
-        cam.RopeCameraCansel = false;
+        Invoke(nameof(RopeCameraCansel), 1.0f);//1秒後にロープカメラを復活させる（バグが出るため）
+        cam.CameraSet();
         Destroy(spawnedObj);
         Destroy(spawneDino);
         AI.PointReset();
@@ -256,5 +258,8 @@ public class Helicopter : MonoBehaviour
     {
         balance.ExplosionOn = false;
     }
-   
+   void RopeCameraCansel()
+    {
+        cam.RopeCameraCansel = false;
+    }
 }

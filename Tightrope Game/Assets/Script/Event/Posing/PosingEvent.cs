@@ -34,7 +34,7 @@ public class PosingEvent : MonoBehaviour
     private double _time;
     int StickOver = 0;
     bool DinoStoping = false;//怪獣を動かなくするフラグ
-    bool Flag = false;
+    bool Flag = false;//イベント開始フラグ
     bool DinoIdouflag = true;//怪獣移動フラグ
     bool PlayerRotation = false;
     bool KeikokuFlag;//警告フラグ

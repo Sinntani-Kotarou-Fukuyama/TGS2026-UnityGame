@@ -19,7 +19,7 @@ public class CameraSwhich : MonoBehaviour
     [SerializeField,Header("Player関連")] TightropeAutoGoalMover move;
     [SerializeField] BalanceManager balance;
     public bool RopeCameraCansel;//最初の恐竜カメラズーム時にロープをくぐるカメラをつけない
-
+    bool skipFlag = false;//スキップフラグ
 
     void Start()
     {
@@ -45,12 +45,24 @@ public class CameraSwhich : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            
-            //カメラの描画優先度を変える
-            mancamera.Priority.Value = 15;
-            dinocamera.Priority.Value = 5;
-            Invoke(nameof(RopeFlagSet), 2.0f);//カメラを切り替え終わってから実行
-            Debug.Log("スキップカメラ実行");
+           
+            if(skipFlag==false)
+            {
+                //カメラの描画優先度を変える
+                mancamera.Priority.Value = 15;
+                dinocamera.Priority.Value = 5;
+                Invoke(nameof(RopeFlagSet), 2.0f);//カメラを切り替え終わってから実行
+                skipFlag = true;//スキップは最初だけ
+                Debug.Log("スキップカメラ実行");
+            }
+
+            Debug.Log(mancamera.Priority.Value);
+            Debug.Log(dinocamera.Priority.Value);
+            Debug.Log(eventdinocamera.Priority.Value);
+            Debug.Log(posingdinocamera.Priority.Value);
+            Debug.Log(posingdinocamera2.Priority.Value);
+            Debug.Log(posingdinocamera3.Priority.Value);
+            Debug.Log(dinounderropecamera.Priority.Value);
 
         }
     }
@@ -71,6 +83,7 @@ public class CameraSwhich : MonoBehaviour
         posingdinocamera2.Priority.Value = 5;
         posingdinocamera3.Priority.Value = 5;
         dinounderropecamera.Priority.Value = 2;
+        skipFlag = true;//スキップしなくても時間がたつとできないようにする
         Debug.Log("CameraSetカメラ実行");
     }
     public void EventCameraSet()

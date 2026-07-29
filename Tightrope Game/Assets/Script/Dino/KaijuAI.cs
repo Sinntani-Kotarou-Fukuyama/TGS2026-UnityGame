@@ -273,7 +273,8 @@ public class KaijuAI : MonoBehaviour
         //Apply Root Motionを有効にする
         anim.applyRootMotion = true;
         // 歩くようにする
-        agent.speed = moveSpeed;
+        // agent.speed = moveSpeed;
+        PointReset();
         //クールタイムを設定
         CoolTime = RopeCoolTime;
         //自動回転をオンにする
@@ -283,6 +284,7 @@ public class KaijuAI : MonoBehaviour
 
     public void PointReset()
     {
+        agent.updateRotation = true;
         agent.speed = moveSpeed;
         agent.angularSpeed = rotateSpeed * 100f;
         agent.acceleration = 20f;
