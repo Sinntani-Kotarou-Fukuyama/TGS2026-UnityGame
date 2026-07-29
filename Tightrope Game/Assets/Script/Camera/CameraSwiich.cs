@@ -49,6 +49,7 @@ public class CameraSwhich : MonoBehaviour
             //カメラの描画優先度を変える
             mancamera.Priority.Value = 15;
             dinocamera.Priority.Value = 5;
+            Invoke(nameof(RopeFlagSet), 2.0f);//カメラを切り替え終わってから実行
             Debug.Log("スキップカメラ実行");
 
         }

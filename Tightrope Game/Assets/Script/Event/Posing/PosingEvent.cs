@@ -23,6 +23,7 @@ public class PosingEvent : MonoBehaviour
     [SerializeField] private float _cycle = 1; // “_–ÅüŠú[•b]
     [SerializeField] ParentKaizyo exoloOarentReset;//e‰ğœ
     [SerializeField] NavMeshAgent agent;
+    [SerializeField] KaijuAI AI;
     Quaternion startplayer;//Å‰‚Ì‰ñ“]‚ğ‹L˜^‚·‚é
     Quaternion startstick;//Å‰‚Ì‰ñ“]‚ğ‹L˜^‚·‚é
     Quaternion startplayerRightHund;//Å‰‚Ì‰ñ“]‚ğ‹L˜^‚·‚é
@@ -198,6 +199,7 @@ public class PosingEvent : MonoBehaviour
         playerMover.PlayerStoping = false;//ƒvƒŒƒCƒ„[‚ğ“®‚¯‚é‚æ‚¤‚É
         DinoStoping = false;//‰öb‚ğ“®‚¯‚é‚æ‚¤‚É
         agent.Warp(new Vector3(-18.05f, 0.1f, 8.0f));
+        AI.PointReset();
         //Dino.transform.position = new Vector3(-18.05f, 0.1f, 8.0f); //ƒrƒ‹‚Ì‰¡‚É‰öb‚ğˆÚ“®
         balance.ResumeNormalBalanceGauge();
     }

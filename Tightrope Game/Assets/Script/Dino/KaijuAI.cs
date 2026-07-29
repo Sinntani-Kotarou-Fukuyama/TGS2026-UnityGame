@@ -283,6 +283,10 @@ public class KaijuAI : MonoBehaviour
 
     public void PointReset()
     {
+        agent.speed = moveSpeed;
+        agent.angularSpeed = rotateSpeed * 100f;
+        agent.acceleration = 20f;
+        agent.stoppingDistance = attackDistance * 0.65f;
         // NavMesh ã‚È‚ç–Ú“I’n‚ğÄİ’è
         if (agent.isOnNavMesh && targetBuilding != null)
         {
