@@ -18,6 +18,12 @@ public class SniperBulletShooter : MonoBehaviour
     [SerializeField] private int shotCount = 4;
     [SerializeField] private float shotInterval = 0.6f;
 
+    [Header("Pre-Fire Laser Warning")]
+    [Tooltip("弾を発射する前に、次の弾と同じ赤線を点滅させる時間です。")]
+    [SerializeField, Min(0f)] private float preFireBlink = 0.6f;
+    [Tooltip("赤線を点滅させるON/OFFの間隔です。")]
+    [SerializeField, Min(0.02f)] private float preFireBlinkInterval = 0.12f;
+
     [Header("Shot Sound")]
     [SerializeField] private AudioSource sniperShotAudioSource;
     [SerializeField] private AudioClip sniperShotSound;
@@ -36,6 +42,9 @@ public class SniperBulletShooter : MonoBehaviour
     private Coroutine shootingCoroutine;
     private bool currentShotFinished;
     private bool currentShotReachedTarget;
+    private bool currentShotResolved;
+    private int currentLaserIndex = -1;
+    private float currentLaserWorldY;
     private bool enabledSniperDefenseMode;
 
     public event Action AllShotsResolved;
@@ -57,6 +66,11 @@ public class SniperBulletShooter : MonoBehaviour
         {
             AutoFindBalanceManager();
         }
+    }
+
+    private void OnDisable()
+    {
+        StopShooting();
     }
 
     public void StartShooting()
@@ -97,9 +111,16 @@ public class SniperBulletShooter : MonoBehaviour
             shootingCoroutine = null;
         }
 
+        if (sideViewLaserController != null)
+        {
+            sideViewLaserController.RestoreSideViewLaserVisibility();
+        }
+
         DestroySpawnedBullets();
         DisableSniperDefenseModeIfNeeded();
         currentShotFinished = true;
+        currentShotResolved = true;
+        currentLaserIndex = -1;
     }
 
     private IEnumerator ShootRoutine()
@@ -112,8 +133,11 @@ public class SniperBulletShooter : MonoBehaviour
         {
             currentShotFinished = false;
             currentShotReachedTarget = false;
+            currentShotResolved = false;
+            currentLaserIndex = GetLaserIndexForShot(shotIndex);
 
-            FireShot(shotIndex);
+            yield return BlinkLaserBeforeShot(currentLaserIndex);
+            FireShot(currentLaserIndex);
             yield return new WaitUntil(() => currentShotFinished);
 
             ResolveCurrentShotIfNeeded();
@@ -124,18 +148,19 @@ public class SniperBulletShooter : MonoBehaviour
             }
         }
 
+        sideViewLaserController.RestoreSideViewLaserVisibility();
         shootingCoroutine = null;
         DisableSniperDefenseModeIfNeeded();
         NotifyAllShotsResolved();
     }
 
-    private void FireShot(int shotIndex)
+    private void FireShot(int laserIndex)
     {
-        int laserIndex = GetLaserIndexForShot(shotIndex);
         SetSniperTargetPositionForLaser(laserIndex);
 
         Vector3 startPosition = sideViewLaserController.GetLaserFirePosition(laserIndex);
         Vector3 targetPosition = sideViewLaserController.GetLaserEndPosition(laserIndex);
+        currentLaserWorldY = targetPosition.y;
 
         GameObject bulletObject = Instantiate(bulletPrefab, startPosition, Quaternion.identity);
         SniperBullet bullet = bulletObject.GetComponent<SniperBullet>();
@@ -183,7 +208,14 @@ public class SniperBulletShooter : MonoBehaviour
             spawnedBullets.Remove(bullet.gameObject);
         }
 
+        // 停止後に破棄された弾から通知されても、防御判定は行いません。
+        if (shootingCoroutine == null)
+        {
+            return;
+        }
+
         currentShotReachedTarget = reachedTarget;
+        ResolveCurrentShotIfNeeded();
         currentShotFinished = true;
     }
 
@@ -208,6 +240,13 @@ public class SniperBulletShooter : MonoBehaviour
     // 弾が判定位置に到達した瞬間に、防御成功/失敗を決めます。
     private void ResolveCurrentShotIfNeeded()
     {
+        if (currentShotResolved)
+        {
+            return;
+        }
+
+        currentShotResolved = true;
+
         if (!currentShotReachedTarget)
         {
             Debug.LogWarning("SniperBulletShooter: 弾が判定位置に届く前に消えました。次の弾へ進みます。", this);
@@ -219,7 +258,43 @@ public class SniperBulletShooter : MonoBehaviour
             return;
         }
 
-        balanceManager.ResolveSniperDefenseShot();
+        balanceManager.ResolveSniperDefenseShot(currentLaserWorldY);
+    }
+
+    /// <summary>
+    /// 次に発射するレーンだけを、時間倍率の影響を受けずに点滅させます。
+    /// </summary>
+    private IEnumerator BlinkLaserBeforeShot(int laserIndex)
+    {
+        if (sideViewLaserController == null)
+        {
+            Debug.LogWarning("SniperBulletShooter: Side View Laser Controller が未設定のため、発射前点滅をスキップします。", this);
+            yield break;
+        }
+
+        float blinkDuration = Mathf.Max(0f, preFireBlink);
+        float blinkInterval = Mathf.Max(0.02f, preFireBlinkInterval);
+        float elapsed = 0f;
+        float intervalTimer = 0f;
+        bool visible = true;
+
+        while (elapsed < blinkDuration)
+        {
+            if (intervalTimer <= 0f)
+            {
+                sideViewLaserController.SetOnlySideViewLaserVisible(laserIndex, visible);
+                visible = !visible;
+                intervalTimer = blinkInterval;
+            }
+
+            float unscaledDeltaTime = Time.unscaledDeltaTime;
+            elapsed += unscaledDeltaTime;
+            intervalTimer -= unscaledDeltaTime;
+            yield return null;
+        }
+
+        // 点滅後は、実際に弾が飛ぶレーンだけを表示します。
+        sideViewLaserController.SetOnlySideViewLaserVisible(laserIndex, true);
     }
 
     private void NotifyAllShotsResolved()

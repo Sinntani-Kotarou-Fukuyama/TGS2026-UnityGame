@@ -1,12 +1,16 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 /* マトリックス回避フェーズで、4発の弾を同時に飛ばすための発射管理です。 */
 public class MatrixAvoidBulletShooter : MonoBehaviour
 {
     [Header("References")]
+    [SerializeField] private BalanceManager balanceManager;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform[] bulletSpawnPoints = new Transform[4];
     [SerializeField] private Transform passCheckTarget;
@@ -21,6 +25,30 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
     [SerializeField] private float passDistance = 1f;
     [SerializeField] private float bulletLifeTime = 6f;
 
+    [Header("Matrix Mash UI")]
+    [Tooltip("『下キー連打！！』をまとめたUIの親Objectです。通常時は非表示にします。")]
+    [SerializeField] private GameObject matrixMashUiRoot;
+    [Tooltip("『下キー連打！！』と結果メッセージを表示するTextMeshProです。")]
+    [SerializeField] private TMP_Text matrixMashMessageText;
+    [Tooltip("必要であれば『▼ ▼ ▼』を表示するTextMeshProです。未設定でも動作します。")]
+    [SerializeField] private TMP_Text matrixMashArrowText;
+
+    [Header("Matrix Mash Settings")]
+    [Tooltip("成功に必要な下キーの入力回数です。")]
+    [SerializeField, Min(1)] private int requiredPressCount = 10;
+    [Tooltip("連打入力を受け付ける実時間です。")]
+    [SerializeField, Min(0.01f)] private float mashDuration = 2.5f;
+    [Tooltip("UI表示後、連打入力を受け付け始めるまでの実時間です。")]
+    [SerializeField, Min(0f)] private float inputStartDelay = 0.3f;
+    [Tooltip("成功・失敗メッセージを表示する実時間です。")]
+    [SerializeField, Min(0f)] private float resultMessageDuration = 3f;
+    [Tooltip("連打中の文字が最も小さくなる倍率です。")]
+    [SerializeField, Min(0f)] private float pulseMinScale = 0.95f;
+    [Tooltip("連打中の文字が最も大きくなる倍率です。")]
+    [SerializeField, Min(0f)] private float pulseMaxScale = 1.10f;
+    [Tooltip("下キーを1回押した瞬間の文字倍率です。")]
+    [SerializeField, Min(0f)] private float inputPunchScale = 1.20f;
+
     [Header("Matrix Shot Sound")]
     [SerializeField] private AudioSource matrixShotAudioSource;
     [SerializeField] private AudioClip matrixShotSound;
@@ -33,12 +61,43 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
     private int firedBulletCount;
     private int passedBulletCount;
     private bool isShooting;
+    private Coroutine matrixMashCoroutine;
+    private int currentPressCount;
+    private bool isMatrixMashResolved;
+    private float inputPunchRemainingTime;
+    private Vector3 matrixMashMessageBaseScale = Vector3.one;
+    private bool hasSavedMatrixMashMessageScale;
 
     public event Action AllMatrixBulletsPassed;
+
+    private void Reset()
+    {
+        AutoFindBalanceManager();
+    }
+
+    private void Awake()
+    {
+        if (balanceManager == null)
+        {
+            AutoFindBalanceManager();
+        }
+
+        CleanupMatrixMashUi();
+    }
+
+    private void OnDisable()
+    {
+        StopShooting();
+    }
 
     public void StartShooting()
     {
         FireMatrixBullets();
+
+        if (isShooting)
+        {
+            StartMatrixMashInput();
+        }
     }
 
     public void FireMatrixBullets()
@@ -134,10 +193,14 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
 
     public void StopShooting()
     {
+        StopMatrixMashInput();
         DestroySpawnedBullets();
         firedBulletCount = 0;
         passedBulletCount = 0;
         isShooting = false;
+        currentPressCount = 0;
+        inputPunchRemainingTime = 0f;
+        isMatrixMashResolved = false;
     }
 
     private void OnBulletPassed(MatrixAvoidBullet bullet)
@@ -157,11 +220,12 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
 
         if (passedBulletCount >= firedBulletCount)
         {
-            NotifyAllBulletsPassed();
+            // 弾は演出として通過させます。Matrix回避の成否は下キー連打だけで確定します。
+            Debug.Log("MatrixAvoidBulletShooter: すべての弾が通過しました。連打結果の確定を待ちます。", this);
         }
     }
 
-    private void NotifyAllBulletsPassed()
+    private void NotifyMatrixMashCompleted()
     {
         if (!isShooting)
         {
@@ -170,9 +234,212 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
 
         isShooting = false;
         RemoveDestroyedBulletReferences();
-        Debug.Log("MatrixAvoidBulletShooter: すべてのマトリックス弾が通過しました。", this);
+        Debug.Log("MatrixAvoidBulletShooter: Matrix連打判定が完了しました。", this);
         onAllMatrixBulletsPassed?.Invoke();
         AllMatrixBulletsPassed?.Invoke();
+    }
+
+    private void StartMatrixMashInput()
+    {
+        StopMatrixMashInput();
+        currentPressCount = 0;
+        isMatrixMashResolved = false;
+        inputPunchRemainingTime = 0f;
+        matrixMashCoroutine = StartCoroutine(MatrixMashRoutine());
+    }
+
+    private void StopMatrixMashInput()
+    {
+        if (matrixMashCoroutine != null)
+        {
+            StopCoroutine(matrixMashCoroutine);
+            matrixMashCoroutine = null;
+        }
+
+        isMatrixMashResolved = true;
+        CleanupMatrixMashUi();
+    }
+
+    private IEnumerator MatrixMashRoutine()
+    {
+        SetupMatrixMashUi();
+
+        // スローモーションに影響されない実時間で、入力開始まで待ちます。
+        float delayElapsed = 0f;
+        while (delayElapsed < Mathf.Max(0f, inputStartDelay))
+        {
+            UpdateMashMessagePulse();
+            delayElapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        float mashElapsed = 0f;
+        float duration = Mathf.Max(0.01f, mashDuration);
+        int requiredCount = Mathf.Max(1, requiredPressCount);
+
+        while (!isMatrixMashResolved && mashElapsed < duration)
+        {
+            if (Keyboard.current != null && Keyboard.current.downArrowKey.wasPressedThisFrame)
+            {
+                currentPressCount++;
+                inputPunchRemainingTime = 0.12f;
+                Debug.Log($"MatrixAvoidBulletShooter: 下キー入力 {currentPressCount}/{requiredCount}", this);
+
+                if (currentPressCount >= requiredCount)
+                {
+                    isMatrixMashResolved = true;
+                    break;
+                }
+            }
+
+            UpdateMashMessagePulse();
+            mashElapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        bool success = currentPressCount >= requiredCount;
+        isMatrixMashResolved = true;
+        yield return ShowMatrixMashResult(success);
+
+        CleanupMatrixMashUi();
+
+        if (!success && balanceManager != null)
+        {
+            balanceManager.FailMatrixAvoidByMash();
+        }
+        else if (!success)
+        {
+            Debug.LogWarning("MatrixAvoidBulletShooter: Balance Manager が未設定のため、Matrix連打失敗時のダメージ処理を呼べません。", this);
+        }
+
+        // 既存通知を使い、SniperEventManager側で成功処理またはイベント終了へ進みます。
+        matrixMashCoroutine = null;
+        NotifyMatrixMashCompleted();
+    }
+
+    private void SetupMatrixMashUi()
+    {
+        if (matrixMashUiRoot == null)
+        {
+            Debug.LogWarning("MatrixAvoidBulletShooter: Matrix Mash UI Root が未設定です。連打判定はUIなしで続行します。", this);
+        }
+        else if (matrixMashUiRoot == gameObject || transform.IsChildOf(matrixMashUiRoot.transform))
+        {
+            Debug.LogWarning("MatrixAvoidBulletShooter: Matrix Mash UI Root にShooter自身が含まれるため、UI表示切り替えをスキップします。", this);
+        }
+        else
+        {
+            matrixMashUiRoot.SetActive(true);
+        }
+
+        if (matrixMashMessageText == null)
+        {
+            Debug.LogWarning("MatrixAvoidBulletShooter: Matrix Mash Message Text が未設定です。連打判定は文字表示なしで続行します。", this);
+        }
+        else
+        {
+            matrixMashMessageBaseScale = matrixMashMessageText.rectTransform.localScale;
+            hasSavedMatrixMashMessageScale = true;
+            matrixMashMessageText.text = "下キー連打！！";
+        }
+
+        if (matrixMashArrowText != null)
+        {
+            matrixMashArrowText.text = "▼ ▼ ▼";
+            matrixMashArrowText.gameObject.SetActive(true);
+        }
+    }
+
+    private void UpdateMashMessagePulse()
+    {
+        if (matrixMashMessageText == null)
+        {
+            return;
+        }
+
+        float minScale = Mathf.Min(pulseMinScale, pulseMaxScale);
+        float maxScale = Mathf.Max(pulseMinScale, pulseMaxScale);
+        float pulseRate = (Mathf.Sin(Time.unscaledTime * 8f) + 1f) * 0.5f;
+        float pulseScale = Mathf.Lerp(minScale, maxScale, pulseRate);
+        float progress = Mathf.Clamp01((float)currentPressCount / Mathf.Max(1, requiredPressCount));
+        float growingBaseScale = 1f + progress * 0.08f;
+        float displayScale = pulseScale * growingBaseScale;
+
+        if (inputPunchRemainingTime > 0f)
+        {
+            displayScale = Mathf.Max(displayScale, inputPunchScale);
+            inputPunchRemainingTime -= Time.unscaledDeltaTime;
+        }
+
+        SetMashMessageScale(displayScale);
+    }
+
+    private IEnumerator ShowMatrixMashResult(bool success)
+    {
+        if (matrixMashMessageText != null)
+        {
+            matrixMashMessageText.text = success ? "素晴らしい！" : "間に合わないっ！";
+        }
+
+        if (matrixMashArrowText != null)
+        {
+            matrixMashArrowText.gameObject.SetActive(false);
+        }
+
+        float duration = Mathf.Max(0f, resultMessageDuration);
+        float elapsedTime = 0f;
+        float startScale = success
+            ? Mathf.Max(1f, inputPunchScale)
+            : Mathf.Max(1.05f, pulseMaxScale);
+
+        while (elapsedTime < duration)
+        {
+            float rate = duration > 0f ? elapsedTime / duration : 1f;
+            SetMashMessageScale(Mathf.Lerp(startScale, 1f, rate));
+            elapsedTime += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        SetMashMessageScale(1f);
+    }
+
+    private void SetMashMessageScale(float scale)
+    {
+        if (matrixMashMessageText == null)
+        {
+            return;
+        }
+
+        Vector3 baseScale = hasSavedMatrixMashMessageScale ? matrixMashMessageBaseScale : Vector3.one;
+        matrixMashMessageText.rectTransform.localScale = baseScale * Mathf.Max(0f, scale);
+    }
+
+    private void CleanupMatrixMashUi()
+    {
+        if (matrixMashMessageText != null)
+        {
+            if (hasSavedMatrixMashMessageScale)
+            {
+                matrixMashMessageText.rectTransform.localScale = matrixMashMessageBaseScale;
+            }
+
+            matrixMashMessageText.text = "下キー連打！！";
+        }
+
+        if (matrixMashArrowText != null)
+        {
+            matrixMashArrowText.text = "▼ ▼ ▼";
+            matrixMashArrowText.gameObject.SetActive(true);
+        }
+
+        if (matrixMashUiRoot != null
+            && matrixMashUiRoot != gameObject
+            && !transform.IsChildOf(matrixMashUiRoot.transform))
+        {
+            matrixMashUiRoot.SetActive(false);
+        }
+
+        hasSavedMatrixMashMessageScale = false;
     }
 
     private void DestroySpawnedBullets()
@@ -197,5 +464,10 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
                 spawnedBullets.RemoveAt(i);
             }
         }
+    }
+
+    private void AutoFindBalanceManager()
+    {
+        balanceManager = FindFirstObjectByType<BalanceManager>();
     }
 }

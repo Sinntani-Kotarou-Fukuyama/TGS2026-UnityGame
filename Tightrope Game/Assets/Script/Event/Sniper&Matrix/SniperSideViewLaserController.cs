@@ -129,6 +129,42 @@ public class SniperSideViewLaserController : MonoBehaviour
         return sideViewLasers != null ? sideViewLasers.Length : 0;
     }
 
+    // 次に弾が飛ぶ1本だけを表示します。visibleを切り替えることで点滅に使えます。
+    public bool SetOnlySideViewLaserVisible(int index, bool visible)
+    {
+        SideViewLaserLine selectedLaser = GetLaser(index);
+        if (selectedLaser == null)
+        {
+            Debug.LogWarning($"SniperSideViewLaserController: Laser index {index} が見つかりません。", this);
+            return false;
+        }
+
+        if (!isLaserVisible)
+        {
+            return false;
+        }
+
+        CreateLasersIfNeeded();
+        UpdateLaserPositions();
+
+        for (int i = 0; i < sideViewLasers.Length; i++)
+        {
+            SideViewLaserLine laser = sideViewLasers[i];
+            if (laser?.lineRenderer != null)
+            {
+                laser.lineRenderer.enabled = isLaserVisible && i == index && visible;
+            }
+        }
+
+        return isLaserVisible;
+    }
+
+    // 点滅を中断・終了した時に、横視点レーザー本来の表示へ戻します。
+    public void RestoreSideViewLaserVisibility()
+    {
+        SetLaserEnabled(isLaserVisible);
+    }
+
     private void CreateLasersIfNeeded()
     {
         if (sideViewLasers == null)
