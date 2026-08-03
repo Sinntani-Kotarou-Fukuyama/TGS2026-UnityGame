@@ -60,6 +60,10 @@ public class KaijuAI : MonoBehaviour
 
     void Update()
     {
+        if(CoolTime<=0)
+        {
+            this.gameObject.layer = 0;
+        }
         if(RopeMove==true)
         {
             Vector3 forward = transform.forward * 0.1f;
@@ -250,6 +254,7 @@ public class KaijuAI : MonoBehaviour
         {
             if(CoolTime<=0)
             {
+               
                 //自動回転をオフにする
                 //agent.updateRotation = false;
                 //agent.updatePosition = true;
@@ -277,6 +282,7 @@ public class KaijuAI : MonoBehaviour
         PointReset();
         //クールタイムを設定
         CoolTime = RopeCoolTime;
+        this.gameObject.layer = 6;
         //自動回転をオンにする
         //agent.updateRotation = true;
         //agent.updatePosition = false;
