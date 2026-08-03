@@ -30,6 +30,7 @@ public class KaijuAI : MonoBehaviour
 
     GameObject targetBuilding;
     BreakBuilding targetBreakScript;
+    
 
     float attackTimer = 0f;
     bool isAttacking = false;
@@ -165,6 +166,7 @@ public class KaijuAI : MonoBehaviour
             .FirstOrDefault();
 
         targetBreakScript = targetBuilding?.GetComponent<BreakBuilding>();
+       
     }
 
     public void PunchHit()
