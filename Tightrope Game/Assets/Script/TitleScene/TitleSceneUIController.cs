@@ -32,6 +32,10 @@ public class TitleSceneUIController : MonoBehaviour
         JoyCon
     }
 
+    [Header("デモフロー")]
+    [Tooltip("ONなら既存のデモ映像フローを使用します。OFFならタイトル画面から直接開始します。")]
+    [SerializeField] private bool useDemoFlow = false;
+
     [Header("画面Root")]
     [Tooltip("既存の動画表示Canvasを設定します。")]
     [SerializeField] private GameObject demoRoot;
@@ -111,7 +115,14 @@ public class TitleSceneUIController : MonoBehaviour
 
     private void Start()
     {
-        ShowDemo();
+        if (useDemoFlow)
+        {
+            ShowDemo();
+        }
+        else
+        {
+            ShowTitle();
+        }
     }
 
     private void Update()
@@ -169,16 +180,19 @@ public class TitleSceneUIController : MonoBehaviour
 
     private void UpdateTitle()
     {
-        bool hasKeyboardInput = Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame;
-        bool hasMouseInput = HasMouseActivityThisFrame();
+        if (useDemoFlow)
+        {
+            bool hasKeyboardInput = Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame;
+            bool hasMouseInput = HasMouseActivityThisFrame();
 
-        if (hasKeyboardInput || hasMouseInput)
-        {
-            titleIdleSeconds = 0f;
-        }
-        else
-        {
-            titleIdleSeconds += Time.unscaledDeltaTime;
+            if (hasKeyboardInput || hasMouseInput)
+            {
+                titleIdleSeconds = 0f;
+            }
+            else
+            {
+                titleIdleSeconds += Time.unscaledDeltaTime;
+            }
         }
 
         if (Keyboard.current != null)
@@ -199,7 +213,7 @@ public class TitleSceneUIController : MonoBehaviour
             }
         }
 
-        if (titleIdleSeconds >= titleIdleDemoSeconds)
+        if (useDemoFlow && titleIdleSeconds >= titleIdleDemoSeconds)
         {
             ShowDemo();
         }
