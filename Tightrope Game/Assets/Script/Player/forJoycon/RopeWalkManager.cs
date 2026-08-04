@@ -8,23 +8,27 @@ public class RopeWalkManager : MonoBehaviour
     [Tooltip("例: CommonRope1Start, CommonRope1End")]
     [SerializeField] private Transform[] commonRoutePoints;
 
-    //[Tooltip("例: LeftRope2Start, LeftRope2End, LeftRope3Start, LeftRope3End")]
-    //[SerializeField] private Transform[] leftRoutePoints;
+    [Tooltip("例: LeftRope2Start, LeftRope2End, LeftRope3Start, LeftRope3End")]
+    [SerializeField] private Transform[] leftRoutePoints;
 
-    //[Tooltip("例: RightRope2Start, RightRope2End, RightRope3Start, RightRope3End")]
-    //[SerializeField] private Transform[] rightRoutePoints;
+    [Tooltip("例: RightRope2Start, RightRope2End, RightRope3Start, RightRope3End")]
+    [SerializeField] private Transform[] rightRoutePoints;
+
+    private Transform CurrentStart, CurrentEnd;
 
 
     private void Start()
     {
-        trolleyWall.transform.SetPositionAndRotation(commonRoutePoints[0].position, GetLookAtRotation(commonRoutePoints[0].position, commonRoutePoints[1].position));
+        CurrentStart = commonRoutePoints[0];
+        CurrentEnd = commonRoutePoints[1];
+        trolleyWall.transform.SetPositionAndRotation(CurrentStart.position, GetLookAtRotation(CurrentStart, CurrentEnd));
 
     }
 
     private void Update()
     {
 
-        float distance = Vector3.Distance(trolleyWall.transform.position, commonRoutePoints[1].position);
+        float distance = Vector3.Distance(trolleyWall.transform.position, CurrentEnd.position);
         // 
         if (distance <= 1.0f)
         {
@@ -35,9 +39,9 @@ public class RopeWalkManager : MonoBehaviour
     }
 
     //第一、第二引数から向きを計算し、その方向に真っ直ぐ向くための回転データ（Quaternion）を作り出す
-    public Quaternion GetLookAtRotation(Vector3 currentPosition, Vector3 targetPosition)
+    public Quaternion GetLookAtRotation(Transform currentPosition, Transform targetPosition)
     {
-        Vector3 direction = targetPosition - currentPosition;
+        Vector3 direction = targetPosition.position - currentPosition.position;
 
         // 完全に同じ座標でなければ、向き（Quaternion）を計算して返す
         if (direction != Vector3.zero)
