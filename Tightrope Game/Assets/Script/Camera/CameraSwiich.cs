@@ -17,7 +17,7 @@ public class CameraSwhich : MonoBehaviour
     [SerializeField] Transform player;//ポーズ取る用
     [SerializeField] Transform Stick;//棒持ち上げ用
     [SerializeField,Header("Player関連")] TightropeAutoGoalMover move;
-    [SerializeField] TrolleyWall trolleyWall;
+    [SerializeField] RopeWalkManager ropeWalkManager;
     [SerializeField] BalanceManager balance;
     public bool RopeCameraCansel;//最初の恐竜カメラズーム時にロープをくぐるカメラをつけない
     bool skipFlag = false;//スキップフラグ
@@ -26,7 +26,7 @@ public class CameraSwhich : MonoBehaviour
     {
         move.StopMoving();//プレイヤーの動きを止める
         balance.PauseNormalBalanceGauge();//バランスゲージを止める
-        if (trolleyWall != null) { trolleyWall.IsStop(true); }　// joycon操作のときはプレイヤーの動きを止める
+        if (ropeWalkManager != null) { ropeWalkManager.StopPlayer(); }　// joycon操作のときはプレイヤーの動きを止める
 
         RopeCameraCansel = true;//最初の恐竜カメラズーム時にロープをくぐるカメラをつけない
         Debug.Log("怪獣注目のやつEscでスキップできるよ");
@@ -43,11 +43,11 @@ public class CameraSwhich : MonoBehaviour
         RopeCameraCansel = false;//次からはイベント時にだけしかつけない
         move.StartMoving();//プレイヤーを動かす
         balance.ResumeNormalBalanceGauge();//バランスゲージを動かす
-        if (trolleyWall != null)
+        if (ropeWalkManager != null)
         {
-            if (trolleyWall.IsStop())
+            if (ropeWalkManager.IsPlayerStop())
             {
-                trolleyWall.IsStop(false);
+                ropeWalkManager.MovePlayer();
                 Debug.Log("動きました");
             }
         }

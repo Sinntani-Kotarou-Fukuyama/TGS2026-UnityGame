@@ -1,8 +1,18 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RopeWalkManager : MonoBehaviour
 {
-    [SerializeField] GameObject trolleyWall;
+    enum Route
+    {
+        None,
+        Idle,
+        Left,
+        Right
+    }
+
+    [SerializeField] TrolleyWall trolleyWall;
 
     [Header("ルートTransform（開始・終了の2個1組）")]
     [Tooltip("例: CommonRope1Start, CommonRope1End")]
@@ -15,14 +25,15 @@ public class RopeWalkManager : MonoBehaviour
     [SerializeField] private Transform[] rightRoutePoints;
 
     private Transform CurrentStart, CurrentEnd;
-
+    private Route currentRoute;
+    private int CntRoute;
 
     private void Start()
     {
-        CurrentStart = commonRoutePoints[0];
-        CurrentEnd = commonRoutePoints[1];
-        trolleyWall.transform.SetPositionAndRotation(CurrentStart.position, GetLookAtRotation(CurrentStart, CurrentEnd));
+        SetRoute(commonRoutePoints[0], commonRoutePoints[1]);
 
+        currentRoute = Route.None;
+        CntRoute = 1;
     }
 
     private void Update()
@@ -30,12 +41,53 @@ public class RopeWalkManager : MonoBehaviour
 
         float distance = Vector3.Distance(trolleyWall.transform.position, CurrentEnd.position);
         // 
-        if (distance <= 1.0f)
+        if (distance <= 0.1f)
         {
-           // Quaternion quaternion = GetLookAtRotation(start2.position, end2.position); // まっすぐ向くためのQuaternionを作る
-            //trolleyWall.transform.SetPositionAndRotation(start2.position, quaternion); // 移動と回転をする
+            switch (currentRoute)
+            {
+                case Route.None:
+
+                    trolleyWall.IsStop(true);
+                    //gamobjectSetactive どちらに進むかのUIを表示させ、UIの法にCrrentRouteを設定させる
+                    //joycon用のゲージは非表示にする
+                    currentRoute = Route.Idle; // LeftかRightが決まるまでの待機場所
+                    break;
+                case Route.Idle:
+                    currentRoute = Route.Left;
+                    trolleyWall.IsStop(false);
+                    break;
+                case Route.Left:
+
+                    if(CntRoute > leftRoutePoints.Length)
+                    {
+                        SceneManager.LoadScene("ClearScene");
+                    }
+
+                    SetRoute(leftRoutePoints[CntRoute - 1], leftRoutePoints[CntRoute]);
+                    CntRoute += 2;
+
+
+                    break;
+                case Route.Right:
+
+                    if(CntRoute > rightRoutePoints.Length)
+                    {
+                        SceneManager.LoadScene("ClearScene");
+                    }
+                    SetRoute(rightRoutePoints[CntRoute - 1], rightRoutePoints[CntRoute]);
+                    CntRoute += 2;
+                    break;
+            }
 
         }
+    }
+
+    public void SetRoute(Transform start, Transform end)
+    {
+        CurrentStart = start;
+        CurrentEnd = end;
+
+        trolleyWall.transform.SetPositionAndRotation(CurrentStart.position, GetLookAtRotation(CurrentStart, CurrentEnd));
     }
 
     //第一、第二引数から向きを計算し、その方向に真っ直ぐ向くための回転データ（Quaternion）を作り出す
@@ -52,4 +104,18 @@ public class RopeWalkManager : MonoBehaviour
         // 向きが計算できない場合は、現在のオブジェクトの回転をそのまま返す
         return transform.rotation;
     }
+
+    public void MovePlayer()
+    {
+        trolleyWall.IsStop(false);
+    }
+    public void StopPlayer()
+    {
+        trolleyWall.IsStop(true);
+    }
+    public bool IsPlayerStop()
+    {
+        return trolleyWall.IsStop();
+    }
+
 }
