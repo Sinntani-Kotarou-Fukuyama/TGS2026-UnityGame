@@ -68,10 +68,7 @@ public class KaijuAI : MonoBehaviour
 
         if (agent.speed == 0)
         {
-            Debug.Log("Spped0");
-            Debug.Log(time);
             time += Time.deltaTime;
-            
             timeFlag = true;
         }
         else
