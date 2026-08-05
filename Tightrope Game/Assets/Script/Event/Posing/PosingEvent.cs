@@ -39,7 +39,18 @@ public class PosingEvent : MonoBehaviour
     bool PlayerRotation = false;
     bool KeikokuFlag;//警告フラグ
     [SerializeField] TightropeAutoGoalMover playerMover;//プレイヤーの動き取得
+    [Tooltip("新しいTrolley移動をポーズイベント中だけ停止・再開するManagerです。")]
+    [SerializeField] RopeWalkManager ropeWalkManager;
     private GameObject spawneDino;
+    private bool isRopeWalkPausedForPosingEvent;
+    private void Awake()
+    {
+        if (ropeWalkManager == null)
+        {
+            ropeWalkManager = FindFirstObjectByType<RopeWalkManager>(FindObjectsInactive.Include);
+        }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -119,11 +130,14 @@ public class PosingEvent : MonoBehaviour
     }
     public void EventFlag() //イベントマネージャーで呼び出す
     {
+        PauseRopeWalkForPosingEvent();
         Flag = true;
     }
 
     void PoseEvent()
     {
+        // プレイヤー・棒・手を書き換える前に、新しい綱渡り更新を停止します。
+        PauseRopeWalkForPosingEvent();
         cam.RopeCameraCansel = true;
         //1秒後に爆発ポイントを子じゃなくする
         Invoke(nameof(ParentReset),1f);
@@ -202,5 +216,45 @@ public class PosingEvent : MonoBehaviour
         AI.PointReset();
         //Dino.transform.position = new Vector3(-18.05f, 0.1f, 8.0f); //ビルの横に怪獣を移動
         balance.ResumeNormalBalanceGauge();
+        // プレイヤー・棒・手・カメラ・ゲージを戻した後にだけ綱渡りを再開します。
+        ResumeRopeWalkAfterPosingEvent();
+    }
+
+    private void PauseRopeWalkForPosingEvent()
+    {
+        if (isRopeWalkPausedForPosingEvent)
+        {
+            return;
+        }
+
+        if (ropeWalkManager == null)
+        {
+            Debug.LogWarning("PosingEvent: Rope Walk Managerが未設定のため、新しい綱渡りの停止をスキップします。", this);
+            return;
+        }
+
+        ropeWalkManager.PauseForPosingEvent();
+        isRopeWalkPausedForPosingEvent = true;
+    }
+
+    private void ResumeRopeWalkAfterPosingEvent()
+    {
+        if (!isRopeWalkPausedForPosingEvent)
+        {
+            return;
+        }
+
+        if (ropeWalkManager != null)
+        {
+            ropeWalkManager.ResumeAfterPosingEvent();
+        }
+
+        isRopeWalkPausedForPosingEvent = false;
+    }
+
+    private void OnDisable()
+    {
+        // 強制終了やScene遷移でも、ポーズイベントの停止理由だけは残さないようにします。
+        ResumeRopeWalkAfterPosingEvent();
     }
 }

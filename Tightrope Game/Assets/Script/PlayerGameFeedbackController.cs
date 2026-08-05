@@ -106,9 +106,13 @@ public class PlayerGameFeedbackController : MonoBehaviour
     private Coroutine redFlashCoroutine;
     private int damageCount;
     private bool isFallingToGameOver;
+    private bool isRecoveryInvulnerable;
+    private bool isRecoveryBlinkActive;
+    private bool[] recoveryBlinkRendererStates;
 
     public int DamageCount => damageCount;
     public int MaxDamageCount => maxDamageCount;
+    public bool IsFallingToGameOver => isFallingToGameOver;
 
     // 体幹メーターなど、ダメージ数の表示だけを担当するUIへ変更後の値を通知します。
     public event Action<int> DamageCountChanged;
@@ -123,6 +127,12 @@ public class PlayerGameFeedbackController : MonoBehaviour
         ResolveFallReferences();
         ValidateFallSettings();
         CacheOriginalMaterialColors();
+    }
+
+    private void OnDisable()
+    {
+        EndRecoveryBlink();
+        isRecoveryInvulnerable = false;
     }
 
     public void PlaySuccessSound()
@@ -150,6 +160,12 @@ public class PlayerGameFeedbackController : MonoBehaviour
         if (isFallingToGameOver)
         {
             DebugLog("Damage ignored because the GameOver fall sequence is already running.");
+            return;
+        }
+
+        if (isRecoveryInvulnerable)
+        {
+            DebugLog("Damage ignored during managed fall recovery protection.");
             return;
         }
 
@@ -283,6 +299,17 @@ public class PlayerGameFeedbackController : MonoBehaviour
             balanceManager.PauseNormalBalanceGauge();
         }
 
+        PlayFallAnimationVisual();
+    }
+
+    // 1～4ミス時の管理落下と、既存の5ミスGameOver落下で同じ見た目を再利用します。
+    public void PlayFallAnimationVisual()
+    {
+        if (playerAnimator == null)
+        {
+            ResolveFallReferences();
+        }
+
         if (playerAnimator == null)
         {
             return;
@@ -297,6 +324,165 @@ public class PlayerGameFeedbackController : MonoBehaviour
         {
             playerAnimator.SetTrigger(fallTriggerName);
         }
+    }
+
+    // Fall Stateへ入ったこととnormalizedTimeを確認し、未設定時も既存Fall Durationで安全に抜けます。
+    public IEnumerator WaitForManagedFallAnimationComplete()
+    {
+        if (playerAnimator == null)
+        {
+            ResolveFallReferences();
+        }
+
+        if (playerAnimator == null || !playerAnimator.isActiveAndEnabled)
+        {
+            yield break;
+        }
+
+        const int animatorLayer = 0;
+        int fallStateHash = Animator.StringToHash("Fall");
+        float timeout = Mathf.Max(0.1f, fallDuration);
+        float elapsed = 0f;
+        bool enteredFallState = false;
+
+        while (elapsed < timeout)
+        {
+            if (playerAnimator == null || !playerAnimator.isActiveAndEnabled)
+            {
+                yield break;
+            }
+
+            AnimatorStateInfo stateInfo = playerAnimator.GetCurrentAnimatorStateInfo(animatorLayer);
+            bool isFallState = stateInfo.shortNameHash == fallStateHash;
+            if (isFallState)
+            {
+                if (!enteredFallState)
+                {
+                    enteredFallState = true;
+                    float stateSpeed = Mathf.Max(0.01f, Mathf.Abs(stateInfo.speed * stateInfo.speedMultiplier));
+                    float stateDuration = stateInfo.length / stateSpeed;
+                    timeout = Mathf.Max(timeout, elapsed + stateDuration * 1.5f);
+                }
+
+                if (stateInfo.normalizedTime >= 1f && !playerAnimator.IsInTransition(animatorLayer))
+                {
+                    yield break;
+                }
+            }
+            else if (enteredFallState && !playerAnimator.IsInTransition(animatorLayer))
+            {
+                yield break;
+            }
+
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        Debug.LogWarning(
+            enteredFallState
+                ? "PlayerGameFeedbackController: Fallアニメーション完了待ちがTimeoutしたため、復帰処理を続行します。"
+                : "PlayerGameFeedbackController: AnimatorがFall Stateへ入らなかったため、Timeout後に復帰処理を続行します。",
+            this);
+    }
+
+    // Fallには通常歩行への遷移がないため、既存catwalk Stateへ小さくCrossFadeして復帰します。
+    public void RestoreAnimatorAfterManagedFall()
+    {
+        if (playerAnimator == null)
+        {
+            ResolveFallReferences();
+        }
+
+        if (playerAnimator == null)
+        {
+            return;
+        }
+
+        if (HasAnimatorParameter(fallTriggerName, AnimatorControllerParameterType.Trigger))
+        {
+            playerAnimator.ResetTrigger(fallTriggerName);
+        }
+
+        if (HasAnimatorParameter(walkBoolName, AnimatorControllerParameterType.Bool))
+        {
+            playerAnimator.SetBool(walkBoolName, true);
+        }
+
+        int walkStateHash = Animator.StringToHash("Base Layer.catwalk");
+        if (playerAnimator.HasState(0, walkStateHash))
+        {
+            playerAnimator.CrossFade(walkStateHash, 0.1f, 0, 0f);
+        }
+        else
+        {
+            Debug.LogWarning("PlayerGameFeedbackController: Animatorにcatwalk Stateがないため、Bool設定だけで復帰します。", this);
+        }
+    }
+
+    public void SetRecoveryInvulnerable(bool invulnerable)
+    {
+        if (invulnerable && isFallingToGameOver)
+        {
+            return;
+        }
+
+        isRecoveryInvulnerable = invulnerable;
+    }
+
+    // 赤フラッシュとは分離し、既存Rendererのenabled状態だけを点滅用に保存します。
+    public void BeginRecoveryBlink()
+    {
+        EndRecoveryBlink();
+        if (playerRenderers == null || playerRenderers.Length == 0)
+        {
+            Debug.LogWarning("PlayerGameFeedbackController: 復帰点滅用のPlayer Renderersが未設定です。", this);
+            return;
+        }
+
+        recoveryBlinkRendererStates = new bool[playerRenderers.Length];
+        for (int i = 0; i < playerRenderers.Length; i++)
+        {
+            Renderer renderer = playerRenderers[i];
+            recoveryBlinkRendererStates[i] = renderer != null && renderer.enabled;
+        }
+
+        isRecoveryBlinkActive = true;
+        SetRecoveryBlinkVisible(true);
+    }
+
+    public void SetRecoveryBlinkVisible(bool visible)
+    {
+        if (!isRecoveryBlinkActive || recoveryBlinkRendererStates == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < playerRenderers.Length && i < recoveryBlinkRendererStates.Length; i++)
+        {
+            Renderer renderer = playerRenderers[i];
+            if (renderer != null)
+            {
+                renderer.enabled = recoveryBlinkRendererStates[i] && visible;
+            }
+        }
+    }
+
+    public void EndRecoveryBlink()
+    {
+        if (recoveryBlinkRendererStates != null && playerRenderers != null)
+        {
+            for (int i = 0; i < playerRenderers.Length && i < recoveryBlinkRendererStates.Length; i++)
+            {
+                Renderer renderer = playerRenderers[i];
+                if (renderer != null)
+                {
+                    renderer.enabled = recoveryBlinkRendererStates[i];
+                }
+            }
+        }
+
+        recoveryBlinkRendererStates = null;
+        isRecoveryBlinkActive = false;
     }
 
     private bool HasAnimatorParameter(string parameterName, AnimatorControllerParameterType parameterType)

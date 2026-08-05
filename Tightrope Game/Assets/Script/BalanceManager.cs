@@ -282,6 +282,9 @@ public class BalanceManager : MonoBehaviour
     private bool wasInsideTarget;
     private float nextSniperDefenseFollowLogTime;
     private bool isNormalBalancePaused;
+    private bool isNormalBalanceGaugeSuppressed;
+    private bool hasSavedNormalBalanceSuppressionState;
+    private bool normalBalanceWasPausedBeforeSuppression;
     private Coroutine unbalanceCoroutine;
     private float nextTimerLogTime;
     private bool hasSavedHorizontalLayout;
@@ -300,6 +303,7 @@ public class BalanceManager : MonoBehaviour
     public BalanceGaugeDirection GaugeDirection => gaugeDirection;
     public BalancePlayMode PlayMode => playMode;
     public bool IsNormalBalancePaused => isNormalBalancePaused;
+    public bool IsNormalBalanceGaugeSuppressed => isNormalBalanceGaugeSuppressed;
 
     private void Start()
     {
@@ -565,8 +569,43 @@ public class BalanceManager : MonoBehaviour
         DebugLog("Normal balance gauge paused.");
     }
 
+    /// <summary>
+    /// 新しいTrolley方式の間だけ、通常ゲージ判定を停止した状態に保ちます。
+    /// SniperDefense / MatrixAvoidのPlayModeは止めません。
+    /// </summary>
+    public void SetNormalBalanceGaugeSuppressed(bool suppressed)
+    {
+        if (isNormalBalanceGaugeSuppressed == suppressed)
+        {
+            return;
+        }
+
+        if (suppressed)
+        {
+            normalBalanceWasPausedBeforeSuppression = isNormalBalancePaused;
+            hasSavedNormalBalanceSuppressionState = true;
+            isNormalBalanceGaugeSuppressed = true;
+            PauseNormalBalanceGauge();
+            return;
+        }
+
+        isNormalBalanceGaugeSuppressed = false;
+        if (hasSavedNormalBalanceSuppressionState && !normalBalanceWasPausedBeforeSuppression)
+        {
+            ResumeNormalBalanceGauge();
+        }
+
+        hasSavedNormalBalanceSuppressionState = false;
+    }
+
     public void ResumeNormalBalanceGauge()
     {
+        // Cameraやイベント終了処理からResumeされても、Trolley使用中は通常判定を再開しません。
+        if (isNormalBalanceGaugeSuppressed)
+        {
+            return;
+        }
+
         if (!isNormalBalancePaused)
         {
             return;
