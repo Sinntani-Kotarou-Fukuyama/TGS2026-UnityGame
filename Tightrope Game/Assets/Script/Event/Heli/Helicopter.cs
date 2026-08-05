@@ -15,11 +15,11 @@ public class Helicopter : MonoBehaviour
     [SerializeField] MessageSequencer Message;//会話を進める
     [SerializeField] CameraSwhich cam;//カメラを切り替えれるように
     [SerializeField] TightropeAutoGoalMover playerMover;//プレイヤーの動き取得
-    [SerializeField] BalanceShake balance;
+    [SerializeField] BalanceShake balance;//バランスバーを揺らす
     [SerializeField] AudioSource explosionAudio;//爆発音
     [SerializeField] AudioSource cameraOnAudio;//カメラ起動音
     [SerializeField] KaijuAI AI;//怪獣の動きを取得
-    [SerializeField] NavMeshAgent agent;
+    [SerializeField] NavMeshAgent agent;//NavMeshで移動させる
     [SerializeField] float offsetX = 10f;
     [SerializeField] float offsetZ = 10f;
     [SerializeField] float speed =1f;//ヘリの移動速度

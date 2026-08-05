@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Linq;
 using System.Collections;
 using UnityEngine.AI;
+//using System;
 
 public class KaijuAI : MonoBehaviour
 {
@@ -36,6 +37,8 @@ public class KaijuAI : MonoBehaviour
     bool isAttacking = false;
     int patrolIndex = 0;
     bool RopeMove = false;
+    float time = 0;
+    bool timeFlag = false;
 
     void Start()
     {
@@ -61,7 +64,33 @@ public class KaijuAI : MonoBehaviour
 
     void Update()
     {
-        if(CoolTime<=0)
+       
+
+        if (agent.speed == 0)
+        {
+            Debug.Log("Spped0");
+            Debug.Log(time);
+            time += Time.deltaTime;
+            
+            timeFlag = true;
+        }
+        else
+        {
+            time = 0;
+            timeFlag = false;
+        }
+        if (timeFlag == true)
+        {
+            if (time >= 6)//speedが6秒間停止したままだったらPointResetする
+            {
+                PointReset();
+                Debug.Log("Dinoが6秒間動いていません、目標をリセットします");
+                time = 0;
+            }
+        }
+        
+
+        if (CoolTime<=0)
         {
             this.gameObject.layer = 0;
         }

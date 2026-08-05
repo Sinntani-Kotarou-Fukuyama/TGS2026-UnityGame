@@ -8570,6 +8570,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 61101584084904651, guid: f2cf1b2d951c113499621e3cb96aa142, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4017128147928116709, guid: f2cf1b2d951c113499621e3cb96aa142, type: 3}
       propertyPath: m_LocalPosition.x
       value: -13.66
@@ -8614,7 +8618,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: PatrolPoint3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 61101584084904651, guid: f2cf1b2d951c113499621e3cb96aa142, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
