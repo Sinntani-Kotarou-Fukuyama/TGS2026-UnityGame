@@ -547,8 +547,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30BF\u30A4\u30C8\u30EB"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
-  m_sharedMaterial: {fileID: -3406407452144206221, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1432,6 +1432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a7c913ec7241e7b6f83d59a2c0418e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useDemoFlow: 0
   demoRoot: {fileID: 471760554}
   titleRoot: {fileID: 1821457973}
   controlSelectRoot: {fileID: 2201000010}
@@ -1442,6 +1443,8 @@ MonoBehaviour:
   titleIdleDemoSeconds: 10
   keyboardButtonTransform: {fileID: 2201000051}
   joyConButtonTransform: {fileID: 2201000061}
+  useControlSelectFlow: 0
+  defaultControlType: 0
   normalButtonScale: 1
   selectedButtonScale: 1.3
   japaneseSourceFont: {fileID: 12800000, guid: 1272a213400c7c74db5ba0faf00ac25d, type: 3}
@@ -1677,8 +1680,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30B9\u30BF\u30FC\u30C8"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
-  m_sharedMaterial: {fileID: -3406407452144206221, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1916,8 +1919,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u30B2\u30FC\u30E0\u3092\u7D42\u4E86"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
-  m_sharedMaterial: {fileID: -3406407452144206221, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

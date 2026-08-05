@@ -32,6 +32,16 @@ public class TitleSceneUIController : MonoBehaviour
         JoyCon
     }
 
+    private enum DefaultControlType
+    {
+        Keyboard,
+        JoyCon
+    }
+
+    [Header("デモフロー")]
+    [Tooltip("ONなら既存のデモ映像フローを使用します。OFFならタイトル画面から直接開始します。")]
+    [SerializeField] private bool useDemoFlow = false;
+
     [Header("画面Root")]
     [Tooltip("既存の動画表示Canvasを設定します。")]
     [SerializeField] private GameObject demoRoot;
@@ -65,6 +75,13 @@ public class TitleSceneUIController : MonoBehaviour
 
     [Tooltip("Joy-Con操作ボタンのRectTransformです。")]
     [SerializeField] private RectTransform joyConButtonTransform;
+
+    [Header("操作選択フロー")]
+    [Tooltip("ONなら既存の操作選択画面を表示します。OFFなら既定の操作方法でゲームへ直接進みます。")]
+    [SerializeField] private bool useControlSelectFlow = false;
+
+    [Tooltip("操作選択画面をスキップした時に使用する操作方法です。")]
+    [SerializeField] private DefaultControlType defaultControlType = DefaultControlType.Keyboard;
 
     [Header("選択中の大きさ")]
     [Tooltip("未選択または通常状態のボタンサイズです。")]
@@ -111,7 +128,14 @@ public class TitleSceneUIController : MonoBehaviour
 
     private void Start()
     {
-        ShowDemo();
+        if (useDemoFlow)
+        {
+            ShowDemo();
+        }
+        else
+        {
+            ShowTitle();
+        }
     }
 
     private void Update()
@@ -169,16 +193,19 @@ public class TitleSceneUIController : MonoBehaviour
 
     private void UpdateTitle()
     {
-        bool hasKeyboardInput = Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame;
-        bool hasMouseInput = HasMouseActivityThisFrame();
+        if (useDemoFlow)
+        {
+            bool hasKeyboardInput = Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame;
+            bool hasMouseInput = HasMouseActivityThisFrame();
 
-        if (hasKeyboardInput || hasMouseInput)
-        {
-            titleIdleSeconds = 0f;
-        }
-        else
-        {
-            titleIdleSeconds += Time.unscaledDeltaTime;
+            if (hasKeyboardInput || hasMouseInput)
+            {
+                titleIdleSeconds = 0f;
+            }
+            else
+            {
+                titleIdleSeconds += Time.unscaledDeltaTime;
+            }
         }
 
         if (Keyboard.current != null)
@@ -199,7 +226,7 @@ public class TitleSceneUIController : MonoBehaviour
             }
         }
 
-        if (titleIdleSeconds >= titleIdleDemoSeconds)
+        if (useDemoFlow && titleIdleSeconds >= titleIdleDemoSeconds)
         {
             ShowDemo();
         }
@@ -298,11 +325,27 @@ public class TitleSceneUIController : MonoBehaviour
     {
         if (titleSelection == TitleSelection.Start)
         {
-            ShowControlSelect();
+            StartGameFromTitle();
             return;
         }
 
         QuitGame();
+    }
+
+    private void StartGameFromTitle()
+    {
+        if (useControlSelectFlow)
+        {
+            ShowControlSelect();
+            return;
+        }
+
+        ControlSelection defaultSelection = defaultControlType == DefaultControlType.JoyCon
+            ? ControlSelection.JoyCon
+            : ControlSelection.Keyboard;
+
+        SelectControlButton(defaultSelection);
+        ConfirmControlSelection();
     }
 
     private void SelectControlButton(ControlSelection selection)
@@ -328,7 +371,7 @@ public class TitleSceneUIController : MonoBehaviour
     {
         if (currentState == ScreenState.Title)
         {
-            ShowControlSelect();
+            StartGameFromTitle();
         }
     }
 
