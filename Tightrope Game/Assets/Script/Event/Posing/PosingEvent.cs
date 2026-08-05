@@ -43,6 +43,9 @@ public class PosingEvent : MonoBehaviour
     [SerializeField] RopeWalkManager ropeWalkManager;
     private GameObject spawneDino;
     private bool isRopeWalkPausedForPosingEvent;
+    private bool hasSavedTimerVisibility;
+    private bool timerWasActiveBeforePosing;
+    private bool hasWarnedMissingTimer;
     private void Awake()
     {
         if (ropeWalkManager == null)
@@ -131,6 +134,7 @@ public class PosingEvent : MonoBehaviour
     public void EventFlag() //イベントマネージャーで呼び出す
     {
         PauseRopeWalkForPosingEvent();
+        HideBalanceTimerForPosingEvent();
         Flag = true;
     }
 
@@ -166,7 +170,7 @@ public class PosingEvent : MonoBehaviour
         Invoke(nameof(DinoIdouFlag), 4.0f);
         cam.PosingCameraSet();
         balance.PauseNormalBalanceGauge();//バランスゲージを止める
-        Timer.SetActive(false);//タイマーを非表示にする
+        HideBalanceTimerForPosingEvent();
 
     }
     void ParentReset()
@@ -209,7 +213,7 @@ public class PosingEvent : MonoBehaviour
     void GameSet()
     {
         cam.RopeCameraCansel = false;
-        Timer.SetActive(true);//タイマーを表示にする
+        RestoreBalanceTimerAfterPosingEvent();
         playerMover.PlayerStoping = false;//プレイヤーを動けるように
         DinoStoping = false;//怪獣を動けるように
         agent.Warp(new Vector3(-18.05f, 0.1f, 8.0f));
@@ -218,6 +222,58 @@ public class PosingEvent : MonoBehaviour
         balance.ResumeNormalBalanceGauge();
         // プレイヤー・棒・手・カメラ・ゲージを戻した後にだけ綱渡りを再開します。
         ResumeRopeWalkAfterPosingEvent();
+    }
+
+    private void HideBalanceTimerForPosingEvent()
+    {
+        if (Timer == null)
+        {
+            WarnAboutMissingTimer();
+            return;
+        }
+
+        if (!hasSavedTimerVisibility)
+        {
+            timerWasActiveBeforePosing = Timer.activeSelf;
+            hasSavedTimerVisibility = true;
+        }
+
+        Timer.SetActive(false);
+    }
+
+    private void RestoreBalanceTimerAfterPosingEvent()
+    {
+        if (!hasSavedTimerVisibility)
+        {
+            if (Timer == null)
+            {
+                WarnAboutMissingTimer();
+            }
+
+            return;
+        }
+
+        if (Timer != null)
+        {
+            Timer.SetActive(timerWasActiveBeforePosing);
+        }
+        else
+        {
+            WarnAboutMissingTimer();
+        }
+
+        hasSavedTimerVisibility = false;
+    }
+
+    private void WarnAboutMissingTimer()
+    {
+        if (hasWarnedMissingTimer)
+        {
+            return;
+        }
+
+        Debug.LogWarning("PosingEvent: Timer is not assigned. Timer visibility control was skipped.", this);
+        hasWarnedMissingTimer = true;
     }
 
     private void PauseRopeWalkForPosingEvent()
@@ -254,6 +310,7 @@ public class PosingEvent : MonoBehaviour
 
     private void OnDisable()
     {
+        RestoreBalanceTimerAfterPosingEvent();
         // 強制終了やScene遷移でも、ポーズイベントの停止理由だけは残さないようにします。
         ResumeRopeWalkAfterPosingEvent();
     }
