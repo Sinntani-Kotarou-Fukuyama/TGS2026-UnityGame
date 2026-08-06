@@ -22294,7 +22294,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 13.701397
+      value: 10.701398
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -22302,23 +22302,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5.620846
+      value: -3.3791552
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.15830763
+      value: 0.9481062
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.024434326
+      value: 0.27465677
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.97553575
+      value: 0.15385641
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.15057112
+      value: -0.044570643
       objectReference: {fileID: 0}
     - target: {fileID: 3925493241121951573, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -22334,7 +22334,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6401884664611525510, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: FollowOffset.x
-      value: 6
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 6401884664611525510, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: FollowOffset.y
@@ -22342,7 +22342,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6401884664611525510, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: FollowOffset.z
-      value: -2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6401884664611525510, guid: 16856126b1808f449b4364f90336750b, type: 3}
       propertyPath: TrackerSettings.BindingMode
@@ -36499,8 +36499,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u3069\u3061\u3089\u306E\u7DB1\u3092\u6E21\u308B\uFF1F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
+  m_sharedMaterial: {fileID: -3406407452144206221, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -36565,7 +36565,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &2037000020
@@ -36785,8 +36785,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Space\u30AD\u30FC\u3067\u6C7A\u5B9A"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
+  m_sharedMaterial: {fileID: -3406407452144206221, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

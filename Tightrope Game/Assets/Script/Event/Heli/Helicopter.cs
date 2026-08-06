@@ -146,18 +146,20 @@ public class Helicopter : MonoBehaviour
     }
     void HeliEventStart()
     {
-        Quaternion rotation = Quaternion.Euler(0, 70, 0);//ヘリの向き
-        Vector3 playerpos = player.transform.position + -player.right * 9f + player.forward * 1.5f+-player.up*6f;
+        Quaternion rotation = Quaternion.Euler(0, 0, 0);//ヘリの向き
+        Vector3 playerpos = player.transform.position + -player.right * 12f + player.forward * 1.0f+-player.up*10f;
+       // Vector3 playerpos = player.transform.position + -player.right * 9f + player.forward * 1.5f + player.up * 6f;
         StartHeli = Instantiate(helicopter, playerpos, rotation);
         LockRotation Lock;
         Lock =StartHeli.GetComponent<LockRotation>();
         Lock.enabled = false;
         cam.RopeCameraCansel = true;
-        Invoke(nameof(HeliEvent), 5.0f);
+        Invoke(nameof(HeliEvent), 6.0f);
         
     }
     void HeliEvent()
     {
+        PauseRopeWalkForHelicopterEvent();
         Destroy(StartHeli);//初めのヘリを削除
         DinoStoping = true;//怪獣を固定
         playerMover.PlayerStoping = true;//プレイヤーを固定
@@ -180,7 +182,7 @@ public class Helicopter : MonoBehaviour
 
     public void EventFlag() //イベントマネージャーで呼び出す
     {
-        PauseRopeWalkForHelicopterEvent();
+       
         Flag = true;
 
     }
