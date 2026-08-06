@@ -59,19 +59,19 @@ public class EventManager : MonoBehaviour
         //任意のイベントを付けたいときはSetEvent(EventType.イベント名)でできるよ
         //ランダムにしたい場合はSetEventを呼ばない
 
-        e = Instantiate(eventFlag, new Vector3(12.74f, 3.0f, -2.0f), Quaternion.identity);//１個目のイベント
+        e = Instantiate(eventFlag, new Vector3(12.74f, 2.5f, -2.0f), Quaternion.identity);//１個目のイベント
         e.SetManager(this);
         e.SetEvent(EventType.Earthquake);//1個目は地震を起こす
-        e = Instantiate(eventFlag, new Vector3(6.057f, 3.0f, 3.082f), Quaternion.identity);//2個目のイベント
+        e = Instantiate(eventFlag, new Vector3(6.057f, 2.5f, 3.082f), Quaternion.identity);//2個目のイベント
         e.SetManager(this);
         e.SetEvent(EventType.Posing);//2個目はポーズを起こす
-        e = Instantiate(eventFlag, new Vector3(5.55f, 3.0f, 5.33f), Quaternion.identity);//3個目のイベント
+        e = Instantiate(eventFlag, new Vector3(5.55f, 2.5f, 5.33f), Quaternion.identity);//3個目のイベント
         e.SetManager(this);
         e.SetEvent(EventType.Sniper);//3個目はスナイパーを起こす
-        e = Instantiate(eventFlag, new Vector3(-4.66f, 3.0f, 6.96f), Quaternion.identity);//4個目のイベント
+        e = Instantiate(eventFlag, new Vector3(-4.66f, 2.5f, 6.96f), Quaternion.identity);//4個目のイベント
         e.SetManager(this);
         e.SetEvent(EventType.Helicopter);//4個目はヘリを起こす
-        e = Instantiate(eventFlag, new Vector3(-4.44f, 3.0f, 3.08f), Quaternion.identity);//5個目のイベント
+        e = Instantiate(eventFlag, new Vector3(-4.44f, 2.5f, 3.08f), Quaternion.identity);//5個目のイベント
         e.SetManager(this);
         e.SetEvent(EventType.Helicopter);//5個目はヘリを起こす
     }
