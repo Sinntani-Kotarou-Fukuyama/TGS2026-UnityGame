@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -58,6 +59,9 @@ public class TightropeRouteController : MonoBehaviour
     [Tooltip("選択中のルートを決定するキーです。")]
     [SerializeField] private KeyCode confirmRouteKey = KeyCode.Space;
 
+    [Tooltip("ONなら左右キーで即決定、OFFなら左右キーで候補を選びSpaceキーで決定します。")]
+    [SerializeField] private bool useImmediateRouteSelection = true;
+
     [Header("ルート選択UI")]
     [Tooltip("RouteSelectPanelに付けたRouteSelectUIControllerを設定します。未設定でもキーによる選択と決定は動作します。")]
     [SerializeField] private RouteSelectUIController routeSelectUIController;
@@ -74,9 +78,13 @@ public class TightropeRouteController : MonoBehaviour
     private int currentSegmentStartIndex;
     private bool balancePausedByThisController;
     private PendingRouteSelection pendingRouteSelection = PendingRouteSelection.None;
+    private bool useTrolleyMovement;
+    private bool hasStarted;
+    private Action<Transform[]> trolleyRouteSelected;
 
     public bool IsWaitingForBranch => state == RouteState.WaitingForBranch;
     public bool HasCompletedRoute => state == RouteState.Completed;
+    private bool UsesImmediateRouteSelection => useTrolleyMovement && useImmediateRouteSelection;
 
     private void Awake()
     {
@@ -96,6 +104,7 @@ public class TightropeRouteController : MonoBehaviour
             playerMover.EnableRouteControl();
         }
 
+        routeSelectUIController?.SetImmediateSelectionMode(UsesImmediateRouteSelection);
         HideRouteSelectionUI();
     }
 
@@ -105,11 +114,17 @@ public class TightropeRouteController : MonoBehaviour
         {
             playerMover.RouteSegmentReached += OnRouteSegmentReached;
         }
+
+        if (useTrolleyMovement)
+        {
+            SetTrolleyNormalBalanceSuppressed(true);
+        }
     }
 
     private void Start()
     {
-        if (startOnPlay)
+        hasStarted = true;
+        if (startOnPlay && !useTrolleyMovement)
         {
             StartRoute();
         }
@@ -134,14 +149,22 @@ public class TightropeRouteController : MonoBehaviour
         {
             pendingRouteSelection = PendingRouteSelection.Left;
             routeSelectUIController?.ShowLeftSelected();
+            if (UsesImmediateRouteSelection)
+            {
+                ConfirmSelectedRoute();
+            }
         }
         else if (rightPressed)
         {
             pendingRouteSelection = PendingRouteSelection.Right;
             routeSelectUIController?.ShowRightSelected();
+            if (UsesImmediateRouteSelection)
+            {
+                ConfirmSelectedRoute();
+            }
         }
 
-        if (Input.GetKeyDown(confirmRouteKey))
+        if (!UsesImmediateRouteSelection && Input.GetKeyDown(confirmRouteKey))
         {
             ConfirmSelectedRoute();
         }
@@ -155,6 +178,86 @@ public class TightropeRouteController : MonoBehaviour
             playerMover.StopMoving();
         }
 
+        trolleyRouteSelected = null;
+        ResumeBalanceIfNeeded();
+        HideRouteSelectionUI();
+        SetTrolleyNormalBalanceSuppressed(false);
+    }
+
+    /// <summary>新しいTrolley方式と従来移動方式のどちらがルートを動かすかを切り替えます。</summary>
+    public void SetTrolleyMovementActive(bool active)
+    {
+        bool wasUsingTrolleyMovement = useTrolleyMovement;
+        useTrolleyMovement = active;
+        if (active)
+        {
+            SetTrolleyNormalBalanceSuppressed(true);
+        }
+
+        trolleyRouteSelected = null;
+        pendingRouteSelection = PendingRouteSelection.None;
+        state = RouteState.NotStarted;
+        ResumeBalanceIfNeeded();
+        routeSelectUIController?.SetImmediateSelectionMode(UsesImmediateRouteSelection);
+        HideRouteSelectionUI();
+
+        if (!active)
+        {
+            // RouteSelectUIの再表示処理が終わってから、開始前の旧ゲージ状態へ戻します。
+            SetTrolleyNormalBalanceSuppressed(false);
+        }
+
+        if (active && playerMover != null)
+        {
+            playerMover.StopMoving();
+        }
+        else if (!active && wasUsingTrolleyMovement && hasStarted && startOnPlay)
+        {
+            // Start()後にTrolley初期化が失敗した場合も、従来ルートを開始できるようにします。
+            StartRoute();
+        }
+    }
+
+    /// <summary>共通ロープ終点でUIを開き、Inspectorで選んだ決定方式の入力を待ちます。</summary>
+    public bool BeginTrolleyRouteSelection(Action<Transform[]> onRouteSelected)
+    {
+        if (!useTrolleyMovement || onRouteSelected == null)
+        {
+            Debug.LogWarning("TightropeRouteController: Trolley用ルート選択を開始できません。", this);
+            return false;
+        }
+
+        if (!ValidateRoutePoints(leftRoutePoints, "Left Route Points") ||
+            !ValidateRoutePoints(rightRoutePoints, "Right Route Points"))
+        {
+            return false;
+        }
+
+        state = RouteState.WaitingForBranch;
+        pendingRouteSelection = PendingRouteSelection.None;
+        trolleyRouteSelected = onRouteSelected;
+        playerMover?.StopMoving();
+        PauseBalanceIfPossible();
+        routeSelectUIController?.SetImmediateSelectionMode(UsesImmediateRouteSelection);
+        ShowRouteSelectionUI();
+
+        string inputGuide = UsesImmediateRouteSelection
+            ? "左右キーでルートを決定してください。"
+            : "左右キーで候補を選び、Spaceキーで決定してください。";
+        Debug.Log($"[TightropeRouteController] 分岐地点に到着しました。{inputGuide}", this);
+        return true;
+    }
+
+    /// <summary>Trolley方式が選択ルートの最終点へ到着したことを記録します。</summary>
+    public void CompleteTrolleyRoute()
+    {
+        if (!useTrolleyMovement)
+        {
+            return;
+        }
+
+        state = RouteState.Completed;
+        trolleyRouteSelected = null;
         ResumeBalanceIfNeeded();
         HideRouteSelectionUI();
     }
@@ -279,13 +382,38 @@ public class TightropeRouteController : MonoBehaviour
             return;
         }
 
-        if (pendingRouteSelection == PendingRouteSelection.Left)
+        Transform[] selectedRoutePoints = pendingRouteSelection == PendingRouteSelection.Left
+            ? leftRoutePoints
+            : rightRoutePoints;
+        string routeLabel = pendingRouteSelection == PendingRouteSelection.Left ? "左" : "右";
+
+        if (!useTrolleyMovement)
         {
-            SelectRoute(leftRoutePoints, "左");
+            SelectRoute(selectedRoutePoints, routeLabel);
             return;
         }
 
-        SelectRoute(rightRoutePoints, "右");
+        // 状態とCallbackを先に確定し、同じ入力から複数回決定されるのを防ぎます。
+        state = RouteState.MovingSelectedRoute;
+        Action<Transform[]> routeSelected = trolleyRouteSelected;
+        trolleyRouteSelected = null;
+        HideRouteSelectionUI();
+        StartCoroutine(ResumeBalanceAfterRouteInputRelease());
+
+        Debug.Log($"[TightropeRouteController] {routeLabel}ルートを選択しました。", this);
+        routeSelected?.Invoke(selectedRoutePoints);
+    }
+
+    private IEnumerator ResumeBalanceAfterRouteInputRelease()
+    {
+        while (Input.GetKey(leftRouteKey) || Input.GetKey(rightRouteKey))
+        {
+            yield return null;
+        }
+
+        // 入力を離した直後の1フレームも分岐用として消費します。
+        yield return null;
+        ResumeBalanceIfNeeded();
     }
 
     private bool ValidateRoutePoints(Transform[] routePoints, string fieldName)
@@ -314,6 +442,28 @@ public class TightropeRouteController : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void SetTrolleyNormalBalanceSuppressed(bool suppressed)
+    {
+        if (suppressed)
+        {
+            if (balanceManager != null)
+            {
+                balanceManager.SetNormalBalanceGaugeSuppressed(true);
+            }
+            else
+            {
+                Debug.LogWarning("TightropeRouteController: BalanceManager未設定のため、Trolley中の旧ゲージ判定を停止できません。", this);
+            }
+
+            routeSelectUIController?.SetTrolleyNormalBalanceUiHidden(true);
+            return;
+        }
+
+        // 表示を開始前の状態へ戻してから、通常判定のPause状態を復元します。
+        routeSelectUIController?.SetTrolleyNormalBalanceUiHidden(false);
+        balanceManager?.SetNormalBalanceGaugeSuppressed(false);
     }
 
     private void PauseBalanceIfPossible()

@@ -15,11 +15,13 @@ public class Helicopter : MonoBehaviour
     [SerializeField] MessageSequencer Message;//会話を進める
     [SerializeField] CameraSwhich cam;//カメラを切り替えれるように
     [SerializeField] TightropeAutoGoalMover playerMover;//プレイヤーの動き取得
-    [SerializeField] BalanceShake balance;//バランスバーを揺らす
+    [Tooltip("ヘリイベント中に新しいTrolley移動を停止・再開するManagerです。")]
+    [SerializeField] RopeWalkManager ropeWalkManager;
+    [SerializeField] BalanceShake balance;
     [SerializeField] AudioSource explosionAudio;//爆発音
     [SerializeField] AudioSource cameraOnAudio;//カメラ起動音
     [SerializeField] KaijuAI AI;//怪獣の動きを取得
-    [SerializeField] NavMeshAgent agent;//NavMeshで移動させる
+    [SerializeField] NavMeshAgent agent;
     [SerializeField] float offsetX = 10f;
     [SerializeField] float offsetZ = 10f;
     [SerializeField] float speed =1f;//ヘリの移動速度
@@ -36,7 +38,17 @@ public class Helicopter : MonoBehaviour
     bool KaiwaFlag = false;//会話フラグ
     bool DinoStoping = false;//怪獣を動かなくするフラグ
     bool PlayerShake = false;//プレイヤーの揺れフラグ
+    bool isRopeWalkPausedForHelicopterEvent;
     float time = 0;
+
+    private void Awake()
+    {
+        if (ropeWalkManager == null)
+        {
+            ropeWalkManager = FindFirstObjectByType<RopeWalkManager>(FindObjectsInactive.Include);
+        }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -168,7 +180,7 @@ public class Helicopter : MonoBehaviour
 
     public void EventFlag() //イベントマネージャーで呼び出す
     {
-       
+        PauseRopeWalkForHelicopterEvent();
         Flag = true;
 
     }
@@ -253,6 +265,7 @@ public class Helicopter : MonoBehaviour
         Destroy(spawnedObj);
         Destroy(spawneDino);
         AI.PointReset();
+        ResumeRopeWalkAfterHelicopterEvent();
     }
    void ExplosionFinish()
     {
@@ -261,5 +274,46 @@ public class Helicopter : MonoBehaviour
    void RopeCameraCansel()
     {
         cam.RopeCameraCansel = false;
+    }
+
+    private void PauseRopeWalkForHelicopterEvent()
+    {
+        if (isRopeWalkPausedForHelicopterEvent)
+        {
+            return;
+        }
+
+        if (ropeWalkManager == null)
+        {
+            ropeWalkManager = FindFirstObjectByType<RopeWalkManager>(FindObjectsInactive.Include);
+        }
+
+        if (ropeWalkManager == null)
+        {
+            Debug.LogWarning("Helicopter: Rope Walk Managerが未設定のため、新しいTrolley移動の停止をスキップします。", this);
+            return;
+        }
+
+        ropeWalkManager.PauseForHelicopterEvent();
+        isRopeWalkPausedForHelicopterEvent = true;
+    }
+
+    private void ResumeRopeWalkAfterHelicopterEvent()
+    {
+        if (!isRopeWalkPausedForHelicopterEvent)
+        {
+            return;
+        }
+
+        isRopeWalkPausedForHelicopterEvent = false;
+        if (ropeWalkManager != null)
+        {
+            ropeWalkManager.ResumeAfterHelicopterEvent();
+        }
+    }
+
+    private void OnDisable()
+    {
+        ResumeRopeWalkAfterHelicopterEvent();
     }
 }

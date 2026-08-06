@@ -10,6 +10,10 @@ public class SniperEventManager : MonoBehaviour
     // SampleSceneではSuitManに付いているTightropeAutoGoalMoverを設定します。
     [SerializeField] private TightropeAutoGoalMover playerMover;
 
+    [Header("Trolley Rope Walk")]
+    [Tooltip("新しいTrolley移動をスナイパーイベント全体で停止・再開するManagerです。")]
+    [SerializeField] private RopeWalkManager ropeWalkManager;
+
     [Header("Balance Gauge")]
     // 通常バランス停止、縦ゲージ切り替え、防御判定に使います。
     [SerializeField] private BalanceManager balanceManager;
@@ -111,6 +115,7 @@ public class SniperEventManager : MonoBehaviour
     private bool hasPlayedSniperWarningSound;
     private bool hasPlayedPaperStickSound;
     private bool hasReturnedToNormalGameplay;
+    private bool isRopeWalkPausedForSniperEvent;
     private readonly List<SavedCameraPriority> savedSniperEventCameraPriorities = new List<SavedCameraPriority>();
     private bool hasSavedSniperEventCameraState;
 
@@ -132,6 +137,7 @@ public class SniperEventManager : MonoBehaviour
     private void Reset()
     {
         AutoFindPlayerMover();
+        AutoFindRopeWalkManager();
         AutoFindBalanceManager();
         AutoFindGameplayBgmController();
         AutoFindWarningLaserController();
@@ -145,6 +151,11 @@ public class SniperEventManager : MonoBehaviour
         if (playerMover == null)
         {
             AutoFindPlayerMover();
+        }
+
+        if (ropeWalkManager == null)
+        {
+            AutoFindRopeWalkManager();
         }
 
         if (warningLaserController == null)
@@ -190,9 +201,14 @@ public class SniperEventManager : MonoBehaviour
 
     private void OnDisable()
     {
-        if (isSniperEventActive && gameplayBgmController != null)
+        if (isSniperEventActive)
         {
-            gameplayBgmController.EndSniperEventBgm();
+            // 中断時も既存の復元処理を先に完了し、その後でTrolleyを再開します。
+            ReturnToNormalGameplay();
+        }
+        else
+        {
+            ResumeRopeWalkAfterSniperEvent();
         }
 
         UnsubscribeBulletShooterEvents();
@@ -231,6 +247,7 @@ public class SniperEventManager : MonoBehaviour
         hasReturnedToNormalGameplay = false;
         hasPlayedSniperWarningSound = false;
         hasPlayedPaperStickSound = false;
+        PauseRopeWalkForSniperEvent();
         StartSniperEventBgm();
         SaveSniperEventCameraState();
         StopPlayerAutoMove();
@@ -268,6 +285,7 @@ public class SniperEventManager : MonoBehaviour
         ResumePlayerAutoMove();
         OnSniperEventEnded();
         EndSniperEventBgm();
+        ResumeRopeWalkAfterSniperEvent();
         Debug.Log("SniperEventManager: Sniper event finished.", this);
     }
 
@@ -359,6 +377,48 @@ public class SniperEventManager : MonoBehaviour
         {
             playerMover = FindFirstObjectByType<TightropeAutoGoalMover>();
         }
+    }
+
+    private void AutoFindRopeWalkManager()
+    {
+        ropeWalkManager = FindFirstObjectByType<RopeWalkManager>(FindObjectsInactive.Include);
+    }
+
+    private void PauseRopeWalkForSniperEvent()
+    {
+        if (isRopeWalkPausedForSniperEvent)
+        {
+            return;
+        }
+
+        if (ropeWalkManager == null)
+        {
+            AutoFindRopeWalkManager();
+        }
+
+        if (ropeWalkManager == null)
+        {
+            Debug.LogWarning("SniperEventManager: Rope Walk Managerが未設定のため、新しい綱渡りの停止をスキップします。", this);
+            return;
+        }
+
+        ropeWalkManager.PauseForSniperEvent();
+        isRopeWalkPausedForSniperEvent = true;
+    }
+
+    private void ResumeRopeWalkAfterSniperEvent()
+    {
+        if (!isRopeWalkPausedForSniperEvent)
+        {
+            return;
+        }
+
+        if (ropeWalkManager != null)
+        {
+            ropeWalkManager.ResumeAfterSniperEvent();
+        }
+
+        isRopeWalkPausedForSniperEvent = false;
     }
 
     private void AutoFindGameplayBgmController()

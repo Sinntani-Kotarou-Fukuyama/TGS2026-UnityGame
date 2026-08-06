@@ -38,6 +38,13 @@ public class RouteSelectUIController : MonoBehaviour
     [Tooltip("分岐選択中だけ非表示にする数字カウント表示の親Objectです。")]
     [SerializeField] private GameObject countDisplayRoot;
 
+    private string originalDecideText;
+    private bool hasCapturedOriginalDecideText;
+    private bool keepNormalBalanceUiHidden;
+    private bool hasSavedTrolleyBalanceUiState;
+    private bool balanceGaugeWasActiveBeforeTrolley;
+    private bool countDisplayWasActiveBeforeTrolley;
+
     private void Awake()
     {
         if (routeSelectPanel == null)
@@ -45,10 +52,68 @@ public class RouteSelectUIController : MonoBehaviour
             routeSelectPanel = gameObject;
         }
 
+        CaptureOriginalDecideText();
         WarnAboutMissingReferences();
         ResetArrowScales();
         SetBalanceGaugeVisible(true);
         SetCountDisplayVisible(true);
+    }
+
+    /// <summary>Trolley方式では左右キー自体が決定入力であることを表示します。</summary>
+    public void SetImmediateSelectionMode(bool immediateSelection)
+    {
+        CaptureOriginalDecideText();
+        if (decideText != null)
+        {
+            decideText.text = immediateSelection ? "左右キーで決定" : originalDecideText;
+        }
+    }
+
+    /// <summary>Trolley方式の間、旧BalanceGaugeと通常カウントを非表示のまま保ちます。</summary>
+    public void SetTrolleyNormalBalanceUiHidden(bool hidden)
+    {
+        if (keepNormalBalanceUiHidden == hidden)
+        {
+            return;
+        }
+
+        if (hidden)
+        {
+            balanceGaugeWasActiveBeforeTrolley = balanceGaugeRoot != null && balanceGaugeRoot.activeSelf;
+            countDisplayWasActiveBeforeTrolley = countDisplayRoot != null && countDisplayRoot.activeSelf;
+            hasSavedTrolleyBalanceUiState = true;
+            keepNormalBalanceUiHidden = true;
+
+            if (balanceGaugeRoot != null)
+            {
+                balanceGaugeRoot.SetActive(false);
+            }
+
+            if (countDisplayRoot != null)
+            {
+                countDisplayRoot.SetActive(false);
+            }
+
+            return;
+        }
+
+        keepNormalBalanceUiHidden = false;
+        if (!hasSavedTrolleyBalanceUiState)
+        {
+            return;
+        }
+
+        if (balanceGaugeRoot != null)
+        {
+            balanceGaugeRoot.SetActive(balanceGaugeWasActiveBeforeTrolley);
+        }
+
+        if (countDisplayRoot != null)
+        {
+            countDisplayRoot.SetActive(countDisplayWasActiveBeforeTrolley);
+        }
+
+        hasSavedTrolleyBalanceUiState = false;
     }
 
     /// <summary>分岐地点でUIを表示し、左右とも未選択状態に戻します。</summary>
@@ -109,6 +174,11 @@ public class RouteSelectUIController : MonoBehaviour
 
     private void SetBalanceGaugeVisible(bool visible)
     {
+        if (keepNormalBalanceUiHidden && visible)
+        {
+            return;
+        }
+
         if (balanceGaugeRoot == null)
         {
             return;
@@ -119,12 +189,28 @@ public class RouteSelectUIController : MonoBehaviour
 
     private void SetCountDisplayVisible(bool visible)
     {
+        if (keepNormalBalanceUiHidden && visible)
+        {
+            return;
+        }
+
         if (countDisplayRoot == null)
         {
             return;
         }
 
         countDisplayRoot.SetActive(visible);
+    }
+
+    private void CaptureOriginalDecideText()
+    {
+        if (hasCapturedOriginalDecideText || decideText == null)
+        {
+            return;
+        }
+
+        originalDecideText = decideText.text;
+        hasCapturedOriginalDecideText = true;
     }
 
     private void WarnAboutMissingReferences()

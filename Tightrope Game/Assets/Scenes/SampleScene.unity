@@ -1394,7 +1394,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -1824,7 +1824,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -2739,6 +2739,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1510712901304232389, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
   m_PrefabInstance: {fileID: 154425277}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &166786275 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5140431719007091951, guid: cd9b281bc8f82e54b9c6446b1f4c5548, type: 3}
+  m_PrefabInstance: {fileID: 862098209}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &166852433
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2749,7 +2754,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -3212,7 +3217,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &197166605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3225,7 +3230,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124c9ec29440740449e4ce4897849114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useTrolleyWalkSystem: 1
+  commonEndStopDistance: 1
   trolleyWall: {fileID: 1424827498}
+  legacyAutoGoalMover: {fileID: 2019293633}
+  playerAnimator: {fileID: 2019293627}
+  routeController: {fileID: 2019293636}
+  clearSceneLoader: {fileID: 2025167755}
+  balanceVignette: {fileID: 1973266952}
+  recoveryProtectionDuration: 1
+  recoveryBlinkInterval: 0.1
   commonRoutePoints:
   - {fileID: 464529537}
   - {fileID: 1332896881}
@@ -3617,7 +3631,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -3740,7 +3754,7 @@ Transform:
   m_GameObject: {fileID: 231032325}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0027703156, y: 0.9871162, z: 0.005916267, w: -0.15987147}
-  m_LocalPosition: {x: 6.286, y: 2.53, z: 5.336}
+  m_LocalPosition: {x: 6.16, y: 2.53, z: 5.378}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3799,7 +3813,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -4482,7 +4496,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -4815,6 +4829,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerMover: {fileID: 2019293633}
+  ropeWalkManager: {fileID: 197166605}
   balanceManager: {fileID: 1311752719}
   gameplayBgmController: {fileID: 1549183866}
   warningLaserController: {fileID: 649669242}
@@ -4870,7 +4885,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -4977,7 +4992,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -5128,7 +5143,7 @@ Transform:
   - {fileID: 1544490567}
   - {fileID: 1455975738}
   - {fileID: 1534532567}
-  - {fileID: 1765535181}
+  - {fileID: 671377576}
   - {fileID: 2115034577}
   - {fileID: 2091476449}
   - {fileID: 678907696}
@@ -5449,7 +5464,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -6319,7 +6334,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -6742,7 +6757,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -7501,7 +7516,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -8141,7 +8156,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -8570,10 +8585,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 61101584084904651, guid: f2cf1b2d951c113499621e3cb96aa142, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4017128147928116709, guid: f2cf1b2d951c113499621e3cb96aa142, type: 3}
       propertyPath: m_LocalPosition.x
       value: -13.66
@@ -8618,8 +8629,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: PatrolPoint3
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 61101584084904651, guid: f2cf1b2d951c113499621e3cb96aa142, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -8936,7 +8946,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -9161,7 +9171,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -9268,7 +9278,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -9575,7 +9585,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -10030,7 +10040,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -10642,6 +10652,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 670072713}
   m_CullTransparentMesh: 1
+--- !u!4 &671377576 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9058432095749335609, guid: e555ffc7cc719a74c8ca8d3f395dc177, type: 3}
+  m_PrefabInstance: {fileID: 1517370823}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &675517726
 GameObject:
   m_ObjectHideFlags: 0
@@ -10694,6 +10709,7 @@ MonoBehaviour:
   agent: {fileID: 1452297750}
   AI: {fileID: 1452297757}
   playerMover: {fileID: 2019293633}
+  ropeWalkManager: {fileID: 197166605}
 --- !u!4 &675517728
 Transform:
   m_ObjectHideFlags: 0
@@ -11534,7 +11550,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -12647,7 +12663,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -12754,11 +12770,6 @@ Rigidbody:
   m_CorrespondingSourceObject: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
   m_PrefabInstance: {fileID: 885524635}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &774190154 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5140431719007091951, guid: cd9b281bc8f82e54b9c6446b1f4c5548, type: 3}
-  m_PrefabInstance: {fileID: 862098209}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &776974065
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12769,7 +12780,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -13012,7 +13023,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -15368,7 +15379,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -15567,7 +15578,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -15674,7 +15685,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -15971,7 +15982,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -16093,7 +16104,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -16255,7 +16266,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -16419,7 +16430,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -17316,7 +17327,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -17501,7 +17512,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -19164,7 +19175,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -19487,7 +19498,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -19904,7 +19915,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -20073,6 +20084,10 @@ PrefabInstance:
       propertyPath: explosionAudio
       value: 
       objectReference: {fileID: 265606444}
+    - target: {fileID: 20523243259468201, guid: 1d7683ca59d0377419261a254cba261d, type: 3}
+      propertyPath: ropeWalkManager
+      value: 
+      objectReference: {fileID: 197166605}
     - target: {fileID: 3108439381910698712, guid: 1d7683ca59d0377419261a254cba261d, type: 3}
       propertyPath: m_Name
       value: Flags
@@ -21210,7 +21225,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -21614,7 +21629,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -22049,7 +22064,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -23394,7 +23409,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -23808,7 +23823,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -24663,7 +24678,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -25024,11 +25039,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  BarMaxAngle: 90
   autoWalk: 1
+  moveSpeed: 0.3
+  BarMaxAngle: 90
+  useJoyConInput: 0
+  keyboardBalanceStrength: 30
+  mouseBalanceSensitivity: 1
+  mouseDeadZone: 0.05
+  mouseMoveThreshold: 1
+  returnToCenterSpeed: 20
   trolley: {fileID: 1389379653}
   Player: {fileID: 2019293626}
-  balanceBarTransform: {fileID: 2052810747}
+  balanceBarTransform: {fileID: 1973266943}
   barInfluenceStrength: 2
   localAnchor: {x: 0, y: 0, z: 0}
   rotationAxis: {x: 0, y: 0, z: 1}
@@ -25036,15 +25058,17 @@ MonoBehaviour:
   useLimits: 1
   minAngle: -90
   maxAngle: 90
+  useManagedFallFlow: 1
   bounciness: 0.2
   angularDrag: 1
   applyGravity: 1
   applyFallForce: 1
   fallSpeedScale: 1
   postureControlStrength: 2
-  reactionForceScale: 0.001
-  moveSpeed: 1
-  wobbleIntensity: 0.5
+  reactionForceScale: 0
+  wobbleIntensity: 8
+  naturalSwaySpeed: 0.5
+  enableDebugLog: 0
 --- !u!54 &1424827499
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -25171,7 +25195,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -25956,7 +25980,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -26649,7 +26673,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -27073,7 +27097,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -27415,7 +27439,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -28766,7 +28790,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -29918,7 +29942,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -31149,7 +31173,7 @@ Transform:
   - {fileID: 1965888874}
   - {fileID: 76622497}
   - {fileID: 393796626}
-  - {fileID: 774190154}
+  - {fileID: 166786275}
   - {fileID: 616626274}
   - {fileID: 1131148452}
   - {fileID: 635757450}
@@ -31493,11 +31517,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc3490d43bb045048b55d2edd5573a55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &1765535181 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9058432095749335609, guid: e555ffc7cc719a74c8ca8d3f395dc177, type: 3}
-  m_PrefabInstance: {fileID: 1517370823}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1766086214
 GameObject:
   m_ObjectHideFlags: 0
@@ -31674,7 +31693,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -31910,7 +31929,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -32063,7 +32082,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -32630,7 +32649,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -33456,7 +33475,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -34617,7 +34636,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -34784,7 +34803,9 @@ MonoBehaviour:
   Parent: {fileID: 2019293626}
   leftEndImage: {fileID: 1235058535}
   rightEndImage: {fileID: 1733002686}
+  warningStartAngle: 0
   maxWarningAngle: 30
+  maxWarningAlpha: 1
 --- !u!4 &1976722910 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2828345539101371827, guid: 7897b8afbf7cec94c88c527d2d8ad560, type: 3}
@@ -34832,7 +34853,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -35299,7 +35320,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -35910,6 +35931,7 @@ MonoBehaviour:
   leftRouteKey: 276
   rightRouteKey: 275
   confirmRouteKey: 32
+  useImmediateRouteSelection: 0
   routeSelectUIController: {fileID: 2037000005}
   balanceManager: {fileID: 1311752719}
   pauseBalanceWhileChoosing: 1
@@ -36477,8 +36499,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u3069\u3061\u3089\u306E\u7DB1\u3092\u6E21\u308B\uFF1F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
-  m_sharedMaterial: {fileID: -3406407452144206221, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -36763,8 +36785,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Space\u30AD\u30FC\u3067\u6C7A\u5B9A"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
-  m_sharedMaterial: {fileID: -3406407452144206221, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -37278,7 +37300,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints
@@ -37422,7 +37444,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_UseGravity
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1332120886260508361, guid: db339a82aaa90f1428405026627eb2f5, type: 3}
       propertyPath: m_Constraints

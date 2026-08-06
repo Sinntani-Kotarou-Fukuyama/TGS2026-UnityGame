@@ -3462,6 +3462,13 @@ MonoBehaviour:
   retrySceneName: SampleScene
   titleSceneName: TitleScene
   retryResetTargets: []
+  retryButton: {fileID: 1495988940}
+  titleButton: {fileID: 1600147354}
+  retryButtonTransform: {fileID: 1495988939}
+  titleButtonTransform: {fileID: 1600147353}
+  selectedScaleMultiplier: 1.15
+  scaleChangeSpeed: 8
+  defaultSelectedButton: 0
 --- !u!4 &154759567
 Transform:
   m_ObjectHideFlags: 0

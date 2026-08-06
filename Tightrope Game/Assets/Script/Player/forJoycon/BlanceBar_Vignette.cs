@@ -10,22 +10,35 @@ public class BlanceBar_Vignette : MonoBehaviour
     [SerializeField] private Image leftEndImage;
     [SerializeField] private Image rightEndImage;
 
-    [Header("角度の設定")]
-    [SerializeField] private float maxWarningAngle = 30f; // 完全に真っ黒になる限界の角度
+    [Header("Vignette Tuning")]
+    [Tooltip("この傾き（度）を超えるとVignetteが表示され始めます。")]
+    [SerializeField, Min(0f)] private float warningStartAngle = 0f;
+
+    [Tooltip("この傾き（度）でVignetteが最大強度になります。")]
+    [SerializeField, Min(0.01f)] private float maxWarningAngle = 30f; // 完全に真っ黒になる限界の角度
+
+    [Tooltip("最大傾き時に使用するVignetteの透明度です。")]
+    [SerializeField, Range(0f, 1f)] private float maxWarningAlpha = 1f;
+
+    private bool isPausedForExternalEvent;
 
     void Update()
     {
+        if (isPausedForExternalEvent) return;
         if (Parent == null) return;
 
         // Z軸の回転を取得し、-180 〜 180 の範囲に変換
         float currentAngle = Parent.transform.localEulerAngles.z;
         if (currentAngle > 180f) currentAngle -= 360f;
 
-        // 傾きの割合（0.0 〜 1.0）を計算
-        float dangerRatio = Mathf.Clamp01(Mathf.Abs(currentAngle) / maxWarningAngle);
+        // 既存値（開始0度・最大30度・Alpha 1）では従来と同じ割合になります。
+        float safeStartAngle = Mathf.Max(0f, warningStartAngle);
+        float safeMaxAngle = Mathf.Max(safeStartAngle + 0.01f, maxWarningAngle);
+        float dangerRatio = Mathf.InverseLerp(safeStartAngle, safeMaxAngle, Mathf.Abs(currentAngle));
+        float warningAlpha = dangerRatio * Mathf.Clamp01(maxWarningAlpha);
 
         // 基本の色は「黒」。傾きに応じてアルファ値（透明度）を 0.0(透明) から 1.0(真っ黒) に変化させる
-        Color targetColor = new Color(0f, 0f, 0f, dangerRatio);
+        Color targetColor = new Color(0f, 0f, 0f, warningAlpha);
         Color transparentColor = new Color(0f, 0f, 0f, 0f); // 完全に透明な黒
 
         // 左右どちらに傾いているかで処理を分岐
@@ -45,6 +58,18 @@ public class BlanceBar_Vignette : MonoBehaviour
         else
         {
             // 完全に水平な場合：両方透明
+            SetImageAlpha(leftEndImage, transparentColor);
+            SetImageAlpha(rightEndImage, transparentColor);
+        }
+    }
+
+    // ポーズ・スナイパー中は傾き表示を透明にして、イベント側の姿勢変更を警告へ反映しません。
+    public void SetPausedForExternalEvent(bool paused)
+    {
+        isPausedForExternalEvent = paused;
+        if (paused)
+        {
+            Color transparentColor = new Color(0f, 0f, 0f, 0f);
             SetImageAlpha(leftEndImage, transparentColor);
             SetImageAlpha(rightEndImage, transparentColor);
         }

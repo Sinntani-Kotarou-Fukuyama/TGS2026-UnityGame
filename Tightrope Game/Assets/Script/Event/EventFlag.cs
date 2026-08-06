@@ -5,7 +5,15 @@ public class EventFlag : MonoBehaviour
     // イベントマネージャー
     private EventManager eventManager;
     private EventManager.EventType eventType;
+    private bool hasTriggered;
+    private Collider triggerCollider;
     public bool _EventFlag = false;
+
+    private void Awake()
+    {
+        triggerCollider = GetComponent<Collider>();
+    }
+
     // イベントマネージャーの中身を設定する
     public void SetManager(EventManager manager)
     {
@@ -21,6 +29,17 @@ public class EventFlag : MonoBehaviour
         //Playerに当たったら
         if (t.gameObject.CompareTag("Player"))
         {
+            if (hasTriggered)
+            {
+                return;
+            }
+
+            hasTriggered = true;
+
+            if (triggerCollider != null)
+            {
+                triggerCollider.enabled = false;
+            }
             if(_EventFlag==false)
             {
                 // イベントマネージャーからイベントを発生させる

@@ -88,6 +88,7 @@ public class TightropeAutoGoalMover : MonoBehaviour
     private bool isRouteControlled;
     private bool isRouteSegmentActive;
     private bool invokeGoalOnRouteSegmentReached;
+    private bool useExternalAnimationControl;
 
     public bool IsMoving => isMoving;
     public bool HasReachedGoal => hasReachedGoal;
@@ -157,6 +158,24 @@ public class TightropeAutoGoalMover : MonoBehaviour
     {
         isMoving = false;
         SetWalkAnimation(false);
+    }
+
+    /// <summary>
+    /// 新しいTrolley方式へ歩行Animatorの制御を一時的に譲ります。
+    /// OFFへ戻すと、従来移動の現在状態からcatwalkを再設定します。
+    /// </summary>
+    public void SetExternalAnimationControl(bool enabled)
+    {
+        if (useExternalAnimationControl == enabled)
+        {
+            return;
+        }
+
+        useExternalAnimationControl = enabled;
+        if (!useExternalAnimationControl)
+        {
+            SetWalkAnimation(isMoving && !hasReachedGoal && goalPoint != null && !PlayerStoping);
+        }
     }
 
     /// <summary>
@@ -343,7 +362,7 @@ public class TightropeAutoGoalMover : MonoBehaviour
 
     private void SetWalkAnimation(bool walking)
     {
-        if (animator == null || string.IsNullOrEmpty(walkBoolName))
+        if (useExternalAnimationControl || animator == null || string.IsNullOrEmpty(walkBoolName))
         {
             return;
         }
