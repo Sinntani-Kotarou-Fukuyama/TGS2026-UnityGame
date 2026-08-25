@@ -83,6 +83,10 @@ public class JoyconManager: MonoBehaviour
 			jc.Attach (leds_: LEDs);
 			jc.Begin ();
 		}
+        foreach (var jc in j)
+        {
+            jc.Begin();               // ← 初期化を再実行
+        }
     }
 
     void Update()
@@ -93,11 +97,12 @@ public class JoyconManager: MonoBehaviour
 		}
     }
 
-    void OnApplicationQuit()
+   /* void OnApplicationQuit()
     {
 		for (int i = 0; i < j.Count; ++i)
 		{
 			j[i].Detach ();
 		}
     }
+   */
 }

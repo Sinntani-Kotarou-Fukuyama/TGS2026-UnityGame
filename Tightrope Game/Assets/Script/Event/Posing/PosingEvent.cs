@@ -46,6 +46,12 @@ public class PosingEvent : MonoBehaviour
     private bool hasSavedTimerVisibility;
     private bool timerWasActiveBeforePosing;
     private bool hasWarnedMissingTimer;
+    Joycon jc;
+    float rotationY = 0f; // キャラの現在の回転角
+    float prevJoyconAngle = 0f;// 前フレームの角度を保存する変数
+    float prevTwist = 0f;
+    float sensitivity = 1.0f; // 0.1?0.4が扱いやすい
+    float smooth = 0.15f;        // 滑らかさ（0.1?0.25が自然）
     private void Awake()
     {
         if (ropeWalkManager == null)
@@ -57,7 +63,19 @@ public class PosingEvent : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        var joycons = JoyconManager.Instance.j;
 
+        Debug.Log($"[Joycon Debug] Joy-Con の検出数: {joycons.Count}");
+
+        if (joycons.Count > 0)
+        {
+            jc = joycons[0];
+            Debug.Log("[Joycon Debug] Joy-Con が正常にセットされました。");
+        }
+        else
+        {
+            Debug.LogWarning("[Joycon Debug] Joy-Con が見つかりません。接続を確認してください。");
+        }
     }
 
     // Update is called once per frame
@@ -85,6 +103,7 @@ public class PosingEvent : MonoBehaviour
         }
         if (PlayerRotation == true)
         {
+
             if (Input.GetKey(KeyCode.RightArrow))//右矢印を押したら左回転する
             {
                 player.transform.Rotate(new Vector3(0, -Rotatespeed, 0));
@@ -117,7 +136,37 @@ public class PosingEvent : MonoBehaviour
                 }
 
             }
+            if (jc == null)
+            {
+                Debug.LogWarning("[Joycon Debug] jc が null のため Joy-Con 回転処理をスキップします。");
+                return;
+            }
+            Quaternion joyconRot = jc.GetVector();
+
+            // Joy-Con を横に持つ前提 → Z軸がひねり
+            float twist = joyconRot.eulerAngles.z;
+
+            // 角度差分
+            float delta = twist - prevTwist;
+
+            // 360度境界補正
+            if (delta > 180f) delta -= 360f;
+            if (delta < -180f) delta += 360f;
+
+            // 感度調整
+            delta *= sensitivity;
+
+            // 目標角度
+            float targetY = player.transform.eulerAngles.y + delta;
+
+            // 滑らかに回す
+            float newY = Mathf.LerpAngle(player.transform.eulerAngles.y, targetY, smooth);
+
+            player.transform.rotation = Quaternion.Euler(0, newY, 0);
+
+            prevTwist = twist;
         }
+
         if (KeikokuFlag == true)
         {
             // 内部時刻を経過させる
