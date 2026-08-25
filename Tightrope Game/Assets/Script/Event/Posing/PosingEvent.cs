@@ -38,6 +38,7 @@ public class PosingEvent : MonoBehaviour
     bool DinoIdouflag = true;//怪獣移動フラグ
     bool PlayerRotation = false;
     bool KeikokuFlag;//警告フラグ
+    bool PlayerResetFlag = true;//プレイヤーの回転リセット
     [SerializeField] TightropeAutoGoalMover playerMover;//プレイヤーの動き取得
     [Tooltip("新しいTrolley移動をポーズイベント中だけ停止・再開するManagerです。")]
     [SerializeField] RopeWalkManager ropeWalkManager;
@@ -50,8 +51,8 @@ public class PosingEvent : MonoBehaviour
     float rotationY = 0f; // キャラの現在の回転角
     float prevJoyconAngle = 0f;// 前フレームの角度を保存する変数
     float prevTwist = 0f;
-    float sensitivity = 1.0f; // 0.1?0.4が扱いやすい
-    float smooth = 0.15f;        // 滑らかさ（0.1?0.25が自然）
+    float sensitivity = 50.0f; // 0.1?0.4が扱いやすい
+    float smooth = 0.1f;        // 滑らかさ（0.1?0.25が自然）
     private void Awake()
     {
         if (ropeWalkManager == null)
@@ -141,30 +142,18 @@ public class PosingEvent : MonoBehaviour
                 Debug.LogWarning("[Joycon Debug] jc が null のため Joy-Con 回転処理をスキップします。");
                 return;
             }
-            Quaternion joyconRot = jc.GetVector();
+            Vector3 gyro = jc.GetGyro();
 
-            // Joy-Con を横に持つ前提 → Z軸がひねり
-            float twist = joyconRot.eulerAngles.z;
+            // 横持ちなら Z軸が回転速度
+            float yawSpeed = gyro.z;
 
-            // 角度差分
-            float delta = twist - prevTwist;
-
-            // 360度境界補正
-            if (delta > 180f) delta -= 360f;
-            if (delta < -180f) delta += 360f;
-
-            // 感度調整
-            delta *= sensitivity;
-
-            // 目標角度
-            float targetY = player.transform.eulerAngles.y + delta;
+            // 積分して角度にする
+            rotationY += yawSpeed * Time.deltaTime * sensitivity;
 
             // 滑らかに回す
-            float newY = Mathf.LerpAngle(player.transform.eulerAngles.y, targetY, smooth);
+            float newY = Mathf.LerpAngle(player.transform.eulerAngles.y, rotationY, smooth);
 
             player.transform.rotation = Quaternion.Euler(0, newY, 0);
-
-            prevTwist = twist;
         }
 
         if (KeikokuFlag == true)
@@ -208,6 +197,8 @@ public class PosingEvent : MonoBehaviour
         startplayerLeftHubdposition = playerLeftHund.transform.position;//イベント前の座標を格納
         player.transform.LookAt(Bill.transform); //プレイヤーの向きを調整する
         Invoke(nameof(DinoEvent), 0.1f);//0.1秒語にポーズイベントを始める
+        rotationY = player.transform.eulerAngles.y;
+        prevTwist = 0f;   // Gyro方式なら prevGyro に変更
     }
     void DinoEvent()
     {
@@ -259,6 +250,8 @@ public class PosingEvent : MonoBehaviour
         playerRightHund.transform.position = startplayerRightHundposition;//座標を元に戻す
         playerLeftHund.transform.position = startplayerLeftHubdposition;//座標を元に戻す
     }
+    
+        
     void GameSet()
     {
         cam.RopeCameraCansel = false;
