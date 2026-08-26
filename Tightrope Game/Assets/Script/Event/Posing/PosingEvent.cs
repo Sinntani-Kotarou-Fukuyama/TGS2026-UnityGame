@@ -49,10 +49,12 @@ public class PosingEvent : MonoBehaviour
     private bool hasWarnedMissingTimer;
     Joycon jc;
     float rotationY = 0f; // キャラの現在の回転角
-    float prevJoyconAngle = 0f;// 前フレームの角度を保存する変数
     float prevTwist = 0f;
-    float sensitivity = 50.0f; // 0.1?0.4が扱いやすい
-    float smooth = 0.1f;        // 滑らかさ（0.1?0.25が自然）
+    float sensitivity = 50.0f;//ジャイロの回転の強さ
+    float smooth = 0.1f;//ジャイロの滑らかさ
+    float stickSensitivity = 1.0f;
+    private float prevPitch = 0f;
+
     private void Awake()
     {
         if (ropeWalkManager == null)
@@ -142,18 +144,56 @@ public class PosingEvent : MonoBehaviour
                 Debug.LogWarning("[Joycon Debug] jc が null のため Joy-Con 回転処理をスキップします。");
                 return;
             }
+
+            //ジャイロ
             Vector3 gyro = jc.GetGyro();
 
-            // 横持ちなら Z軸が回転速度
+            //横持ちなら Z軸が回転速度
             float yawSpeed = gyro.z;
 
-            // 積分して角度にする
+            //積分して角度にする
             rotationY += yawSpeed * Time.deltaTime * sensitivity;
 
-            // 滑らかに回す
+            //滑らかに回す
             float newY = Mathf.LerpAngle(player.transform.eulerAngles.y, rotationY, smooth);
 
             player.transform.rotation = Quaternion.Euler(0, newY, 0);
+
+
+            //上下の動きは X軸の回転速度
+            float pitch = gyro.x;
+
+            //ノイズ除去（しきい値）
+            float threshold = 0.15f;   // ← ここが重要。0.05 は小さすぎてノイズを拾う
+
+            //減衰フィルタ（ノイズを弱める）
+            pitch = Mathf.Lerp(prevPitch, pitch, 0.2f);
+            prevPitch = pitch;
+
+            //上に動かす
+            if (pitch > threshold)
+            {
+                if (StickOver <= 30)
+                {
+                    stick.transform.Translate(0.0f, 0.0f, -Stickspeed * 0.3f * Time.deltaTime);
+                    playerRightHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
+                    playerLeftHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
+                    StickOver++;
+                }
+            }
+
+            //下に動かす
+            if (pitch < -threshold)
+            {
+                if (StickOver >= -25)
+                {
+                    stick.transform.Translate(0.0f, 0.0f, Stickspeed * 0.3f * Time.deltaTime);
+                    playerRightHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
+                    playerLeftHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
+                    StickOver--;
+                }
+            }
+
         }
 
         if (KeikokuFlag == true)
