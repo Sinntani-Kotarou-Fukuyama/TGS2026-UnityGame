@@ -5488,7 +5488,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1205045343}
   - {fileID: 1487946508}
   m_Father: {fileID: 414652189}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -5841,7 +5840,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 2052810747}
+    m_TransformParent: {fileID: 1837462911}
     m_Modifications:
     - target: {fileID: 4802263753046169304, guid: ea4a3e3ba7c6d694d84c84b4e28c9b6f, type: 3}
       propertyPath: m_LocalScale.x
@@ -5857,15 +5856,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4802263753046169304, guid: ea4a3e3ba7c6d694d84c84b4e28c9b6f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0155
+      value: -0.014550165
       objectReference: {fileID: 0}
     - target: {fileID: 4802263753046169304, guid: ea4a3e3ba7c6d694d84c84b4e28c9b6f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.00483
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4802263753046169304, guid: ea4a3e3ba7c6d694d84c84b4e28c9b6f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.01188
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4802263753046169304, guid: ea4a3e3ba7c6d694d84c84b4e28c9b6f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -6286,6 +6285,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1515038813}
+  - {fileID: 1205045343}
   - {fileID: 1429579934}
   - {fileID: 1719014686}
   - {fileID: 996324197}
@@ -21592,12 +21592,12 @@ RectTransform:
   m_Children:
   - {fileID: 1235058533}
   - {fileID: 1733002688}
-  m_Father: {fileID: 378646943}
+  m_Father: {fileID: 414652189}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1820, y: 980}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1205045344
 MonoBehaviour:
@@ -25230,7 +25230,7 @@ MonoBehaviour:
   autoWalk: 1
   moveSpeed: 0.3
   BarMaxAngle: 90
-  useJoyConInput: 0
+  useJoyConInput: 1
   keyboardBalanceStrength: 30
   mouseBalanceSensitivity: 1
   mouseDeadZone: 0.05
@@ -25238,7 +25238,7 @@ MonoBehaviour:
   returnToCenterSpeed: 20
   trolley: {fileID: 1389379653}
   Player: {fileID: 2019293626}
-  balanceBarTransform: {fileID: 1973266943}
+  balanceBarTransform: {fileID: 1837462911}
   barInfluenceStrength: 2
   localAnchor: {x: 0, y: 0, z: 0}
   rotationAxis: {x: 0, y: 0, z: 1}
@@ -25256,7 +25256,7 @@ MonoBehaviour:
   reactionForceScale: 0
   wobbleIntensity: 8
   naturalSwaySpeed: 0.5
-  enableDebugLog: 0
+  enableDebugLog: 1
 --- !u!54 &1424827499
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -32798,6 +32798,38 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1510712901304232389, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
   m_PrefabInstance: {fileID: 1556565779}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1837462910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1837462911}
+  m_Layer: 0
+  m_Name: BalanceBarPivot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1837462911
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1837462910}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.0009498352, y: -0.00483, z: 0.01188}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1973266943}
+  m_Father: {fileID: 2052810747}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1838808752
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35870,7 +35902,7 @@ PrefabInstance:
       addedObject: {fileID: 1919166457}
     - targetCorrespondingSourceObject: {fileID: 5871738953386835730, guid: 3efa18409f3a284408c9f34da9b2cecb, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1973266943}
+      addedObject: {fileID: 1837462911}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 3efa18409f3a284408c9f34da9b2cecb, type: 3}
       insertIndex: -1

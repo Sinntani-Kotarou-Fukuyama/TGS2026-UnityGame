@@ -72,6 +72,10 @@ public class TrolleyWall : MonoBehaviour
     private List<Joycon> joycons;
     private Joycon myJoycon;
     private bool joyConInitializationAttempted;
+    private const float JoyConNeutralCaptureDelay = 0.5f;
+    private float joyConNeutralCaptureTime;
+    private float neutralEulerZ;
+    private bool neutralCaptured;
 
     [Header("Connected Object (接続先の土台)")]
     private Rigidbody connectedRigidbody; // 今上に乗っているロープのオブジェクトをセット
@@ -130,6 +134,8 @@ public class TrolleyWall : MonoBehaviour
     [Header("Debug")]
     [Tooltip("調査用ログを表示する場合だけONにします。通常はOFFにしてください。")]
     [SerializeField] private bool enableDebugLog = false;
+    private const float JoyConDebugLogInterval = 0.5f;
+    private float nextJoyConDebugLogTime;
 
     private Rigidbody PlayerRb; // プレイヤーのRigidBody
     private Quaternion initialLocalRotation;
@@ -572,6 +578,13 @@ public class TrolleyWall : MonoBehaviour
 
         // 最初に見つかったJoy-Con（左でも右でも可）を操作用として割り当て
         myJoycon = joycons[0];
+        if (myJoycon != null)
+        {
+            neutralCaptured = false;
+            joyConNeutralCaptureTime = Time.unscaledTime + JoyConNeutralCaptureDelay;
+            latestBarRoll = 0f;
+        }
+
         return myJoycon != null;
     }
 
@@ -607,7 +620,8 @@ public class TrolleyWall : MonoBehaviour
             TryInitializeJoyConInput();
         }
 
-        if (useJoyConInput && myJoycon != null)
+        bool isUsingJoyConThisFrame = useJoyConInput && myJoycon != null;
+        if (isUsingJoyConThisFrame)
         {
             UpdateJoyConInput();
         }
@@ -620,7 +634,8 @@ public class TrolleyWall : MonoBehaviour
         // 決定した角度を棒のグラフィックに適用（Joy-Conでもキーボードでも共通）
         if (balanceBarTransform != null)
         {
-            ApplyBalanceBarRotation(latestBarRoll);
+            float displayRoll = -latestBarRoll;
+            ApplyBalanceBarRotation(displayRoll);
         }
     }
 
@@ -644,8 +659,12 @@ public class TrolleyWall : MonoBehaviour
         }
 
         CaptureBalanceBarBaseLocalRotation();
-        Quaternion balanceRollRotation = Quaternion.AngleAxis(roll, Vector3.forward);
-        balanceBarTransform.localRotation = balanceBarBaseLocalRotation * balanceRollRotation;
+        Transform balanceBarParent = balanceBarTransform.parent;
+        Vector3 rollAxisInParent = balanceBarParent != null
+            ? balanceBarParent.InverseTransformDirection(WallRb.transform.forward)
+            : WallRb.transform.forward;
+        Quaternion balanceRollRotation = Quaternion.AngleAxis(roll, rollAxisInParent);
+        balanceBarTransform.localRotation = balanceRollRotation * balanceBarBaseLocalRotation;
     }
 
     private void UpdateJoyConInput()
@@ -653,9 +672,39 @@ public class TrolleyWall : MonoBehaviour
         Quaternion joyconRotation = myJoycon.GetVector();
         Vector3 euler = joyconRotation.eulerAngles;
 
-        // 既存のJoy-Con補正は将来の再利用用に維持する
-        latestBarRoll = euler.z + 90f;
-        if (latestBarRoll > (180f + 80f)) latestBarRoll -= (360f + 90f);
+        float relativeRoll = 0f;
+        if (!neutralCaptured)
+        {
+            latestBarRoll = 0f;
+            if (Time.unscaledTime >= joyConNeutralCaptureTime)
+            {
+                neutralEulerZ = euler.z;
+                neutralCaptured = true;
+
+                if (enableDebugLog)
+                {
+                    Debug.Log($"[TrolleyWall JoyCon Debug] Neutral Captured Z={neutralEulerZ:F2}", this);
+                }
+            }
+        }
+        else
+        {
+            relativeRoll = Mathf.DeltaAngle(neutralEulerZ, euler.z);
+            float safeBarMaxAngle = Mathf.Max(0f, BarMaxAngle);
+            latestBarRoll = Mathf.Clamp(relativeRoll, -safeBarMaxAngle, safeBarMaxAngle);
+        }
+
+        if (enableDebugLog && Time.unscaledTime >= nextJoyConDebugLogTime)
+        {
+            nextJoyConDebugLogTime = Time.unscaledTime + JoyConDebugLogInterval;
+            Debug.Log(
+                $"[TrolleyWall JoyCon Debug] IsLeft={myJoycon.isLeft}, " +
+                $"Euler=({euler.x:F2}, {euler.y:F2}, {euler.z:F2}), " +
+                $"NeutralZ={(neutralCaptured ? neutralEulerZ.ToString("F2") : "Waiting")}, " +
+                $"RelativeRoll={relativeRoll:F2}, " +
+                $"LatestBarRoll={latestBarRoll:F2}",
+                this);
+        }
     }
 
     private void UpdateKeyboardAndMouseInput()
