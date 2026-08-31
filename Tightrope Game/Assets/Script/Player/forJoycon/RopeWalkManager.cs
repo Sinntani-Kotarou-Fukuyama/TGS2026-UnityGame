@@ -517,6 +517,7 @@ public class RopeWalkManager : MonoBehaviour
         // 矢印キーの解放待ちとマウス位置再初期化は既存TrolleyWall APIへ任せます。
         trolleyWall.ResumeRouteMovement(true);
         UpdateWalkAnimationState();
+        
     }
 
     private void CancelManagedFallRecovery()

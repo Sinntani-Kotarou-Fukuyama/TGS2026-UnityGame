@@ -50,7 +50,7 @@ public class PosingEvent : MonoBehaviour
     Joycon jc;
     float rotationY = 0f; // キャラの現在の回転角
     float prevTwist = 0f;
-    float sensitivity = 50.0f;//ジャイロの回転の強さ
+    float sensitivity = 200.0f;//ジャイロの回転の強さ
     float smooth = 0.1f;//ジャイロの滑らかさ
     float stickSensitivity = 1.0f;
     private float prevPitch = 0f;

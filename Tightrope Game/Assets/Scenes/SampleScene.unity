@@ -20197,6 +20197,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 616056365}
     - target: {fileID: 20523243259468201, guid: 1d7683ca59d0377419261a254cba261d, type: 3}
+      propertyPath: wall
+      value: 
+      objectReference: {fileID: 1424827498}
+    - target: {fileID: 20523243259468201, guid: 1d7683ca59d0377419261a254cba261d, type: 3}
       propertyPath: agent
       value: 
       objectReference: {fileID: 1452297750}
@@ -25231,6 +25235,10 @@ MonoBehaviour:
   moveSpeed: 0.3
   BarMaxAngle: 90
   useJoyConInput: 1
+  joyConSensitivity: 0.5
+  joyConNeutralMinimumWait: 1
+  joyConNeutralStableDuration: 0.5
+  joyConNeutralAngleTolerance: 1.5
   keyboardBalanceStrength: 30
   mouseBalanceSensitivity: 1
   mouseDeadZone: 0.05
@@ -25257,6 +25265,9 @@ MonoBehaviour:
   wobbleIntensity: 8
   naturalSwaySpeed: 0.5
   enableDebugLog: 1
+  isHeliEvent: 0
+  heliAngle: 0
+  heliAngularVelocity: 0
 --- !u!54 &1424827499
 Rigidbody:
   m_ObjectHideFlags: 0

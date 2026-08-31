@@ -5,6 +5,7 @@ using UnityEngine.AI;
 public class Helicopter : MonoBehaviour
 {
     [SerializeField] Animator animator;//プレイヤーのアニメーション
+    [SerializeField] TrolleyWall wall;//プレイヤーの移動処理
     [SerializeField] Transform player;//プレイヤーの座標取得用
     [SerializeField] Transform Dino;//イベント中は怪獣を見えないところへ移動させる
     [SerializeField] GameObject helicopter;//ヘリのプレハブ用
@@ -197,6 +198,8 @@ public class Helicopter : MonoBehaviour
     {
         DinoIdouflag = false;
         cam.EventCameraSet();
+        wall.IsStop(true);
+        wall.isHeliEvent = false;
     }
     void KaiwaNext()
     {
@@ -253,6 +256,7 @@ public class Helicopter : MonoBehaviour
     }
     private void Destroy()
     {
+        wall.IsStop(false);
         panel.SetActive(false);
         cameraFrame.SetActive(false);
         playerMover.PlayerStoping = false;
@@ -297,6 +301,7 @@ public class Helicopter : MonoBehaviour
         }
 
         ropeWalkManager.PauseForHelicopterEvent();
+        wall.StopRouteHeliMovement();
         isRopeWalkPausedForHelicopterEvent = true;
     }
 
