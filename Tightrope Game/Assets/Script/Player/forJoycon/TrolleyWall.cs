@@ -163,7 +163,7 @@ public class TrolleyWall : MonoBehaviour
     private float angularVelocity = 0f; // 角速度 (度/秒)
     private bool isInitialized = false;
     private bool isStop = false; //カメラが離れて見えづらい時などに一時的に操作、回転を止める用
-    public bool isHeliEvent=false;
+    public bool balanceOnlyMode = false;
     private bool waitForBalanceInputRelease;
     private bool isPausedForExternalEvent;
     private bool isManagedFallActive;
@@ -476,6 +476,13 @@ public class TrolleyWall : MonoBehaviour
             isInitialized = false;
         }
 
+        if (balanceOnlyMode)
+        {
+            isStop = false;
+            isManagedFallActive = false;
+            waitForBalanceInputRelease = false;
+            isInitialized = true;
+        }
     }
 
     // 分岐待機・区間終端・Goal停止で共通して、現在の物理速度を確実に止めます。
@@ -485,14 +492,7 @@ public class TrolleyWall : MonoBehaviour
         angularVelocity = 0f;
         StopRigidBodyMotion();
     }
-    public void StopRouteHeliMovement()
-    { 
-        isStop = false;
-        isHeliEvent = true;
-        isPausedForExternalEvent = false;
-        angularVelocity = 0f;
-        StopRigidBodyMotion();
-    }
+    
 
     // 旧APIは既存参照との互換用に残します。
     public void StopAtCommonRopeEnd()
@@ -946,22 +946,14 @@ public class TrolleyWall : MonoBehaviour
     public float heliAngularVelocity = 0f;
     private void FixedUpdate()
     {
-        // ★ ヘリイベント中でも isStop を無視する（動かす）
-        if (isHeliEvent)
+
+        //通常モードの停止条件
+        if (isStop || isPausedForExternalEvent || isManagedFallActive)
         {
-            // ★ 位置だけ固定（回転は通常処理に任せる）
-            PlayerRb.constraints = RigidbodyConstraints.FreezePosition;
-            PlayerRb.linearVelocity = Vector3.zero;
+            StopRigidBodyMotion();
+            return;
         }
-        else
-        {
-            // ★ 通常モードの停止条件
-            if (isStop || isPausedForExternalEvent || isManagedFallActive)
-            {
-                StopRigidBodyMotion();
-                return;
-            }
-        }
+
 
 
 
@@ -971,48 +963,51 @@ public class TrolleyWall : MonoBehaviour
 
         DebugLog("止まっていない");
         float currentWobble = 0f;
-        if (!isHeliEvent)
+
+        // ★ ヘリイベント中は前進だけ止める
+        if (balanceOnlyMode)
         {
-            if (autoWalk)
+            WallRb.linearVelocity = Vector3.zero;
+        }
+        else
+        {
+
+        
+        if (autoWalk)
+        {
+            WallRb.linearVelocity = WallRb.transform.forward * Mathf.Max(0f, moveSpeed);
+            // サイン波（Mathf.Sin）を使い、時間の経過（Time.time）に合わせて、大きな波のようにじわ〜っと揺らす。
+            // Natural Sway Speedを小さくするほど、よりスローでぬるっとした波になります。
+            float slowWave = Mathf.Sin(Time.time * Mathf.Max(0f, naturalSwaySpeed));
+
+            // 滑らかな波に wobbleIntensity（揺れの強さ）をかけ算して、回転力（トルク）に変換します。
+            currentWobble = slowWave * Mathf.Max(0f, wobbleIntensity);
+        }
+        else
+        {
+            // Wキーによる前進処理と、前進時のブレ（キッカケ）の計算 ───
+
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null && keyboard.wKey.isPressed)
             {
+
+                // 壁をうごかす
                 WallRb.linearVelocity = WallRb.transform.forward * Mathf.Max(0f, moveSpeed);
+
                 // サイン波（Mathf.Sin）を使い、時間の経過（Time.time）に合わせて、大きな波のようにじわ〜っと揺らす。
                 // Natural Sway Speedを小さくするほど、よりスローでぬるっとした波になります。
                 float slowWave = Mathf.Sin(Time.time * Mathf.Max(0f, naturalSwaySpeed));
 
                 // 滑らかな波に wobbleIntensity（揺れの強さ）をかけ算して、回転力（トルク）に変換します。
                 currentWobble = slowWave * Mathf.Max(0f, wobbleIntensity);
+
             }
             else
             {
-                // Wキーによる前進処理と、前進時のブレ（キッカケ）の計算 ───
-
-                Keyboard keyboard = Keyboard.current;
-                if (keyboard != null && keyboard.wKey.isPressed)
-                {
-
-                    // 壁をうごかす
-                    WallRb.linearVelocity = WallRb.transform.forward * Mathf.Max(0f, moveSpeed);
-
-                    // サイン波（Mathf.Sin）を使い、時間の経過（Time.time）に合わせて、大きな波のようにじわ〜っと揺らす。
-                    // Natural Sway Speedを小さくするほど、よりスローでぬるっとした波になります。
-                    float slowWave = Mathf.Sin(Time.time * Mathf.Max(0f, naturalSwaySpeed));
-
-                    // 滑らかな波に wobbleIntensity（揺れの強さ）をかけ算して、回転力（トルク）に変換します。
-                    currentWobble = slowWave * Mathf.Max(0f, wobbleIntensity);
-
-                }
-                else
-                {
-                    WallRb.linearVelocity = Vector3.zero;
-                }
+                WallRb.linearVelocity = Vector3.zero;
             }
         }
-        else
-        {
-            // ★ ヘリ中は完全停止
-            WallRb.linearVelocity = Vector3.zero;
-        }
+    }
 
 
 
@@ -1446,5 +1441,9 @@ public class TrolleyWall : MonoBehaviour
         {
             Debug.Log(message, this);
         }
+    }
+    public void SetBalanceOnlyMode(bool enabled)
+    {
+        balanceOnlyMode = enabled;
     }
 }

@@ -25265,7 +25265,7 @@ MonoBehaviour:
   wobbleIntensity: 8
   naturalSwaySpeed: 0.5
   enableDebugLog: 1
-  isHeliEvent: 0
+  balanceOnlyMode: 0
   heliAngle: 0
   heliAngularVelocity: 0
 --- !u!54 &1424827499

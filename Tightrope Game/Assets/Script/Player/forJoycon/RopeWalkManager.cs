@@ -648,6 +648,11 @@ public class RopeWalkManager : MonoBehaviour
 
     private void UpdateWalkAnimationState()
     {
+        if (trolleyWall.balanceOnlyMode)
+        {
+            SetPlayerWalkAnimation(false, true);
+            return;
+        }
         bool shouldWalk = useTrolleyWalkSystem &&
             isSystemInitialized &&
             CurrentStart != null &&
@@ -872,6 +877,7 @@ public class RopeWalkManager : MonoBehaviour
 
         if (trolleyWall != null)
         {
+            
             if (wasPausedForEvent)
             {
                 trolleyWall.FinishExternalEventPause(false);

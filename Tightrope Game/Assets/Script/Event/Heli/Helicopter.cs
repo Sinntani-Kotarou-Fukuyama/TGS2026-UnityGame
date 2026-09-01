@@ -160,6 +160,8 @@ public class Helicopter : MonoBehaviour
     }
     void HeliEvent()
     {
+        wall.SetBalanceOnlyMode(true);
+        wall.IsStop(false); 
         PauseRopeWalkForHelicopterEvent();
         Destroy(StartHeli);//‰‚ß‚ÌƒwƒŠ‚ğíœ
         DinoStoping = true;//‰öb‚ğŒÅ’è
@@ -198,8 +200,7 @@ public class Helicopter : MonoBehaviour
     {
         DinoIdouflag = false;
         cam.EventCameraSet();
-        wall.IsStop(true);
-        wall.isHeliEvent = false;
+        
     }
     void KaiwaNext()
     {
@@ -213,6 +214,7 @@ public class Helicopter : MonoBehaviour
     }
     void DinoEvent()
     {
+        wall.StopRouteMovement();
         Quaternion rotation = Quaternion.Euler(0, -90, 0);//‰öb‚ÌŒü‚«
         //ƒwƒŠ‚Ì‰¡‚É‰öb‚ğ¶¬
         //Vector3 helipos = spawnedObj.transform.position + new Vector3(5.0f, -3.18f, 0.0f);
@@ -256,7 +258,8 @@ public class Helicopter : MonoBehaviour
     }
     private void Destroy()
     {
-        wall.IsStop(false);
+        wall.SetBalanceOnlyMode(false);
+        wall.ResumeRouteMovement(true);
         panel.SetActive(false);
         cameraFrame.SetActive(false);
         playerMover.PlayerStoping = false;
@@ -300,8 +303,8 @@ public class Helicopter : MonoBehaviour
             return;
         }
 
-        ropeWalkManager.PauseForHelicopterEvent();
-        wall.StopRouteHeliMovement();
+       // ropeWalkManager.PauseForHelicopterEvent();
+       // wall.StopRouteMovement();
         isRopeWalkPausedForHelicopterEvent = true;
     }
 
