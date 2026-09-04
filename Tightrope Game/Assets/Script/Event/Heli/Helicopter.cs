@@ -148,8 +148,9 @@ public class Helicopter : MonoBehaviour
     void HeliEventStart()
     {
         Quaternion rotation = Quaternion.Euler(0, 0, 0);//ƒwƒŠ‚ÌŒü‚«
-        Vector3 playerpos = player.transform.position + -player.right * 12f + player.forward * 1.0f+-player.up*10f;
-       // Vector3 playerpos = player.transform.position + -player.right * 9f + player.forward * 1.5f + player.up * 6f;
+        //ƒwƒŠ‚ÌˆÊ’u
+        //Vector3 playerpos = player.transform.position + -player.right * 12f + player.forward * 1.0f + -player.up*10f;
+        Vector3 playerpos = new Vector3(-15.64f, 4.7f, -8f);
         StartHeli = Instantiate(helicopter, playerpos, rotation);
         LockRotation Lock;
         Lock =StartHeli.GetComponent<LockRotation>();
