@@ -89,11 +89,9 @@ public class TrolleyWall : MonoBehaviour
     private float joyConStableElapsed;
     private bool hasJoyConStabilityReference;
     private bool joyConMinimumWaitStarted;
-    private float neutralEulerZ;
     private bool neutralCaptured;
-    private Quaternion neutralJoyConDebugRotation;
-    private Quaternion previousJoyConDebugRotation;
-    private bool hasPreviousJoyConDebugRotation;
+    private Quaternion neutralJoyConRotation;
+    private const float JoyConProjectedVectorMinSqrMagnitude = 0.000001f;
 
     [Header("Connected Object (接続先の土台)")]
     private Rigidbody connectedRigidbody; // 今上に乗っているロープのオブジェクトをセット
@@ -152,8 +150,6 @@ public class TrolleyWall : MonoBehaviour
     [Header("Debug")]
     [Tooltip("調査用ログを表示する場合だけONにします。通常はOFFにしてください。")]
     [SerializeField] private bool enableDebugLog = false;
-    private const float JoyConDebugLogInterval = 0.5f;
-    private float nextJoyConDebugLogTime;
 
     private Rigidbody PlayerRb; // プレイヤーのRigidBody
     private Quaternion initialLocalRotation;
@@ -715,11 +711,7 @@ public class TrolleyWall : MonoBehaviour
     private void UpdateJoyConInput()
     {
         Quaternion joyconRotation = myJoycon.GetVector();
-        Vector3 euler = joyconRotation.eulerAngles;
 
-        float relativeRoll = 0f;
-        float adjustedRoll = 0f;
-        string neutralCapturePhase = neutralCaptured ? "NeutralCaptured" : "WaitingForIMU";
         if (!neutralCaptured)
         {
             latestBarRoll = 0f;
@@ -735,15 +727,9 @@ public class TrolleyWall : MonoBehaviour
                 joyConImuReadyTime = Time.unscaledTime;
                 hasJoyConStabilityReference = false;
                 joyConStableElapsed = 0f;
-                neutralCapturePhase = "MinimumWait";
             }
-            else if (Time.unscaledTime - joyConImuReadyTime < Mathf.Max(0f, joyConNeutralMinimumWait))
+            else if (Time.unscaledTime - joyConImuReadyTime >= Mathf.Max(0f, joyConNeutralMinimumWait))
             {
-                neutralCapturePhase = "MinimumWait";
-            }
-            else
-            {
-                neutralCapturePhase = "Stabilizing";
                 if (!hasJoyConStabilityReference)
                 {
                     joyConStabilityReference = joyconRotation;
@@ -768,112 +754,32 @@ public class TrolleyWall : MonoBehaviour
                 if (hasJoyConStabilityReference &&
                     joyConStableElapsed >= Mathf.Max(0f, joyConNeutralStableDuration))
                 {
-                    neutralEulerZ = euler.z;
-                    neutralJoyConDebugRotation = joyconRotation;
+                    neutralJoyConRotation = joyconRotation;
                     neutralCaptured = true;
-                    neutralCapturePhase = "NeutralCaptured";
-
-                    if (enableDebugLog)
-                    {
-                        Debug.Log(
-                            $"[TrolleyWall JoyCon Debug] Neutral Captured EulerZ={neutralEulerZ:F2}, " +
-                            $"Quaternion=({neutralJoyConDebugRotation.x:F4}, {neutralJoyConDebugRotation.y:F4}, " +
-                            $"{neutralJoyConDebugRotation.z:F4}, {neutralJoyConDebugRotation.w:F4}), " +
-                            $"TimeSinceIMUReady={Time.unscaledTime - joyConImuReadyTime:F2}, " +
-                            $"StableElapsed={joyConStableElapsed:F2}",
-                            this);
-                        previousJoyConDebugRotation = joyconRotation;
-                        hasPreviousJoyConDebugRotation = true;
-                    }
                 }
             }
         }
         else
         {
-            relativeRoll = Mathf.DeltaAngle(neutralEulerZ, euler.z);
-            adjustedRoll = relativeRoll * joyConSensitivity;
-            float safeBarMaxAngle = Mathf.Max(0f, BarMaxAngle);
-            latestBarRoll = Mathf.Clamp(adjustedRoll, -safeBarMaxAngle, safeBarMaxAngle);
-        }
-
-        if (enableDebugLog && Time.unscaledTime >= nextJoyConDebugLogTime)
-        {
-            nextJoyConDebugLogTime = Time.unscaledTime + JoyConDebugLogInterval;
-
-            float quaternionAngleFromPreviousLog = hasPreviousJoyConDebugRotation
-                ? Quaternion.Angle(previousJoyConDebugRotation, joyconRotation)
-                : 0f;
-            Vector3 gyro = myJoycon.GetGyro();
-            const float projectedVectorMinSqrMagnitude = 0.000001f;
-            bool xProjectedValid = false;
-            bool yProjectedValid = false;
-            bool zProjectedValid = false;
-            float quaternionRollX = 0f;
-            float quaternionRollY = 0f;
-            float quaternionRollZ = 0f;
-            if (neutralCaptured)
+            Quaternion relativeRotation =
+                Quaternion.Inverse(neutralJoyConRotation) * joyconRotation;
+            Vector3 rotatedForward = relativeRotation * Vector3.forward;
+            Vector3 projectedForward = Vector3.ProjectOnPlane(rotatedForward, Vector3.up);
+            if (projectedForward.sqrMagnitude > JoyConProjectedVectorMinSqrMagnitude)
             {
-                Quaternion relativeRotation =
-                    Quaternion.Inverse(neutralJoyConDebugRotation) * joyconRotation;
-
-                Vector3 xRotated = relativeRotation * Vector3.up;
-                Vector3 xProjected = Vector3.ProjectOnPlane(xRotated, Vector3.right);
-                xProjectedValid = xProjected.sqrMagnitude > projectedVectorMinSqrMagnitude;
-                if (xProjectedValid)
-                {
-                    quaternionRollX = Vector3.SignedAngle(
-                        Vector3.up,
-                        xProjected.normalized,
-                        Vector3.right);
-                }
-
-                Vector3 yRotated = relativeRotation * Vector3.forward;
-                Vector3 yProjected = Vector3.ProjectOnPlane(yRotated, Vector3.up);
-                yProjectedValid = yProjected.sqrMagnitude > projectedVectorMinSqrMagnitude;
-                if (yProjectedValid)
-                {
-                    quaternionRollY = Vector3.SignedAngle(
-                        Vector3.forward,
-                        yProjected.normalized,
-                        Vector3.up);
-                }
-
-                Vector3 zRotated = relativeRotation * Vector3.up;
-                Vector3 zProjected = Vector3.ProjectOnPlane(zRotated, Vector3.forward);
-                zProjectedValid = zProjected.sqrMagnitude > projectedVectorMinSqrMagnitude;
-                if (zProjectedValid)
-                {
-                    quaternionRollZ = Vector3.SignedAngle(
-                        Vector3.up,
-                        zProjected.normalized,
-                        Vector3.forward);
-                }
+                float quaternionRollY = Vector3.SignedAngle(
+                    Vector3.forward,
+                    projectedForward.normalized,
+                    Vector3.up);
+                float joyConRoll = quaternionRollY;
+                float adjustedRoll = joyConRoll * joyConSensitivity;
+                float safeBarMaxAngle = Mathf.Max(0f, BarMaxAngle);
+                latestBarRoll = Mathf.Clamp(adjustedRoll, -safeBarMaxAngle, safeBarMaxAngle);
             }
-
-            Debug.Log(
-                $"[TrolleyWall JoyCon Debug] IsLeft={myJoycon.isLeft}, " +
-                $"Quaternion=({joyconRotation.x:F4}, {joyconRotation.y:F4}, " +
-                $"{joyconRotation.z:F4}, {joyconRotation.w:F4}), " +
-                $"Euler=({euler.x:F2}, {euler.y:F2}, {euler.z:F2}), " +
-                $"NeutralPhase={neutralCapturePhase}, " +
-                $"StableElapsed={joyConStableElapsed:F2}, " +
-                $"NeutralZ={(neutralCaptured ? neutralEulerZ.ToString("F2") : "Waiting")}, " +
-                $"RelativeRoll={relativeRoll:F2}, " +
-                $"AdjustedRoll={adjustedRoll:F2}, " +
-                $"LatestBarRoll={latestBarRoll:F2}, " +
-                $"QuaternionAngleFromPreviousLog=" +
-                $"{(hasPreviousJoyConDebugRotation ? quaternionAngleFromPreviousLog.ToString("F2") : "Invalid")}, " +
-                $"QuaternionRollX={(xProjectedValid ? quaternionRollX.ToString("F2") : "Invalid")}, " +
-                $"QuaternionRollY={(yProjectedValid ? quaternionRollY.ToString("F2") : "Invalid")}, " +
-                $"QuaternionRollZ={(zProjectedValid ? quaternionRollZ.ToString("F2") : "Invalid")}, " +
-                $"Gyro=({gyro.x:F4}, {gyro.y:F4}, {gyro.z:F4}), " +
-                $"XProjectedValid={xProjectedValid}, " +
-                $"YProjectedValid={yProjectedValid}, " +
-                $"ZProjectedValid={zProjectedValid}",
-                this);
-
-            previousJoyConDebugRotation = joyconRotation;
-            hasPreviousJoyConDebugRotation = true;
+            else
+            {
+                latestBarRoll = 0f;
+            }
         }
     }
 
