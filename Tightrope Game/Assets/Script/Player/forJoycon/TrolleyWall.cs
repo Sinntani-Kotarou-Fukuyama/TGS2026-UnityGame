@@ -147,10 +147,6 @@ public class TrolleyWall : MonoBehaviour
     [Tooltip("自然な揺れのSin波へ掛ける時間係数（ラジアン/秒）です。大きいほど揺れが速くなります。")]
     [SerializeField, Min(0f)] private float naturalSwaySpeed = 1f;
 
-    [Header("Debug")]
-    [Tooltip("調査用ログを表示する場合だけONにします。通常はOFFにしてください。")]
-    [SerializeField] private bool enableDebugLog = false;
-
     private Rigidbody PlayerRb; // プレイヤーのRigidBody
     private Quaternion initialLocalRotation;
     private Vector3 initialLocalAnchorOffset;
@@ -936,7 +932,6 @@ public class TrolleyWall : MonoBehaviour
         // ロープから離れていれば処理しない
         if (isTouchingRope == false) return;
 
-        DebugLog("止まっていない");
         float currentWobble = 0f;
 
         // ★ ヘリイベント中は前進だけ止める
@@ -1233,14 +1228,8 @@ public class TrolleyWall : MonoBehaviour
 
             // 揺れを伝えるオブジェクトにプレイヤーの回転を反映させる
             // TODO : アティチュード・インジケーターのようなUIをやってみる
-            //Quaternion shakingOb = Quaternion.Euler(0, 0, Player.transform.rotation.x);
-            //ShakingObject.transform.rotation = Quaternion.Slerp(ShakingObject.transform.rotation, shakingOb, Time.deltaTime * 5.0f);
-
         }
 
-
-
-        DebugLog("ropeに当たっているはず");
 
 
     }
@@ -1430,13 +1419,6 @@ public class TrolleyWall : MonoBehaviour
         isTouchingRope = false;
     }
 
-    private void DebugLog(string message)
-    {
-        if (enableDebugLog)
-        {
-            Debug.Log(message, this);
-        }
-    }
     public void SetBalanceOnlyMode(bool enabled)
     {
         balanceOnlyMode = enabled;

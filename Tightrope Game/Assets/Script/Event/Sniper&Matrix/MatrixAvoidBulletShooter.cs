@@ -274,7 +274,6 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
             }
         }
 
-        Debug.Log($"MatrixAvoidBulletShooter: MatrixMashInput={(useJoyConMashInput ? "JoyCon" : "Keyboard")}", this);
     }
 
     private bool WasMatrixMashInputPressedThisFrame()
@@ -324,8 +323,6 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
             {
                 currentPressCount++;
                 inputPunchRemainingTime = 0.12f;
-                Debug.Log($"MatrixAvoidBulletShooter: 連打入力 {currentPressCount}/{requiredCount}", this);
-
                 if (currentPressCount >= requiredCount)
                 {
                     isMatrixMashResolved = true;

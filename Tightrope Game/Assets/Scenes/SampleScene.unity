@@ -23252,8 +23252,6 @@ MonoBehaviour:
   useSeparateHandFollowSettings: 0
   handFollowSpace: 0
   handFollowAxis: 2
-  handFollowMinValue: 0.8
-  handFollowMaxValue: -0.1
   stickFollowSpace: 1
   stickFollowAxis: 1
   stickFollowMinValue: -0.1
@@ -23340,8 +23338,7 @@ MonoBehaviour:
   animator: {fileID: 2019293627}
   unbalanceBoolName: Unbalance
   unbalanceDuration: 0.6
-  enableDebugLog: 1
-  timerLogInterval: 0.25
+  enableDebugLog: 0
 --- !u!4 &1311752720
 Transform:
   m_ObjectHideFlags: 0
@@ -25273,7 +25270,6 @@ MonoBehaviour:
   reactionForceScale: 0
   wobbleIntensity: 8
   naturalSwaySpeed: 0.5
-  enableDebugLog: 0
   balanceOnlyMode: 0
   heliAngle: 0
   heliAngularVelocity: 0

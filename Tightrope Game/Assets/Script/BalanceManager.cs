@@ -4,7 +4,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Serialization;
-using UnityEngine.Animations.Rigging;
 
 /*
   ◆説明
@@ -194,8 +193,6 @@ public class BalanceManager : MonoBehaviour
     [SerializeField] private bool useSeparateHandFollowSettings = false;
     [SerializeField] private StickFollowSpace handFollowSpace = StickFollowSpace.Local;
     [SerializeField] private StickFollowAxis handFollowAxis = StickFollowAxis.Z;
-    [SerializeField] private float handFollowMinValue = -0.007f;
-    [SerializeField] private float handFollowMaxValue = 0.007f;
     [SerializeField] private StickFollowSpace stickFollowSpace = StickFollowSpace.Local;
     [FormerlySerializedAs("stickFollowAxisMode")]
     [SerializeField] private StickFollowAxis stickFollowAxis = StickFollowAxis.Z;
@@ -283,13 +280,7 @@ public class BalanceManager : MonoBehaviour
     // trueにするとConsoleへ状態確認用ログを出します。
     // 原因調査が終わったらfalseにするとConsoleが静かになります。
     [SerializeField] private bool enableDebugLog = true;
-    // outsideTimerのログを何秒ごとに出すかです。
-    // 毎フレーム出すとConsoleが見づらくなるので、少し間隔を空けます。
-    [SerializeField] private float timerLogInterval = 0.25f;
 
-    // スナイパー防御用Joy-Con入力の実機確認中だけ残すログ設定です。
-    private const float SniperDefenseJoyConDebugLogInterval = 0.5f;
-    private const float SniperDefenseHandIkDebugLogInterval = 0.5f;
     private const float SniperDefenseJoyConPitchSmoothing = 0.2f;
 
     private float pointAxisPosition;
@@ -320,22 +311,17 @@ public class BalanceManager : MonoBehaviour
     private bool matrixAvoidGaugeWasActive;
     private bool isInsideTarget;
     private bool wasInsideTarget;
-    private float nextSniperDefenseFollowLogTime;
     private bool isNormalBalancePaused;
     private bool isNormalBalanceGaugeSuppressed;
     private bool hasSavedNormalBalanceSuppressionState;
     private bool normalBalanceWasPausedBeforeSuppression;
     private Coroutine unbalanceCoroutine;
-    private float nextTimerLogTime;
     private bool hasSavedHorizontalLayout;
     private Joycon sniperDefenseJoyCon;
     private float sniperDefenseJoyConPreviousPitch;
     private SniperDefenseJoyConGestureState sniperDefenseJoyConGestureState;
     private float sniperDefenseJoyConNeutralElapsed;
     private float sniperDefenseJoyConOppositeDirectionElapsed;
-    private float nextSniperDefenseJoyConDebugLogTime;
-    private Transform[] sniperDefenseHandIkTipDebugTransforms;
-    private Coroutine sniperDefenseHandIkDebugCoroutine;
     private bool hasSavedNormalCountUiState;
     private GameObject savedBalanceTimerTextObject;
     private GameObject savedBalanceTimerTmpTextObject;
@@ -419,7 +405,7 @@ public class BalanceManager : MonoBehaviour
             return;
         }
 
-        UpdateSniperDefenseStickPosition("LateUpdate");
+        UpdateSniperDefenseStickPosition();
     }
 
     private void UpdateNormalMode()
@@ -571,7 +557,6 @@ public class BalanceManager : MonoBehaviour
         playMode = BalancePlayMode.SniperDefense;
         outsideTimer = 0f;
         challengeTimer = 0f;
-        nextSniperDefenseFollowLogTime = 0f;
         SetGaugeDirection(BalanceGaugeDirection.Horizontal);
         SaveHorizontalLayoutIfNeeded();
         ApplyEventVerticalLayout();
@@ -582,19 +567,16 @@ public class BalanceManager : MonoBehaviour
         ActivatePendingSniperDefenseStickWorldYRange();
         SetSniperDefensePointToZeroStickOffset();
         InitializeSniperDefenseJoyConInput();
-        StartSniperDefenseHandIkDebug();
         HideGaugeForSniperDefense();
         LogSniperDefenseFollowSetup();
         ApplyAllUiPositions();
         UpdateBalanceState();
-        LogSniperDefenseStickWorldYRange();
         DebugLog("SniperDefenseMode enabled.");
     }
 
     public void DisableSniperDefenseMode()
     {
         ResetSniperDefenseJoyConInput();
-        StopSniperDefenseHandIkDebug();
         RestoreSniperDefenseStickPosition();
         RestoreGaugeAfterSniperDefense();
 
@@ -909,9 +891,6 @@ public class BalanceManager : MonoBehaviour
     private void UpdateSniperDefenseMode()
     {
         float input = 0f;
-        float gyroX = 0f;
-        float smoothedPitch = 0f;
-        bool usedJoyConInput = false;
         float minPointPosition = GetMinPointPosition();
         float maxPointPosition = GetMaxPointPosition();
         bool isAtLowerLimit = pointAxisPosition <= minPointPosition;
@@ -921,9 +900,7 @@ public class BalanceManager : MonoBehaviour
         {
             input = UpdateSniperDefenseJoyConInput(
                 isAtUpperLimit,
-                isAtLowerLimit,
-                out gyroX,
-                out smoothedPitch);
+                isAtLowerLimit);
             input *= Mathf.Max(0f, sniperDefenseJoyConMoveMultiplier);
 
             if ((isAtUpperLimit && input > 0f)
@@ -931,8 +908,6 @@ public class BalanceManager : MonoBehaviour
             {
                 input = 0f;
             }
-
-            usedJoyConInput = true;
         }
         else
         {
@@ -950,17 +925,12 @@ public class BalanceManager : MonoBehaviour
         pointAxisPosition += input * pointMoveSpeed * Time.deltaTime;
         pointAxisPosition = Mathf.Clamp(pointAxisPosition, minPointPosition, maxPointPosition);
 
-        if (usedJoyConInput)
-        {
-            LogSniperDefenseJoyConInput(gyroX, smoothedPitch, input);
-        }
-
         ApplyAllUiPositions();
         UpdateBalanceState();
 
         if (stickFollowUpdateTiming == StickFollowUpdateTiming.Update)
         {
-            UpdateSniperDefenseStickPosition("Update");
+            UpdateSniperDefenseStickPosition();
         }
     }
 
@@ -988,7 +958,6 @@ public class BalanceManager : MonoBehaviour
         sniperDefenseJoyConPreviousPitch = 0f;
         sniperDefenseJoyConGestureState = SniperDefenseJoyConGestureState.Neutral;
         sniperDefenseJoyConNeutralElapsed = 0f;
-        nextSniperDefenseJoyConDebugLogTime = Time.unscaledTime;
     }
 
     private bool CanUseSniperDefenseJoyConInput()
@@ -1001,12 +970,10 @@ public class BalanceManager : MonoBehaviour
 
     private float UpdateSniperDefenseJoyConInput(
         bool isAtUpperLimit,
-        bool isAtLowerLimit,
-        out float gyroX,
-        out float smoothedPitch)
+        bool isAtLowerLimit)
     {
-        gyroX = sniperDefenseJoyCon.GetGyro().x;
-        smoothedPitch = Mathf.Lerp(
+        float gyroX = sniperDefenseJoyCon.GetGyro().x;
+        float smoothedPitch = Mathf.Lerp(
             sniperDefenseJoyConPreviousPitch,
             gyroX,
             SniperDefenseJoyConPitchSmoothing);
@@ -1111,271 +1078,6 @@ public class BalanceManager : MonoBehaviour
         sniperDefenseJoyConOppositeDirectionElapsed = 0f;
     }
 
-    private void LogSniperDefenseJoyConInput(float gyroX, float smoothedPitch, float finalDefenseInput)
-    {
-        if (!enableDebugLog || Time.unscaledTime < nextSniperDefenseJoyConDebugLogTime)
-        {
-            return;
-        }
-
-        nextSniperDefenseJoyConDebugLogTime =
-            Time.unscaledTime + SniperDefenseJoyConDebugLogInterval;
-        float stickOffset = Mathf.Lerp(
-            GetEffectiveSniperDefenseStickFollowMin(),
-            GetEffectiveSniperDefenseStickFollowMax(),
-            GetNormalizedPointPosition01());
-        bool isAtUpperLimit = pointAxisPosition >= GetMaxPointPosition();
-        bool isAtLowerLimit = pointAxisPosition <= GetMinPointPosition();
-        string leftHandLocalPosition = GetSniperDefenseHandLocalPositionForDebug(0);
-        string rightHandLocalPosition = GetSniperDefenseHandLocalPositionForDebug(1);
-
-        Debug.Log(
-            $"[BalanceManager Sniper Defense JoyCon Debug] " +
-            $"GyroX={gyroX:F4}, " +
-            $"SmoothedPitch={smoothedPitch:F4}, " +
-            $"FinalDefenseInput={finalDefenseInput:F1}, " +
-            $"GestureState={sniperDefenseJoyConGestureState}, " +
-            $"JoyConMoveMultiplier={sniperDefenseJoyConMoveMultiplier:F2}, " +
-            $"PointAxisPosition={pointAxisPosition:F3}, " +
-            $"StickOffset={stickOffset:F4}, " +
-            $"IsAtUpperLimit={isAtUpperLimit}, " +
-            $"IsAtLowerLimit={isAtLowerLimit}, " +
-            $"LeftHandTargetLocal={leftHandLocalPosition}, " +
-            $"RightHandTargetLocal={rightHandLocalPosition}",
-            this);
-    }
-
-    private string GetSniperDefenseHandLocalPositionForDebug(int index)
-    {
-        if (sniperDefenseHandFollowTargets == null
-            || index < 0
-            || index >= sniperDefenseHandFollowTargets.Length
-            || sniperDefenseHandFollowTargets[index] == null)
-        {
-            return "None";
-        }
-
-        return FormatVector(sniperDefenseHandFollowTargets[index].localPosition);
-    }
-
-    private void StartSniperDefenseHandIkDebug()
-    {
-        StopSniperDefenseHandIkDebug();
-
-        if (!enableDebugLog)
-        {
-            return;
-        }
-
-        int targetCount = sniperDefenseHandFollowTargets != null
-            ? sniperDefenseHandFollowTargets.Length
-            : 0;
-        sniperDefenseHandIkTipDebugTransforms = new Transform[targetCount];
-
-        TwoBoneIKConstraint[] constraints = FindObjectsByType<TwoBoneIKConstraint>(
-            FindObjectsInactive.Include,
-            FindObjectsSortMode.None);
-
-        for (int targetIndex = 0; targetIndex < targetCount; targetIndex++)
-        {
-            Transform handTarget = sniperDefenseHandFollowTargets[targetIndex];
-            if (handTarget == null)
-            {
-                continue;
-            }
-
-            for (int constraintIndex = 0; constraintIndex < constraints.Length; constraintIndex++)
-            {
-                TwoBoneIKConstraint constraint = constraints[constraintIndex];
-                TwoBoneIKConstraintData data = constraint.data;
-                if (data.target != handTarget)
-                {
-                    continue;
-                }
-
-                sniperDefenseHandIkTipDebugTransforms[targetIndex] = data.tip;
-                Debug.Log(
-                    $"[Sniper Defense Hand IK Debug] Constraint={constraint.name}, " +
-                    $"Root={GetTransformNameForDebug(data.root)}, " +
-                    $"Mid={GetTransformNameForDebug(data.mid)}, " +
-                    $"Tip={GetTransformNameForDebug(data.tip)}, " +
-                    $"Target={GetTransformNameForDebug(data.target)}, " +
-                    $"Hint={GetTransformNameForDebug(data.hint)}",
-                    this);
-                break;
-            }
-
-            if (sniperDefenseHandIkTipDebugTransforms[targetIndex] == null)
-            {
-                Debug.LogWarning(
-                    $"[Sniper Defense Hand IK Debug] " +
-                    $"Two Bone IK Constraint was not found for target {handTarget.name}.",
-                    this);
-            }
-        }
-
-        sniperDefenseHandIkDebugCoroutine = StartCoroutine(SniperDefenseHandIkDebugRoutine());
-    }
-
-    private void StopSniperDefenseHandIkDebug()
-    {
-        if (sniperDefenseHandIkDebugCoroutine != null)
-        {
-            StopCoroutine(sniperDefenseHandIkDebugCoroutine);
-            sniperDefenseHandIkDebugCoroutine = null;
-        }
-
-        sniperDefenseHandIkTipDebugTransforms = null;
-    }
-
-    private IEnumerator SniperDefenseHandIkDebugRoutine()
-    {
-        WaitForSecondsRealtime interval =
-            new WaitForSecondsRealtime(SniperDefenseHandIkDebugLogInterval);
-
-        while (playMode == BalancePlayMode.SniperDefense && enableDebugLog)
-        {
-            yield return interval;
-            yield return new WaitForEndOfFrame();
-
-            if (playMode != BalancePlayMode.SniperDefense || !enableDebugLog)
-            {
-                break;
-            }
-
-            LogSniperDefenseHandIkAfterRigEvaluation();
-        }
-
-        sniperDefenseHandIkDebugCoroutine = null;
-    }
-
-    private void LogSniperDefenseHandIkAfterRigEvaluation()
-    {
-        float stickOffset = Mathf.Lerp(
-            GetEffectiveSniperDefenseStickFollowMin(),
-            GetEffectiveSniperDefenseStickFollowMax(),
-            GetNormalizedPointPosition01());
-        string positionState = GetSniperDefenseStickPositionStateForDebug();
-
-        Debug.Log(
-            $"[Sniper Defense Hand IK Debug] " +
-            $"StickPositionState={positionState}, " +
-            $"StickOffset={stickOffset:F4}, " +
-            GetSniperDefenseHandIkMeasurementForDebug(0, "Left") + ", " +
-            GetSniperDefenseHandIkMeasurementForDebug(1, "Right"),
-            this);
-    }
-
-    private string GetSniperDefenseStickPositionStateForDebug()
-    {
-        float minPointPosition = GetMinPointPosition();
-        float maxPointPosition = GetMaxPointPosition();
-
-        if (pointAxisPosition <= minPointPosition)
-        {
-            return "LowerLimit";
-        }
-
-        if (pointAxisPosition >= maxPointPosition)
-        {
-            return "UpperLimit";
-        }
-
-        float normalizedZeroOffset = Mathf.InverseLerp(
-            GetEffectiveSniperDefenseStickFollowMin(),
-            GetEffectiveSniperDefenseStickFollowMax(),
-            0f);
-        float zeroOffsetPointPosition = Mathf.Lerp(
-            minPointPosition,
-            maxPointPosition,
-            normalizedZeroOffset);
-
-        return Mathf.Approximately(pointAxisPosition, zeroOffsetPointPosition)
-            ? "Center"
-            : "Moving";
-    }
-
-    private string GetSniperDefenseHandIkMeasurementForDebug(int index, string label)
-    {
-        Transform target = sniperDefenseHandFollowTargets != null
-            && index >= 0
-            && index < sniperDefenseHandFollowTargets.Length
-                ? sniperDefenseHandFollowTargets[index]
-                : null;
-        Transform tip = sniperDefenseHandIkTipDebugTransforms != null
-            && index >= 0
-            && index < sniperDefenseHandIkTipDebugTransforms.Length
-                ? sniperDefenseHandIkTipDebugTransforms[index]
-                : null;
-        string additionalWorldDistance =
-            GetSniperDefenseHandAdditionalWorldDistanceForDebug(index, target);
-        string targetAdditionalWorldDistance =
-            GetSniperDefenseHandAdditionalOffsetDistanceForDebug(
-                sniperDefenseHandTargetAdditionalWorldOffsets,
-                index);
-        string appliedAdditionalWorldDistance =
-            GetSniperDefenseHandAdditionalOffsetDistanceForDebug(
-                sniperDefenseHandCurrentAdditionalWorldOffsets,
-                index);
-
-        if (target == null || tip == null)
-        {
-            return $"{label}TargetWorld={GetTransformPositionForDebug(target)}, " +
-                $"{label}TipWorld={GetTransformPositionForDebug(tip)}, " +
-                $"{label}TargetTipDistance=Unavailable, " +
-                $"{label}HandAdditionalWorldDistance={additionalWorldDistance}, " +
-                $"{label}TargetAdditionalWorldDistance={targetAdditionalWorldDistance}, " +
-                $"{label}AppliedAdditionalWorldDistance={appliedAdditionalWorldDistance}";
-        }
-
-        return $"{label}TargetWorld={FormatVector(target.position)}, " +
-            $"{label}TipWorld={FormatVector(tip.position)}, " +
-            $"{label}TargetTipDistance={Vector3.Distance(target.position, tip.position):F4}, " +
-            $"{label}HandAdditionalWorldDistance={additionalWorldDistance}, " +
-            $"{label}TargetAdditionalWorldDistance={targetAdditionalWorldDistance}, " +
-            $"{label}AppliedAdditionalWorldDistance={appliedAdditionalWorldDistance}";
-    }
-
-    private string GetSniperDefenseHandAdditionalOffsetDistanceForDebug(
-        Vector3[] offsets,
-        int index)
-    {
-        if (offsets == null || index < 0 || index >= offsets.Length)
-        {
-            return "Unavailable";
-        }
-
-        return offsets[index].magnitude.ToString("F4");
-    }
-
-    private string GetSniperDefenseHandAdditionalWorldDistanceForDebug(
-        int index,
-        Transform target)
-    {
-        if (target == null
-            || sniperDefenseHandBasePositions == null
-            || index < 0
-            || index >= sniperDefenseHandBasePositions.Length)
-        {
-            return "Unavailable";
-        }
-
-        Transform parent = target.parent;
-        Vector3 baseWorldPosition = parent != null
-            ? parent.TransformPoint(sniperDefenseHandBasePositions[index])
-            : sniperDefenseHandBasePositions[index];
-        return Vector3.Distance(baseWorldPosition, target.position).ToString("F4");
-    }
-
-    private string GetTransformNameForDebug(Transform target)
-    {
-        return target != null ? target.name : "None";
-    }
-
-    private string GetTransformPositionForDebug(Transform target)
-    {
-        return target != null ? FormatVector(target.position) : "None";
-    }
 
     private void SetSniperDefensePointToZeroStickOffset()
     {
@@ -1457,19 +1159,6 @@ public class BalanceManager : MonoBehaviour
             : stickFollowMaxValue;
     }
 
-    private void LogSniperDefenseStickWorldYRange()
-    {
-        DebugLog(
-            $"SniperDefense stick World Y range. " +
-            $"LowerLaserWorldY={sniperDefenseLowerLaserWorldY:F4}, " +
-            $"UpperLaserWorldY={sniperDefenseUpperLaserWorldY:F4}, " +
-            $"DefenseStartStickBaseWorldY={sniperDefenseStartStickBaseWorldY:F4}, " +
-            $"StickWorldYOffset={sniperDefenseStickWorldYOffset:F4}, " +
-            $"EffectiveStickFollowMin={GetEffectiveSniperDefenseStickFollowMin():F4}, " +
-            $"EffectiveStickFollowMax={GetEffectiveSniperDefenseStickFollowMax():F4}, " +
-            $"DynamicRangeUsed={hasDynamicSniperDefenseStickFollowRange}");
-    }
-
     private void ClearSniperDefenseStickWorldYRange()
     {
         hasPendingSniperDefenseStickWorldYRange = false;
@@ -1493,7 +1182,6 @@ public class BalanceManager : MonoBehaviour
         sniperDefenseJoyConGestureState = SniperDefenseJoyConGestureState.Neutral;
         sniperDefenseJoyConNeutralElapsed = 0f;
         sniperDefenseJoyConOppositeDirectionElapsed = 0f;
-        nextSniperDefenseJoyConDebugLogTime = 0f;
     }
 
     private void UpdateMatrixAvoidMode()
@@ -1536,7 +1224,6 @@ public class BalanceManager : MonoBehaviour
         }
 
         outsideTimer += Time.deltaTime;
-        LogOutsideTimer();
 
         if (outsideTimer < Mathf.Max(0.01f, matrixAvoidAllowedOutsideTime))
         {
@@ -1643,7 +1330,6 @@ public class BalanceManager : MonoBehaviour
         {
             sniperDefenseStickBasePosition = GetFollowPosition(sniperDefenseStickTarget, stickFollowSpace);
             hasSniperDefenseStickBasePosition = true;
-            DebugLog($"SniperDefense stick base saved. target={sniperDefenseStickTarget.name}, space={stickFollowSpace}, local={FormatVector(sniperDefenseStickTarget.localPosition)}, world={FormatVector(sniperDefenseStickTarget.position)}, saved={FormatVector(sniperDefenseStickBasePosition)}");
         }
 
         if (!hasSniperDefenseHandBasePositions)
@@ -1652,7 +1338,7 @@ public class BalanceManager : MonoBehaviour
         }
     }
 
-    private void UpdateSniperDefenseStickPosition(string updateSource)
+    private void UpdateSniperDefenseStickPosition()
     {
         SaveSniperDefenseStickBasePosition();
 
@@ -1662,16 +1348,10 @@ public class BalanceManager : MonoBehaviour
             GetEffectiveSniperDefenseStickFollowMax(),
             normalizedPoint);
         float smoothSpeed = Mathf.Max(0f, stickFollowSmoothSpeed);
-        bool logThisFrame = ShouldLogSniperDefenseFollow();
 
-        if (logThisFrame)
-        {
-            DebugLog($"UpdateSniperDefenseStickPosition called. source={updateSource}, timing={stickFollowUpdateTiming}, normalized={normalizedPoint:F3}, stickOffset={stickOffset:F4}, stickSpace={stickFollowSpace}, stickAxis={stickFollowAxis}, handTargets={GetValidHandFollowTargetCount()}");
-        }
-
-        UpdateFollowTarget(sniperDefenseStickTarget, sniperDefenseStickBasePosition, hasSniperDefenseStickBasePosition, stickOffset, smoothSpeed, stickFollowSpace, stickFollowAxis, logThisFrame);
+        UpdateFollowTarget(sniperDefenseStickTarget, sniperDefenseStickBasePosition, hasSniperDefenseStickBasePosition, stickOffset, smoothSpeed, stickFollowSpace, stickFollowAxis);
         float actualStickMovement = GetSniperDefenseStickMovementFromBase();
-        UpdateSniperDefenseHandFollowTargets(actualStickMovement, logThisFrame);
+        UpdateSniperDefenseHandFollowTargets(actualStickMovement);
     }
 
     private void RestoreSniperDefenseStickPosition()
@@ -1693,33 +1373,26 @@ public class BalanceManager : MonoBehaviour
         sniperDefenseHandBasePositions = new Vector3[targetCount];
         sniperDefenseHandTargetAdditionalWorldOffsets = new Vector3[targetCount];
         sniperDefenseHandCurrentAdditionalWorldOffsets = new Vector3[targetCount];
-        DebugLog($"SniperDefense hand base save start. targetCount={targetCount}, followSpace=Local");
 
         for (int i = 0; i < targetCount; i++)
         {
             Transform followTarget = sniperDefenseHandFollowTargets[i];
             if (followTarget == null)
             {
-                DebugLog($"SniperDefense hand base skipped. index={i}, target=None");
                 continue;
             }
 
             // 棒の子として動く前の握り位置を、親基準のLocal座標で保存します。
             sniperDefenseHandBasePositions[i] = followTarget.localPosition;
-            DebugLog($"SniperDefense hand base saved. index={i}, target={followTarget.name}, local={FormatVector(followTarget.localPosition)}, world={FormatVector(followTarget.position)}, saved={FormatVector(sniperDefenseHandBasePositions[i])}");
         }
 
         hasSniperDefenseHandBasePositions = true;
     }
 
-    private void UpdateSniperDefenseHandFollowTargets(float actualStickMovement, bool logThisFrame)
+    private void UpdateSniperDefenseHandFollowTargets(float actualStickMovement)
     {
         if (sniperDefenseHandFollowTargets == null || sniperDefenseHandBasePositions == null)
         {
-            if (logThisFrame)
-            {
-                DebugLog("Hand follow update skipped. target array or base positions are null.");
-            }
             return;
         }
 
@@ -1730,11 +1403,6 @@ public class BalanceManager : MonoBehaviour
         float handAdditionalMovement = -actualStickMovement
             * (sniperDefenseHandAdditionalFollowMultiplier / posingStickMovementRatio);
 
-        if (logThisFrame)
-        {
-            DebugLog($"Hand follow update entered. targetCount={targetCount}, actualStickMovement={actualStickMovement:F4}, localZAdditionalMovement={handAdditionalMovement:F4}");
-        }
-
         for (int i = 0; i < targetCount; i++)
         {
             Transform followTarget = sniperDefenseHandFollowTargets[i];
@@ -1742,8 +1410,7 @@ public class BalanceManager : MonoBehaviour
                 i,
                 followTarget,
                 sniperDefenseHandBasePositions[i],
-                handAdditionalMovement,
-                logThisFrame);
+                handAdditionalMovement);
         }
     }
 
@@ -1751,8 +1418,7 @@ public class BalanceManager : MonoBehaviour
         int targetIndex,
         Transform handTarget,
         Vector3 baseLocalPosition,
-        float additionalMovement,
-        bool logThisFrame)
+        float additionalMovement)
     {
         if (handTarget == null)
         {
@@ -1789,10 +1455,6 @@ public class BalanceManager : MonoBehaviour
             handTarget.position = targetWorldPosition;
         }
 
-        if (logThisFrame)
-        {
-            DebugLog($"Posing-style hand follow updated. target={handTarget.name}, baseLocal={FormatVector(baseLocalPosition)}, localAfter={FormatVector(handTarget.localPosition)}, additionalMovement={additionalMovement:F4}, candidateWorldDistance={candidateWorldDisplacement.magnitude:F4}, targetWorldDistance={clampedWorldDisplacement.magnitude:F4}, appliedWorldDistance={appliedWorldDisplacement.magnitude:F4}");
-        }
     }
 
     private void RestoreSniperDefenseHandFollowTargets()
@@ -1860,22 +1522,6 @@ public class BalanceManager : MonoBehaviour
         return useSeparateHandFollowSettings ? handFollowAxis : stickFollowAxis;
     }
 
-    private bool ShouldLogSniperDefenseFollow()
-    {
-        if (!enableDebugLog)
-        {
-            return false;
-        }
-
-        if (Time.time < nextSniperDefenseFollowLogTime)
-        {
-            return false;
-        }
-
-        nextSniperDefenseFollowLogTime = Time.time + 1f;
-        return true;
-    }
-
     private void UpdateFollowTarget(
         Transform followTarget,
         Vector3 basePosition,
@@ -1883,20 +1529,13 @@ public class BalanceManager : MonoBehaviour
         float targetOffset,
         float smoothSpeed,
         StickFollowSpace followSpace,
-        StickFollowAxis followAxis,
-        bool logThisFrame)
+        StickFollowAxis followAxis)
     {
         if (followTarget == null || !hasBasePosition)
         {
-            if (logThisFrame)
-            {
-                DebugLog($"Follow target skipped. target={(followTarget != null ? followTarget.name : "None")}, hasBasePosition={hasBasePosition}");
-            }
             return;
         }
 
-        Vector3 beforeLocalPosition = followTarget.localPosition;
-        Vector3 beforeWorldPosition = followTarget.position;
         float baseValue = GetAxisValue(basePosition, followAxis);
         float targetValue = baseValue + targetOffset;
         Vector3 currentPosition = GetFollowPosition(followTarget, followSpace);
@@ -1913,11 +1552,6 @@ public class BalanceManager : MonoBehaviour
 
         SetAxisValue(ref currentPosition, currentValue, followAxis);
         SetFollowPosition(followTarget, currentPosition, followSpace);
-
-        if (logThisFrame)
-        {
-            DebugLog($"Follow target updated. target={followTarget.name}, space={followSpace}, axis={followAxis}, offset={targetOffset:F4}, base={FormatVector(basePosition)}, beforeLocal={FormatVector(beforeLocalPosition)}, afterLocal={FormatVector(followTarget.localPosition)}, beforeWorld={FormatVector(beforeWorldPosition)}, afterWorld={FormatVector(followTarget.position)}");
-        }
     }
 
     private Vector3 GetFollowPosition(Transform followTarget, StickFollowSpace followSpace)
@@ -1995,9 +1629,6 @@ public class BalanceManager : MonoBehaviour
     private void LogSniperDefenseFollowSetup()
     {
         int handTargetCount = GetValidHandFollowTargetCount();
-        string legacyHandSettings = $"enabled={useSeparateHandFollowSettings}, space={handFollowSpace}, axis={handFollowAxis}, min={handFollowMinValue:F4}, max={handFollowMaxValue:F4}";
-
-        DebugLog($"SniperDefense follow setup. StickTarget={(sniperDefenseStickTarget != null ? sniperDefenseStickTarget.name : "None")}, HandTargets={handTargetCount}, HandMode=PosingStyleLocalZ, HandMultiplier={sniperDefenseHandAdditionalFollowMultiplier:F3}, LegacyHandMinMaxIgnored=({legacyHandSettings})");
 
         if (sniperDefenseStickTarget == null)
         {
@@ -2083,7 +1714,6 @@ public class BalanceManager : MonoBehaviour
         }
 
         outsideTimer += Time.deltaTime;
-        LogOutsideTimer();
 
         // 一定時間外れたら、ふらつきとダメージ通知を発生させます。
         if (outsideTimer >= failTimeLimit)
@@ -2634,25 +2264,6 @@ public class BalanceManager : MonoBehaviour
         animator.SetBool(unbalanceBoolName, false);
         unbalanceCoroutine = null;
         DebugLog("StopUnbalance coroutine finished.");
-    }
-
-    private void LogOutsideTimer()
-    {
-        // enableDebugLogがfalseなら何も出しません。
-        if (!enableDebugLog)
-        {
-            return;
-        }
-
-        // Time.timeはゲーム開始からの経過秒数です。
-        // nextTimerLogTimeより前なら、ログを出すタイミングではないので戻ります。
-        if (Time.time < nextTimerLogTime)
-        {
-            return;
-        }
-
-        nextTimerLogTime = Time.time + timerLogInterval;
-        DebugLog($"outsideTimer={outsideTimer:F2}/{failTimeLimit:F2}, point={pointAxisPosition:F2}, target={targetAxisPosition:F2}, IsInsideTarget={isInsideTarget}");
     }
 
     private void DebugLog(string message)
