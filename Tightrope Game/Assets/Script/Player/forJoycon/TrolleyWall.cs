@@ -180,6 +180,17 @@ public class TrolleyWall : MonoBehaviour
     public bool IsJoyConInputActive => useJoyConInput && myJoycon != null;
     public bool IsJoyConReady => IsJoyConInputActive && neutralCaptured;
 
+    public bool TryGetCurrentJoyConBalanceAngle(out float angle)
+    {
+        angle = 0f;
+        if (!IsJoyConReady)
+        {
+            return false;
+        }
+
+        return TryCalculateJoyConBalanceAngle(myJoycon.GetVector(), out angle);
+    }
+
     private struct RigidbodyStateSnapshot
     {
         public bool IsValid;
@@ -792,26 +803,32 @@ public class TrolleyWall : MonoBehaviour
         }
         else
         {
-            Quaternion relativeRotation =
-                Quaternion.Inverse(neutralJoyConRotation) * joyconRotation;
-            Vector3 rotatedForward = relativeRotation * Vector3.forward;
-            Vector3 projectedForward = Vector3.ProjectOnPlane(rotatedForward, Vector3.up);
-            if (projectedForward.sqrMagnitude > JoyConProjectedVectorMinSqrMagnitude)
-            {
-                float quaternionRollY = Vector3.SignedAngle(
-                    Vector3.forward,
-                    projectedForward.normalized,
-                    Vector3.up);
-                float joyConRoll = quaternionRollY;
-                float adjustedRoll = joyConRoll * joyConSensitivity;
-                float safeBarMaxAngle = Mathf.Max(0f, BarMaxAngle);
-                latestBarRoll = Mathf.Clamp(adjustedRoll, -safeBarMaxAngle, safeBarMaxAngle);
-            }
-            else
-            {
-                latestBarRoll = 0f;
-            }
+            latestBarRoll = TryCalculateJoyConBalanceAngle(joyconRotation, out float angle)
+                ? angle
+                : 0f;
         }
+    }
+
+    private bool TryCalculateJoyConBalanceAngle(Quaternion joyconRotation, out float angle)
+    {
+        angle = 0f;
+        Quaternion relativeRotation =
+            Quaternion.Inverse(neutralJoyConRotation) * joyconRotation;
+        Vector3 rotatedForward = relativeRotation * Vector3.forward;
+        Vector3 projectedForward = Vector3.ProjectOnPlane(rotatedForward, Vector3.up);
+        if (projectedForward.sqrMagnitude <= JoyConProjectedVectorMinSqrMagnitude)
+        {
+            return false;
+        }
+
+        float quaternionRollY = Vector3.SignedAngle(
+            Vector3.forward,
+            projectedForward.normalized,
+            Vector3.up);
+        float adjustedRoll = quaternionRollY * joyConSensitivity;
+        float safeBarMaxAngle = Mathf.Max(0f, BarMaxAngle);
+        angle = Mathf.Clamp(adjustedRoll, -safeBarMaxAngle, safeBarMaxAngle);
+        return true;
     }
 
     private void UpdateKeyboardAndMouseInput()

@@ -113,6 +113,8 @@ public class TitleSceneUIController : MonoBehaviour
     private Button keyboardButton;
     private Button joyConButton;
     private TMP_FontAsset runtimeJapaneseFontAsset;
+    private readonly JoyConMenuInput joyConMenuInput = new JoyConMenuInput();
+    private bool ignoreFirstControlSelectJoyConInput;
 
     private void Awake()
     {
@@ -193,12 +195,17 @@ public class TitleSceneUIController : MonoBehaviour
 
     private void UpdateTitle()
     {
+        JoyConMenuInputFrame joyConInput = joyConMenuInput.Read();
+
         if (useDemoFlow)
         {
             bool hasKeyboardInput = Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame;
             bool hasMouseInput = HasMouseActivityThisFrame();
+            bool hasJoyConInput = joyConInput.HorizontalStep != 0
+                || joyConInput.VerticalStep != 0
+                || joyConInput.ConfirmPressed;
 
-            if (hasKeyboardInput || hasMouseInput)
+            if (hasKeyboardInput || hasMouseInput || hasJoyConInput)
             {
                 titleIdleSeconds = 0f;
             }
@@ -208,22 +215,30 @@ public class TitleSceneUIController : MonoBehaviour
             }
         }
 
+        bool selectStart = joyConInput.VerticalStep > 0;
+        bool selectQuit = joyConInput.VerticalStep < 0;
+        bool confirmSelection = joyConInput.ConfirmPressed;
+
         if (Keyboard.current != null)
         {
-            if (Keyboard.current.upArrowKey.wasPressedThisFrame)
-            {
-                SelectTitleButton(TitleSelection.Start);
-            }
-            else if (Keyboard.current.downArrowKey.wasPressedThisFrame)
-            {
-                SelectTitleButton(TitleSelection.Quit);
-            }
+            selectStart |= Keyboard.current.upArrowKey.wasPressedThisFrame;
+            selectQuit |= Keyboard.current.downArrowKey.wasPressedThisFrame;
+            confirmSelection |= Keyboard.current.spaceKey.wasPressedThisFrame;
+        }
 
-            if (Keyboard.current.spaceKey.wasPressedThisFrame)
-            {
-                ConfirmTitleSelection();
-                return;
-            }
+        if (selectStart)
+        {
+            SelectTitleButton(TitleSelection.Start);
+        }
+        else if (selectQuit)
+        {
+            SelectTitleButton(TitleSelection.Quit);
+        }
+
+        if (confirmSelection)
+        {
+            ConfirmTitleSelection();
+            return;
         }
 
         if (useDemoFlow && titleIdleSeconds >= titleIdleDemoSeconds)
@@ -234,21 +249,34 @@ public class TitleSceneUIController : MonoBehaviour
 
     private void UpdateControlSelect()
     {
-        if (Keyboard.current == null)
+        JoyConMenuInputFrame joyConInput = joyConMenuInput.Read();
+        bool useJoyConInputThisFrame = !ignoreFirstControlSelectJoyConInput;
+        if (ignoreFirstControlSelectJoyConInput)
         {
-            return;
+            ignoreFirstControlSelectJoyConInput = false;
         }
 
-        if (Keyboard.current.leftArrowKey.wasPressedThisFrame)
+        bool selectKeyboard = useJoyConInputThisFrame && joyConInput.HorizontalStep < 0;
+        bool selectJoyCon = useJoyConInputThisFrame && joyConInput.HorizontalStep > 0;
+        bool confirmSelection = useJoyConInputThisFrame && joyConInput.ConfirmPressed;
+
+        if (Keyboard.current != null)
+        {
+            selectKeyboard |= Keyboard.current.leftArrowKey.wasPressedThisFrame;
+            selectJoyCon |= Keyboard.current.rightArrowKey.wasPressedThisFrame;
+            confirmSelection |= Keyboard.current.spaceKey.wasPressedThisFrame;
+        }
+
+        if (selectKeyboard)
         {
             SelectControlButton(ControlSelection.Keyboard);
         }
-        else if (Keyboard.current.rightArrowKey.wasPressedThisFrame)
+        else if (selectJoyCon)
         {
             SelectControlButton(ControlSelection.JoyCon);
         }
 
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (confirmSelection)
         {
             ConfirmControlSelection();
         }
@@ -292,6 +320,8 @@ public class TitleSceneUIController : MonoBehaviour
     {
         currentState = ScreenState.ControlSelect;
         controlSelection = ControlSelection.None;
+        joyConMenuInput.Reset();
+        ignoreFirstControlSelectJoyConInput = true;
         ClearEventSystemSelection();
         SetOnlyRootActive(controlSelectRoot);
         SetButtonScale(keyboardButtonTransform, normalButtonScale);

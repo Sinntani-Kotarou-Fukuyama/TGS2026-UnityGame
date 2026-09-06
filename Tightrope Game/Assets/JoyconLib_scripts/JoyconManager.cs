@@ -19,6 +19,8 @@ public class JoyconManager: MonoBehaviour
 
     public List<Joycon> j; // Array of all connected Joy-Cons
     static JoyconManager instance;
+    private bool isPrimaryManager;
+    private bool hasCleanedUpConnections;
 
     public static JoyconManager Instance
     {
@@ -27,8 +29,17 @@ public class JoyconManager: MonoBehaviour
 
     void Awake()
     {
-        if (instance != null) Destroy(gameObject);
+        if (instance != null && instance != this)
+        {
+            Debug.Log("[JoyconManager] Duplicate manager destroyed", this);
+            Destroy(gameObject);
+            return;
+        }
+
         instance = this;
+		isPrimaryManager = true;
+		DontDestroyOnLoad(gameObject);
+		Debug.Log("[JoyconManager] Primary manager initialized", this);
 		int i = 0;
 
 		j = new List<Joycon>();
@@ -74,6 +85,11 @@ public class JoyconManager: MonoBehaviour
 
     void Start()
     {
+		if (!isPrimaryManager)
+		{
+			return;
+		}
+
 		for (int i = 0; i < j.Count; ++i)
 		{
 			Debug.Log (i);
@@ -91,18 +107,52 @@ public class JoyconManager: MonoBehaviour
 
     void Update()
     {
+		if (!isPrimaryManager)
+		{
+			return;
+		}
+
 		for (int i = 0; i < j.Count; ++i)
 		{
 			j[i].Update();
 		}
     }
 
-   /* void OnApplicationQuit()
+    void OnApplicationQuit()
     {
+		CleanupOwnedConnections();
+    }
+
+	void OnDestroy()
+	{
+		if (!isPrimaryManager || instance != this)
+		{
+			return;
+		}
+
+		CleanupOwnedConnections();
+		instance = null;
+	}
+
+	private void CleanupOwnedConnections()
+	{
+		if (!isPrimaryManager || hasCleanedUpConnections)
+		{
+			return;
+		}
+
+		hasCleanedUpConnections = true;
+		if (j == null)
+		{
+			return;
+		}
+
 		for (int i = 0; i < j.Count; ++i)
 		{
-			j[i].Detach ();
+			if (j[i] != null)
+			{
+				j[i].Detach();
+			}
 		}
-    }
-   */
+	}
 }

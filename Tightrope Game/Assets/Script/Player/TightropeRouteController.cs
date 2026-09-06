@@ -29,6 +29,13 @@ public class TightropeRouteController : MonoBehaviour
         Right
     }
 
+    private enum JoyConRouteHoldDirection
+    {
+        Neutral,
+        Left,
+        Right
+    }
+
     [Header("移動担当")]
     [Tooltip("SuitManに付いているTightropeAutoGoalMoverを設定します。")]
     [SerializeField] private TightropeAutoGoalMover playerMover;
@@ -62,6 +69,16 @@ public class TightropeRouteController : MonoBehaviour
     [Tooltip("ONなら左右キーで即決定、OFFなら左右キーで候補を選びSpaceキーで決定します。")]
     [SerializeField] private bool useImmediateRouteSelection = true;
 
+    [Header("Joy-Conルート選択")]
+    [Tooltip("Joy-Con本体の左右傾きをHoldとして扱い始める角度です。")]
+    [SerializeField, Range(0f, 90f)] private float joyConRouteHoldAngleThreshold = 15f;
+
+    [Tooltip("同じ方向へJoy-Con本体を傾け続けてルートを決定する秒数です。")]
+    [SerializeField, Min(0.1f)] private float joyConRouteHoldDuration = 1.5f;
+
+    [Tooltip("通常綱渡りで取得したNeutralを使って、現在のJoy-Con傾きを読み取るTrolleyWallです。")]
+    [SerializeField] private TrolleyWall trolleyWall;
+
     [Header("ルート選択UI")]
     [Tooltip("RouteSelectPanelに付けたRouteSelectUIControllerを設定します。未設定でもキーによる選択と決定は動作します。")]
     [SerializeField] private RouteSelectUIController routeSelectUIController;
@@ -81,6 +98,9 @@ public class TightropeRouteController : MonoBehaviour
     private bool useTrolleyMovement;
     private bool hasStarted;
     private Action<Transform[]> trolleyRouteSelected;
+    private bool useJoyConRouteHold;
+    private JoyConRouteHoldDirection joyConRouteHoldDirection = JoyConRouteHoldDirection.Neutral;
+    private float joyConRouteHoldTime;
 
     public bool IsWaitingForBranch => state == RouteState.WaitingForBranch;
     public bool HasCompletedRoute => state == RouteState.Completed;
@@ -168,6 +188,11 @@ public class TightropeRouteController : MonoBehaviour
         {
             ConfirmSelectedRoute();
         }
+
+        if (state == RouteState.WaitingForBranch && useJoyConRouteHold)
+        {
+            UpdateJoyConRouteHold();
+        }
     }
 
     private void OnDisable()
@@ -239,6 +264,7 @@ public class TightropeRouteController : MonoBehaviour
         playerMover?.StopMoving();
         PauseBalanceIfPossible();
         routeSelectUIController?.SetImmediateSelectionMode(UsesImmediateRouteSelection);
+        PrepareJoyConRouteSelection();
         ShowRouteSelectionUI();
 
         string inputGuide = UsesImmediateRouteSelection
@@ -369,6 +395,8 @@ public class TightropeRouteController : MonoBehaviour
         state = RouteState.WaitingForBranch;
         pendingRouteSelection = PendingRouteSelection.None;
         PauseBalanceIfPossible();
+        routeSelectUIController?.SetImmediateSelectionMode(UsesImmediateRouteSelection);
+        PrepareJoyConRouteSelection();
         ShowRouteSelectionUI();
 
         Debug.Log("[TightropeRouteController] 分岐地点に到着しました。左右キーでルートを選び、Spaceキーで決定してください。", this);
@@ -402,6 +430,106 @@ public class TightropeRouteController : MonoBehaviour
 
         Debug.Log($"[TightropeRouteController] {routeLabel}ルートを選択しました。", this);
         routeSelected?.Invoke(selectedRoutePoints);
+    }
+
+    private void PrepareJoyConRouteSelection()
+    {
+        ResetJoyConRouteHoldProgress();
+        useJoyConRouteHold = false;
+
+        if (ControlSelectionSession.HasSelection
+            && ControlSelectionSession.SelectedControlType == GameplayControlType.JoyCon)
+        {
+            if (trolleyWall != null && trolleyWall.IsJoyConReady)
+            {
+                useJoyConRouteHold = true;
+            }
+            else
+            {
+                Debug.LogWarning("TightropeRouteController: TrolleyWallのJoy-Con Neutralが未準備のため、ルート選択はKeyboard操作を使用します。", this);
+            }
+        }
+
+        routeSelectUIController?.SetJoyConHoldMode(useJoyConRouteHold);
+    }
+
+    private void UpdateJoyConRouteHold()
+    {
+        if (trolleyWall == null ||
+            !trolleyWall.TryGetCurrentJoyConBalanceAngle(out float angle))
+        {
+            ResetJoyConRouteHoldProgress();
+            return;
+        }
+
+        float holdAngleThreshold = Mathf.Max(0f, joyConRouteHoldAngleThreshold);
+        JoyConRouteHoldDirection requestedDirection = JoyConRouteHoldDirection.Neutral;
+        if (angle >= holdAngleThreshold)
+        {
+            requestedDirection = JoyConRouteHoldDirection.Right;
+        }
+        else if (angle <= -holdAngleThreshold)
+        {
+            requestedDirection = JoyConRouteHoldDirection.Left;
+        }
+
+        if (requestedDirection == JoyConRouteHoldDirection.Neutral)
+        {
+            ResetJoyConRouteHoldProgress();
+            return;
+        }
+
+        if (joyConRouteHoldDirection != requestedDirection)
+        {
+            joyConRouteHoldDirection = requestedDirection;
+            joyConRouteHoldTime = 0f;
+
+            if (requestedDirection == JoyConRouteHoldDirection.Left)
+            {
+                pendingRouteSelection = PendingRouteSelection.Left;
+                routeSelectUIController?.ShowLeftSelected();
+            }
+            else
+            {
+                pendingRouteSelection = PendingRouteSelection.Right;
+                routeSelectUIController?.ShowRightSelected();
+            }
+        }
+
+        joyConRouteHoldTime += Time.unscaledDeltaTime;
+        float holdDuration = Mathf.Max(0.1f, joyConRouteHoldDuration);
+        float holdProgress = Mathf.Clamp01(joyConRouteHoldTime / holdDuration);
+
+        if (requestedDirection == JoyConRouteHoldDirection.Left)
+        {
+            routeSelectUIController?.SetJoyConHoldProgress(holdProgress, 0f);
+        }
+        else
+        {
+            routeSelectUIController?.SetJoyConHoldProgress(0f, holdProgress);
+        }
+
+        if (joyConRouteHoldTime < holdDuration)
+        {
+            return;
+        }
+
+        ResetJoyConRouteHoldProgress();
+        ConfirmSelectedRoute();
+    }
+
+    private void ResetJoyConRouteHoldProgress()
+    {
+        joyConRouteHoldDirection = JoyConRouteHoldDirection.Neutral;
+        joyConRouteHoldTime = 0f;
+        routeSelectUIController?.SetJoyConHoldProgress(0f, 0f);
+    }
+
+    private void FinishJoyConRouteSelection()
+    {
+        ResetJoyConRouteHoldProgress();
+        useJoyConRouteHold = false;
+        routeSelectUIController?.SetJoyConHoldMode(false);
     }
 
     private IEnumerator ResumeBalanceAfterRouteInputRelease()
@@ -517,6 +645,7 @@ public class TightropeRouteController : MonoBehaviour
 
     private void HideRouteSelectionUI()
     {
+        FinishJoyConRouteSelection();
         if (routeSelectUIController != null)
         {
             routeSelectUIController.HideRouteSelection();

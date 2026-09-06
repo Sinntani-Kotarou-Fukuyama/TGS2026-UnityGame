@@ -69,6 +69,8 @@ public class ClearSceneButtonController : MonoBehaviour
     private bool allInputReleased;
     private bool keyboardInputEnabled;
     private bool hasConfirmed;
+    private readonly JoyConMenuInput joyConMenuInput = new JoyConMenuInput();
+    private bool joyConInputArmed;
 
     private void Awake()
     {
@@ -113,16 +115,18 @@ public class ClearSceneButtonController : MonoBehaviour
             return;
         }
 
-        if (keyboard.leftArrowKey.wasPressedThisFrame)
+        JoyConMenuInputFrame joyConInput = ReadJoyConMenuInput();
+
+        if (keyboard.leftArrowKey.wasPressedThisFrame || joyConInput.HorizontalStep < 0)
         {
             SelectButton(leftSelection);
         }
-        else if (keyboard.rightArrowKey.wasPressedThisFrame)
+        else if (keyboard.rightArrowKey.wasPressedThisFrame || joyConInput.HorizontalStep > 0)
         {
             SelectButton(rightSelection);
         }
 
-        if (keyboard.spaceKey.wasPressedThisFrame)
+        if (keyboard.spaceKey.wasPressedThisFrame || joyConInput.ConfirmPressed)
         {
             Button selectedButton = GetButton(currentSelection);
             if (IsButtonReady(selectedButton))
@@ -217,12 +221,34 @@ public class ClearSceneButtonController : MonoBehaviour
         allInputReleased = false;
         keyboardInputEnabled = false;
         hasConfirmed = false;
+        joyConMenuInput.Reset();
+        joyConInputArmed = false;
 
         if (hasCapturedOriginalScales)
         {
             retryButtonTransform.localScale = retryOriginalScale;
             titleButtonTransform.localScale = titleOriginalScale;
         }
+    }
+
+    private JoyConMenuInputFrame ReadJoyConMenuInput()
+    {
+        if (!ControlSelectionSession.HasSelection ||
+            ControlSelectionSession.SelectedControlType != GameplayControlType.JoyCon)
+        {
+            return JoyConMenuInputFrame.None;
+        }
+
+        JoyConMenuInputFrame input = joyConMenuInput.Read();
+        if (joyConInputArmed)
+        {
+            return input;
+        }
+
+        // 最初のReadを破棄して、前Sceneから倒しっぱなしのStickをHelper内でLockします。
+        // XのGetButtonDownも同じフレームでは決定に使用しません。
+        joyConInputArmed = true;
+        return JoyConMenuInputFrame.None;
     }
 
     private bool AreButtonsReady()

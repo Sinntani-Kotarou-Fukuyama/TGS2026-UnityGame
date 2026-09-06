@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// 分岐地点で表示するルート選択UIの見た目だけを管理します。
@@ -23,6 +24,12 @@ public class RouteSelectUIController : MonoBehaviour
     [Tooltip("『Spaceキーで決定』を表示するTextMeshProです。")]
     [SerializeField] private TMP_Text decideText;
 
+    [Tooltip("左ルートをHold中に表示する円ゲージです。")]
+    [SerializeField] private Image leftHoldCircleImage;
+
+    [Tooltip("右ルートをHold中に表示する円ゲージです。")]
+    [SerializeField] private Image rightHoldCircleImage;
+
     [Header("矢印サイズ")]
     [Tooltip("未選択時の矢印サイズです。")]
     [SerializeField, Min(0f)] private float normalArrowScale = 1.0f;
@@ -44,6 +51,10 @@ public class RouteSelectUIController : MonoBehaviour
     private bool hasSavedTrolleyBalanceUiState;
     private bool balanceGaugeWasActiveBeforeTrolley;
     private bool countDisplayWasActiveBeforeTrolley;
+    private bool immediateSelectionMode;
+    private bool joyConHoldMode;
+
+    private const string JoyConHoldGuideText = "行きたい方向にJoy-Conを傾け続けよう！";
 
     private void Awake()
     {
@@ -55,6 +66,7 @@ public class RouteSelectUIController : MonoBehaviour
         CaptureOriginalDecideText();
         WarnAboutMissingReferences();
         ResetArrowScales();
+        SetJoyConHoldProgress(0f, 0f);
         SetBalanceGaugeVisible(true);
         SetCountDisplayVisible(true);
     }
@@ -63,9 +75,29 @@ public class RouteSelectUIController : MonoBehaviour
     public void SetImmediateSelectionMode(bool immediateSelection)
     {
         CaptureOriginalDecideText();
-        if (decideText != null)
+        immediateSelectionMode = immediateSelection;
+        UpdateDecideText();
+    }
+
+    /// <summary>Joy-Con選択時だけHold操作の案内へ切り替えます。</summary>
+    public void SetJoyConHoldMode(bool enabled)
+    {
+        joyConHoldMode = enabled;
+        UpdateDecideText();
+        SetJoyConHoldProgress(0f, 0f);
+    }
+
+    /// <summary>左右のHold円ゲージを0～1で更新します。</summary>
+    public void SetJoyConHoldProgress(float leftProgress, float rightProgress)
+    {
+        if (leftHoldCircleImage != null)
         {
-            decideText.text = immediateSelection ? "左右キーで決定" : originalDecideText;
+            leftHoldCircleImage.fillAmount = Mathf.Clamp01(leftProgress);
+        }
+
+        if (rightHoldCircleImage != null)
+        {
+            rightHoldCircleImage.fillAmount = Mathf.Clamp01(rightProgress);
         }
     }
 
@@ -120,6 +152,7 @@ public class RouteSelectUIController : MonoBehaviour
     public void ShowRouteSelection()
     {
         ResetArrowScales();
+        SetJoyConHoldProgress(0f, 0f);
         SetRouteSelectVisible(true);
         SetBalanceGaugeVisible(false);
         SetCountDisplayVisible(false);
@@ -141,6 +174,7 @@ public class RouteSelectUIController : MonoBehaviour
     public void HideRouteSelection()
     {
         ResetArrowScales();
+        SetJoyConHoldProgress(0f, 0f);
         SetRouteSelectVisible(false);
         SetBalanceGaugeVisible(true);
         SetCountDisplayVisible(true);
@@ -213,6 +247,23 @@ public class RouteSelectUIController : MonoBehaviour
         hasCapturedOriginalDecideText = true;
     }
 
+    private void UpdateDecideText()
+    {
+        CaptureOriginalDecideText();
+        if (decideText == null)
+        {
+            return;
+        }
+
+        if (joyConHoldMode)
+        {
+            decideText.text = JoyConHoldGuideText;
+            return;
+        }
+
+        decideText.text = immediateSelectionMode ? "左右キーで決定" : originalDecideText;
+    }
+
     private void WarnAboutMissingReferences()
     {
         if (questionText == null)
@@ -233,6 +284,16 @@ public class RouteSelectUIController : MonoBehaviour
         if (decideText == null)
         {
             Debug.LogWarning("RouteSelectUIController: Decide Textが未設定です。", this);
+        }
+
+        if (leftHoldCircleImage == null)
+        {
+            Debug.LogWarning("RouteSelectUIController: Left Hold Circle Imageが未設定です。", this);
+        }
+
+        if (rightHoldCircleImage == null)
+        {
+            Debug.LogWarning("RouteSelectUIController: Right Hold Circle Imageが未設定です。", this);
         }
 
         if (balanceGaugeRoot == null)
