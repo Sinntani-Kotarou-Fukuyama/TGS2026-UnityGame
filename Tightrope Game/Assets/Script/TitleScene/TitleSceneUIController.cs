@@ -16,7 +16,8 @@ public class TitleSceneUIController : MonoBehaviour
     {
         Demo,
         Title,
-        ControlSelect
+        ControlSelect,
+        TutorialSelect
     }
 
     private enum TitleSelection
@@ -51,6 +52,9 @@ public class TitleSceneUIController : MonoBehaviour
 
     [Tooltip("操作選択画面全体の親Objectです。")]
     [SerializeField] private GameObject controlSelectRoot;
+
+    [Tooltip("チュートリアル選択画面全体の親Objectです。")]
+    [SerializeField] private GameObject tutorialSelectRoot;
 
     [Header("既存デモ")]
     [Tooltip("既存のデモ用VideoPlayerです。ループは自動的にOFFになります。")]
@@ -100,6 +104,12 @@ public class TitleSceneUIController : MonoBehaviour
     [Header("画面遷移")]
     [Tooltip("操作方法を決定した後に移動するScene名です。")]
     [SerializeField] private string gameSceneName = "SampleScene";
+    [SerializeField] private string tutorialSceneName = "TutorialScene";
+
+    [Header("チュートリアル選択画面")]
+
+    [SerializeField] private RectTransform tutorialYesButtonTransform;
+    [SerializeField] private RectTransform tutorialNoButtonTransform;
 
     private ScreenState currentState;
     private TitleSelection titleSelection;
@@ -107,6 +117,7 @@ public class TitleSceneUIController : MonoBehaviour
     private float titleIdleSeconds;
     private float demoElapsedSeconds;
     private bool isLoadingScene;
+    private bool tutorialWillStart = true;
 
     private Button startButton;
     private Button quitButton;
@@ -152,6 +163,9 @@ public class TitleSceneUIController : MonoBehaviour
 
             case ScreenState.ControlSelect:
                 UpdateControlSelect();
+                break;
+            case ScreenState.TutorialSelect:
+                UpdateTutorialSelect();
                 break;
         }
     }
@@ -368,7 +382,7 @@ public class TitleSceneUIController : MonoBehaviour
             : GameplayControlType.Keyboard;
         ControlSelectionSession.SetSelection(selectedControlType);
 
-        LoadGameScene();
+        ShowTutorialSelect();
     }
 
     /// <summary>Startボタンをマウスで押した時に呼ばれます。</summary>
@@ -427,7 +441,14 @@ public class TitleSceneUIController : MonoBehaviour
         }
 
         isLoadingScene = true;
-        SceneManager.LoadScene(gameSceneName);
+        if (TutorialSelectionSession.WillStartTutorial())
+        {
+            SceneManager.LoadScene(tutorialSceneName);
+        }
+        else
+        {
+            SceneManager.LoadScene(gameSceneName);
+        }
     }
 
     private void QuitGame()
@@ -444,6 +465,7 @@ public class TitleSceneUIController : MonoBehaviour
         SetRootActive(demoRoot, demoRoot == activeRoot);
         SetRootActive(titleRoot, titleRoot == activeRoot);
         SetRootActive(controlSelectRoot, controlSelectRoot == activeRoot);
+        SetRootActive(tutorialSelectRoot, tutorialSelectRoot == activeRoot);
     }
 
     private static void SetRootActive(GameObject root, bool active)
@@ -591,5 +613,58 @@ public class TitleSceneUIController : MonoBehaviour
         {
             Debug.LogWarning("TitleSceneUIController: Japanese Source Fontが未設定です。日本語が正しく表示されない場合があります。", this);
         }
+    }
+    private void ShowTutorialSelect()
+    {
+        currentState = ScreenState.TutorialSelect;
+        ClearEventSystemSelection();
+        SetOnlyRootActive(tutorialSelectRoot);
+
+        // 最初は「Yes」を選択状態にする
+        SelectTutorialButton(true);
+    }
+    private void SelectTutorialButton(bool yes)
+    {
+        tutorialWillStart = yes;
+
+        SetButtonScale(tutorialYesButtonTransform, yes ? selectedButtonScale : normalButtonScale);
+        SetButtonScale(tutorialNoButtonTransform, yes ? normalButtonScale : selectedButtonScale);
+    }
+    private void UpdateTutorialSelect()
+    {
+        if (Keyboard.current.leftArrowKey.wasPressedThisFrame)
+        {
+            SelectTutorialButton(true);
+        }
+        else if (Keyboard.current.rightArrowKey.wasPressedThisFrame)
+        {
+            SelectTutorialButton(false);
+        }
+
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            ConfirmTutorialSelection();
+        }
+    }
+    public static class TutorialSelectionSession
+    {
+        private static bool willStartTutorial = false;
+
+        public static void SetWillStartTutorial(bool value)
+        {
+            willStartTutorial = value;
+        }
+
+        public static bool WillStartTutorial()
+        {
+            return willStartTutorial;
+        }
+    }
+    private void ConfirmTutorialSelection()
+    {
+        // チュートリアルするかどうかを保存
+        TutorialSelectionSession.SetWillStartTutorial(tutorialWillStart);
+
+        LoadGameScene();
     }
 }
