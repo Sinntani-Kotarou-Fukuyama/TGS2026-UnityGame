@@ -67,6 +67,8 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
     private float inputPunchRemainingTime;
     private Vector3 matrixMashMessageBaseScale = Vector3.one;
     private bool hasSavedMatrixMashMessageScale;
+    private bool useJoyConMashInput;
+    private Joycon matrixMashJoyCon;
 
     public event Action AllMatrixBulletsPassed;
 
@@ -245,7 +247,46 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
         currentPressCount = 0;
         isMatrixMashResolved = false;
         inputPunchRemainingTime = 0f;
+        SelectMatrixMashInput();
         matrixMashCoroutine = StartCoroutine(MatrixMashRoutine());
+    }
+
+    private void SelectMatrixMashInput()
+    {
+        useJoyConMashInput = false;
+        matrixMashJoyCon = null;
+
+        if (ControlSelectionSession.HasSelection
+            && ControlSelectionSession.SelectedControlType == GameplayControlType.JoyCon)
+        {
+            JoyconManager joyconManager = JoyconManager.Instance;
+            if (joyconManager != null
+                && joyconManager.j != null
+                && joyconManager.j.Count > 0
+                && joyconManager.j[0] != null)
+            {
+                matrixMashJoyCon = joyconManager.j[0];
+                useJoyConMashInput = true;
+            }
+            else
+            {
+                Debug.LogWarning("MatrixAvoidBulletShooter: Joy-Conを利用できないため、Matrix連打入力をKeyboardへFallbackします。", this);
+            }
+        }
+
+        Debug.Log($"MatrixAvoidBulletShooter: MatrixMashInput={(useJoyConMashInput ? "JoyCon" : "Keyboard")}", this);
+    }
+
+    private bool WasMatrixMashInputPressedThisFrame()
+    {
+        if (useJoyConMashInput)
+        {
+            return matrixMashJoyCon != null
+                && matrixMashJoyCon.GetButtonDown(Joycon.Button.DPAD_UP);
+        }
+
+        return Keyboard.current != null
+            && Keyboard.current.downArrowKey.wasPressedThisFrame;
     }
 
     private void StopMatrixMashInput()
@@ -279,11 +320,11 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
 
         while (!isMatrixMashResolved && mashElapsed < duration)
         {
-            if (Keyboard.current != null && Keyboard.current.downArrowKey.wasPressedThisFrame)
+            if (WasMatrixMashInputPressedThisFrame())
             {
                 currentPressCount++;
                 inputPunchRemainingTime = 0.12f;
-                Debug.Log($"MatrixAvoidBulletShooter: 下キー入力 {currentPressCount}/{requiredCount}", this);
+                Debug.Log($"MatrixAvoidBulletShooter: 連打入力 {currentPressCount}/{requiredCount}", this);
 
                 if (currentPressCount >= requiredCount)
                 {
@@ -340,7 +381,9 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
         {
             matrixMashMessageBaseScale = matrixMashMessageText.rectTransform.localScale;
             hasSavedMatrixMashMessageScale = true;
-            matrixMashMessageText.text = "下キー連打！！";
+            matrixMashMessageText.text = useJoyConMashInput
+                ? "Xボタン連打！！"
+                : "下キー連打！！";
         }
 
         if (matrixMashArrowText != null)

@@ -4,6 +4,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Serialization;
+using UnityEngine.Animations.Rigging;
 
 /*
   ◆説明
@@ -83,6 +84,13 @@ public class BalanceManager : MonoBehaviour
     {
         Update,
         LateUpdate
+    }
+
+    private enum SniperDefenseJoyConGestureState
+    {
+        Neutral,
+        MovingUp,
+        MovingDown
     }
 
     [System.Serializable]
@@ -200,6 +208,10 @@ public class BalanceManager : MonoBehaviour
     [SerializeField] private bool resetStickTargetOnSniperDefenseEnd = true;
     [Tooltip("PosingEventと同じく、棒0.3に対して左右の手Targetを逆方向へ1.0動かすための倍率です。1で同じ比率になります。")]
     [SerializeField] private float sniperDefenseHandAdditionalFollowMultiplier = 1f;
+    [Tooltip("スナイパー防御中に左右の手Targetへ加える追加補正の最大World距離です。")]
+    [SerializeField, Min(0f)] private float sniperDefenseHandAdditionalMaxWorldDistance = 0.03f;
+    [Tooltip("スナイパー防御中に左右の手Targetへ加える追加World補正の追従速度です。")]
+    [SerializeField, Min(0f)] private float sniperDefenseHandAdditionalSmoothSpeed = 0.2f;
     [Tooltip("防御判定に使う棒のWorld Y補正です。棒のPivotが見た目の中心からずれている場合だけ調整します。")]
     [SerializeField] private float sniperDefenseStickWorldYOffset = 0f;
     [Tooltip("棒と赤いレーザーのWorld Y差がこの値以内なら防御成功です。")]
@@ -208,6 +220,18 @@ public class BalanceManager : MonoBehaviour
     [SerializeField] private KeyCode sniperDefenseDownKey = KeyCode.DownArrow;
     // スナイパー防御中に白球を上へ動かすキーです。
     [SerializeField] private KeyCode sniperDefenseUpKey = KeyCode.UpArrow;
+
+    [Header("Sniper Defense Joy-Con")]
+    [Tooltip("Joy-ConのGyro Xを上下入力として扱う閾値です。PosingEventと同じ初期値を使用します。")]
+    [SerializeField, Min(0f)] private float sniperDefenseJoyConPitchThreshold = 0.15f;
+    [Tooltip("Joy-Con Defense入力だけに適用する移動倍率です。Keyboard操作には影響しません。")]
+    [SerializeField, Min(0f)] private float sniperDefenseJoyConMoveMultiplier = 5f;
+    [Tooltip("Gyro XがDead Zone内へ戻ってからGestureを終了するまでの時間です。")]
+    [SerializeField, Min(0f)] private float sniperDefenseJoyConGestureEndDelay = 0.1f;
+    [Tooltip("移動中に反対方向のGyroが継続してから、反対Gestureへ直接切り替えるまでの時間です。")]
+    [SerializeField, Min(0f)] private float sniperDefenseJoyConOppositeDirectionHoldDuration = 0.08f;
+    [Tooltip("Joy-Con Defenseの上下方向だけを反転します。通常綱渡りのJoy-Con入力には影響しません。")]
+    [SerializeField] private bool invertSniperDefenseJoyConVerticalDirection;
 
     [Header("Sniper Defense Sound")]
     [SerializeField] private AudioSource sniperDeflectAudioSource;
@@ -263,6 +287,11 @@ public class BalanceManager : MonoBehaviour
     // 毎フレーム出すとConsoleが見づらくなるので、少し間隔を空けます。
     [SerializeField] private float timerLogInterval = 0.25f;
 
+    // スナイパー防御用Joy-Con入力の実機確認中だけ残すログ設定です。
+    private const float SniperDefenseJoyConDebugLogInterval = 0.5f;
+    private const float SniperDefenseHandIkDebugLogInterval = 0.5f;
+    private const float SniperDefenseJoyConPitchSmoothing = 0.2f;
+
     private float pointAxisPosition;
     private float targetAxisPosition;
     private float targetMoveDirection = 1f;
@@ -272,6 +301,17 @@ public class BalanceManager : MonoBehaviour
     private Quaternion wobbleBaseRotation;
     private Vector3 sniperDefenseStickBasePosition;
     private Vector3[] sniperDefenseHandBasePositions;
+    private Vector3[] sniperDefenseHandTargetAdditionalWorldOffsets;
+    private Vector3[] sniperDefenseHandCurrentAdditionalWorldOffsets;
+    private bool hasPendingSniperDefenseStickWorldYRange;
+    private float pendingSniperDefenseLowerLaserWorldY;
+    private float pendingSniperDefenseUpperLaserWorldY;
+    private bool hasDynamicSniperDefenseStickFollowRange;
+    private float dynamicSniperDefenseStickFollowMin;
+    private float dynamicSniperDefenseStickFollowMax;
+    private float sniperDefenseStartStickBaseWorldY;
+    private float sniperDefenseLowerLaserWorldY;
+    private float sniperDefenseUpperLaserWorldY;
     private bool hasSniperDefenseStickBasePosition;
     private bool hasSniperDefenseHandBasePositions;
     private bool hasSavedSniperDefenseGaugeState;
@@ -288,6 +328,14 @@ public class BalanceManager : MonoBehaviour
     private Coroutine unbalanceCoroutine;
     private float nextTimerLogTime;
     private bool hasSavedHorizontalLayout;
+    private Joycon sniperDefenseJoyCon;
+    private float sniperDefenseJoyConPreviousPitch;
+    private SniperDefenseJoyConGestureState sniperDefenseJoyConGestureState;
+    private float sniperDefenseJoyConNeutralElapsed;
+    private float sniperDefenseJoyConOppositeDirectionElapsed;
+    private float nextSniperDefenseJoyConDebugLogTime;
+    private Transform[] sniperDefenseHandIkTipDebugTransforms;
+    private Coroutine sniperDefenseHandIkDebugCoroutine;
     private bool hasSavedNormalCountUiState;
     private GameObject savedBalanceTimerTextObject;
     private GameObject savedBalanceTimerTmpTextObject;
@@ -497,6 +545,27 @@ public class BalanceManager : MonoBehaviour
         DebugLog($"Sniper target set. normalized={t:F2}, target={targetAxisPosition:F2}");
     }
 
+    public bool SetSniperDefenseStickWorldYRange(float lowerWorldY, float upperWorldY)
+    {
+        hasPendingSniperDefenseStickWorldYRange = false;
+
+        if (!IsFinite(lowerWorldY)
+            || !IsFinite(upperWorldY)
+            || upperWorldY <= lowerWorldY)
+        {
+            Debug.LogWarning(
+                $"BalanceManager: Sniper Defense laser World Y range is invalid. " +
+                $"lower={lowerWorldY}, upper={upperWorldY}. Serialized Stick Follow Min/Max will be used.",
+                this);
+            return false;
+        }
+
+        pendingSniperDefenseLowerLaserWorldY = lowerWorldY;
+        pendingSniperDefenseUpperLaserWorldY = upperWorldY;
+        hasPendingSniperDefenseStickWorldYRange = true;
+        return true;
+    }
+
     public void EnableSniperDefenseMode()
     {
         playMode = BalancePlayMode.SniperDefense;
@@ -508,16 +577,24 @@ public class BalanceManager : MonoBehaviour
         ApplyEventVerticalLayout();
         hasSniperDefenseStickBasePosition = false;
         hasSniperDefenseHandBasePositions = false;
+        ResetSniperDefenseHandAdditionalWorldOffsets();
         SaveSniperDefenseStickBasePosition();
+        ActivatePendingSniperDefenseStickWorldYRange();
+        SetSniperDefensePointToZeroStickOffset();
+        InitializeSniperDefenseJoyConInput();
+        StartSniperDefenseHandIkDebug();
         HideGaugeForSniperDefense();
         LogSniperDefenseFollowSetup();
         ApplyAllUiPositions();
         UpdateBalanceState();
+        LogSniperDefenseStickWorldYRange();
         DebugLog("SniperDefenseMode enabled.");
     }
 
     public void DisableSniperDefenseMode()
     {
+        ResetSniperDefenseJoyConInput();
+        StopSniperDefenseHandIkDebug();
         RestoreSniperDefenseStickPosition();
         RestoreGaugeAfterSniperDefense();
 
@@ -526,6 +603,7 @@ public class BalanceManager : MonoBehaviour
             playMode = BalancePlayMode.Normal;
         }
 
+        ClearSniperDefenseStickWorldYRange();
         outsideTimer = 0f;
         DebugLog("SniperDefenseMode disabled.");
     }
@@ -733,6 +811,16 @@ public class BalanceManager : MonoBehaviour
             return;
         }
 
+        if (stickFollowSpace != StickFollowSpace.World
+            || stickFollowAxis != StickFollowAxis.Y)
+        {
+            Debug.LogWarning(
+                "BalanceManager: Dynamic Sniper Defense laser range requires World Y stick follow. " +
+                "Serialized Stick Follow Min/Max will be used.",
+                this);
+            return;
+        }
+
         if (transform == gaugeRoot || transform.IsChildOf(gaugeRoot))
         {
             Debug.LogWarning("BalanceManager: Gauge Root にBalanceManager自身が含まれるため、GameObjectの無効化をスキップします。UIだけの親Objectを設定してください。", this);
@@ -821,19 +909,51 @@ public class BalanceManager : MonoBehaviour
     private void UpdateSniperDefenseMode()
     {
         float input = 0f;
+        float gyroX = 0f;
+        float smoothedPitch = 0f;
+        bool usedJoyConInput = false;
+        float minPointPosition = GetMinPointPosition();
+        float maxPointPosition = GetMaxPointPosition();
+        bool isAtLowerLimit = pointAxisPosition <= minPointPosition;
+        bool isAtUpperLimit = pointAxisPosition >= maxPointPosition;
 
-        if (Input.GetKey(sniperDefenseDownKey))
+        if (CanUseSniperDefenseJoyConInput())
         {
-            input -= 1f;
+            input = UpdateSniperDefenseJoyConInput(
+                isAtUpperLimit,
+                isAtLowerLimit,
+                out gyroX,
+                out smoothedPitch);
+            input *= Mathf.Max(0f, sniperDefenseJoyConMoveMultiplier);
+
+            if ((isAtUpperLimit && input > 0f)
+                || (isAtLowerLimit && input < 0f))
+            {
+                input = 0f;
+            }
+
+            usedJoyConInput = true;
         }
-
-        if (Input.GetKey(sniperDefenseUpKey))
+        else
         {
-            input += 1f;
+            if (Input.GetKey(sniperDefenseDownKey))
+            {
+                input -= 1f;
+            }
+
+            if (Input.GetKey(sniperDefenseUpKey))
+            {
+                input += 1f;
+            }
         }
 
         pointAxisPosition += input * pointMoveSpeed * Time.deltaTime;
-        pointAxisPosition = Mathf.Clamp(pointAxisPosition, GetMinPointPosition(), GetMaxPointPosition());
+        pointAxisPosition = Mathf.Clamp(pointAxisPosition, minPointPosition, maxPointPosition);
+
+        if (usedJoyConInput)
+        {
+            LogSniperDefenseJoyConInput(gyroX, smoothedPitch, input);
+        }
 
         ApplyAllUiPositions();
         UpdateBalanceState();
@@ -842,6 +962,538 @@ public class BalanceManager : MonoBehaviour
         {
             UpdateSniperDefenseStickPosition("Update");
         }
+    }
+
+    private void InitializeSniperDefenseJoyConInput()
+    {
+        ResetSniperDefenseJoyConInput();
+
+        if (!ControlSelectionSession.HasSelection
+            || ControlSelectionSession.SelectedControlType != GameplayControlType.JoyCon)
+        {
+            return;
+        }
+
+        JoyconManager joyconManager = JoyconManager.Instance;
+        if (joyconManager == null
+            || joyconManager.j == null
+            || joyconManager.j.Count == 0
+            || joyconManager.j[0] == null
+            || joyconManager.j[0].state < Joycon.state_.IMU_DATA_OK)
+        {
+            return;
+        }
+
+        sniperDefenseJoyCon = joyconManager.j[0];
+        sniperDefenseJoyConPreviousPitch = 0f;
+        sniperDefenseJoyConGestureState = SniperDefenseJoyConGestureState.Neutral;
+        sniperDefenseJoyConNeutralElapsed = 0f;
+        nextSniperDefenseJoyConDebugLogTime = Time.unscaledTime;
+    }
+
+    private bool CanUseSniperDefenseJoyConInput()
+    {
+        return ControlSelectionSession.HasSelection
+            && ControlSelectionSession.SelectedControlType == GameplayControlType.JoyCon
+            && sniperDefenseJoyCon != null
+            && sniperDefenseJoyCon.state >= Joycon.state_.IMU_DATA_OK;
+    }
+
+    private float UpdateSniperDefenseJoyConInput(
+        bool isAtUpperLimit,
+        bool isAtLowerLimit,
+        out float gyroX,
+        out float smoothedPitch)
+    {
+        gyroX = sniperDefenseJoyCon.GetGyro().x;
+        smoothedPitch = Mathf.Lerp(
+            sniperDefenseJoyConPreviousPitch,
+            gyroX,
+            SniperDefenseJoyConPitchSmoothing);
+        sniperDefenseJoyConPreviousPitch = smoothedPitch;
+
+        float threshold = Mathf.Max(0f, sniperDefenseJoyConPitchThreshold);
+        float directedPitch = invertSniperDefenseJoyConVerticalDirection
+            ? -smoothedPitch
+            : smoothedPitch;
+        float input = 0f;
+
+        switch (sniperDefenseJoyConGestureState)
+        {
+            case SniperDefenseJoyConGestureState.Neutral:
+                sniperDefenseJoyConNeutralElapsed = 0f;
+                sniperDefenseJoyConOppositeDirectionElapsed = 0f;
+
+                if (directedPitch > threshold)
+                {
+                    sniperDefenseJoyConGestureState = SniperDefenseJoyConGestureState.MovingUp;
+                    input = 1f;
+                }
+                else if (directedPitch < -threshold)
+                {
+                    sniperDefenseJoyConGestureState = SniperDefenseJoyConGestureState.MovingDown;
+                    input = -1f;
+                }
+                break;
+
+            case SniperDefenseJoyConGestureState.MovingUp:
+                if (directedPitch < -threshold)
+                {
+                    sniperDefenseJoyConNeutralElapsed = 0f;
+                    if (isAtUpperLimit || IsSniperDefenseOppositeDirectionConfirmed())
+                    {
+                        sniperDefenseJoyConGestureState = SniperDefenseJoyConGestureState.MovingDown;
+                        sniperDefenseJoyConNeutralElapsed = 0f;
+                        sniperDefenseJoyConOppositeDirectionElapsed = 0f;
+                        input = -1f;
+                    }
+                }
+                else if (Mathf.Abs(directedPitch) <= threshold)
+                {
+                    sniperDefenseJoyConOppositeDirectionElapsed = 0f;
+                    UpdateSniperDefenseJoyConGestureEnd();
+                }
+                else
+                {
+                    sniperDefenseJoyConNeutralElapsed = 0f;
+                    sniperDefenseJoyConOppositeDirectionElapsed = 0f;
+                    input = directedPitch > threshold ? 1f : 0f;
+                }
+                break;
+
+            case SniperDefenseJoyConGestureState.MovingDown:
+                if (directedPitch > threshold)
+                {
+                    sniperDefenseJoyConNeutralElapsed = 0f;
+                    if (isAtLowerLimit || IsSniperDefenseOppositeDirectionConfirmed())
+                    {
+                        sniperDefenseJoyConGestureState = SniperDefenseJoyConGestureState.MovingUp;
+                        sniperDefenseJoyConNeutralElapsed = 0f;
+                        sniperDefenseJoyConOppositeDirectionElapsed = 0f;
+                        input = 1f;
+                    }
+                }
+                else if (Mathf.Abs(directedPitch) <= threshold)
+                {
+                    sniperDefenseJoyConOppositeDirectionElapsed = 0f;
+                    UpdateSniperDefenseJoyConGestureEnd();
+                }
+                else
+                {
+                    sniperDefenseJoyConNeutralElapsed = 0f;
+                    sniperDefenseJoyConOppositeDirectionElapsed = 0f;
+                    input = directedPitch < -threshold ? -1f : 0f;
+                }
+                break;
+        }
+
+        return input;
+    }
+
+    private bool IsSniperDefenseOppositeDirectionConfirmed()
+    {
+        sniperDefenseJoyConOppositeDirectionElapsed += Time.unscaledDeltaTime;
+        return sniperDefenseJoyConOppositeDirectionElapsed
+            >= Mathf.Max(0f, sniperDefenseJoyConOppositeDirectionHoldDuration);
+    }
+
+    private void UpdateSniperDefenseJoyConGestureEnd()
+    {
+        sniperDefenseJoyConNeutralElapsed += Time.unscaledDeltaTime;
+        if (sniperDefenseJoyConNeutralElapsed
+            < Mathf.Max(0f, sniperDefenseJoyConGestureEndDelay))
+        {
+            return;
+        }
+
+        sniperDefenseJoyConGestureState = SniperDefenseJoyConGestureState.Neutral;
+        sniperDefenseJoyConNeutralElapsed = 0f;
+        sniperDefenseJoyConOppositeDirectionElapsed = 0f;
+    }
+
+    private void LogSniperDefenseJoyConInput(float gyroX, float smoothedPitch, float finalDefenseInput)
+    {
+        if (!enableDebugLog || Time.unscaledTime < nextSniperDefenseJoyConDebugLogTime)
+        {
+            return;
+        }
+
+        nextSniperDefenseJoyConDebugLogTime =
+            Time.unscaledTime + SniperDefenseJoyConDebugLogInterval;
+        float stickOffset = Mathf.Lerp(
+            GetEffectiveSniperDefenseStickFollowMin(),
+            GetEffectiveSniperDefenseStickFollowMax(),
+            GetNormalizedPointPosition01());
+        bool isAtUpperLimit = pointAxisPosition >= GetMaxPointPosition();
+        bool isAtLowerLimit = pointAxisPosition <= GetMinPointPosition();
+        string leftHandLocalPosition = GetSniperDefenseHandLocalPositionForDebug(0);
+        string rightHandLocalPosition = GetSniperDefenseHandLocalPositionForDebug(1);
+
+        Debug.Log(
+            $"[BalanceManager Sniper Defense JoyCon Debug] " +
+            $"GyroX={gyroX:F4}, " +
+            $"SmoothedPitch={smoothedPitch:F4}, " +
+            $"FinalDefenseInput={finalDefenseInput:F1}, " +
+            $"GestureState={sniperDefenseJoyConGestureState}, " +
+            $"JoyConMoveMultiplier={sniperDefenseJoyConMoveMultiplier:F2}, " +
+            $"PointAxisPosition={pointAxisPosition:F3}, " +
+            $"StickOffset={stickOffset:F4}, " +
+            $"IsAtUpperLimit={isAtUpperLimit}, " +
+            $"IsAtLowerLimit={isAtLowerLimit}, " +
+            $"LeftHandTargetLocal={leftHandLocalPosition}, " +
+            $"RightHandTargetLocal={rightHandLocalPosition}",
+            this);
+    }
+
+    private string GetSniperDefenseHandLocalPositionForDebug(int index)
+    {
+        if (sniperDefenseHandFollowTargets == null
+            || index < 0
+            || index >= sniperDefenseHandFollowTargets.Length
+            || sniperDefenseHandFollowTargets[index] == null)
+        {
+            return "None";
+        }
+
+        return FormatVector(sniperDefenseHandFollowTargets[index].localPosition);
+    }
+
+    private void StartSniperDefenseHandIkDebug()
+    {
+        StopSniperDefenseHandIkDebug();
+
+        if (!enableDebugLog)
+        {
+            return;
+        }
+
+        int targetCount = sniperDefenseHandFollowTargets != null
+            ? sniperDefenseHandFollowTargets.Length
+            : 0;
+        sniperDefenseHandIkTipDebugTransforms = new Transform[targetCount];
+
+        TwoBoneIKConstraint[] constraints = FindObjectsByType<TwoBoneIKConstraint>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
+
+        for (int targetIndex = 0; targetIndex < targetCount; targetIndex++)
+        {
+            Transform handTarget = sniperDefenseHandFollowTargets[targetIndex];
+            if (handTarget == null)
+            {
+                continue;
+            }
+
+            for (int constraintIndex = 0; constraintIndex < constraints.Length; constraintIndex++)
+            {
+                TwoBoneIKConstraint constraint = constraints[constraintIndex];
+                TwoBoneIKConstraintData data = constraint.data;
+                if (data.target != handTarget)
+                {
+                    continue;
+                }
+
+                sniperDefenseHandIkTipDebugTransforms[targetIndex] = data.tip;
+                Debug.Log(
+                    $"[Sniper Defense Hand IK Debug] Constraint={constraint.name}, " +
+                    $"Root={GetTransformNameForDebug(data.root)}, " +
+                    $"Mid={GetTransformNameForDebug(data.mid)}, " +
+                    $"Tip={GetTransformNameForDebug(data.tip)}, " +
+                    $"Target={GetTransformNameForDebug(data.target)}, " +
+                    $"Hint={GetTransformNameForDebug(data.hint)}",
+                    this);
+                break;
+            }
+
+            if (sniperDefenseHandIkTipDebugTransforms[targetIndex] == null)
+            {
+                Debug.LogWarning(
+                    $"[Sniper Defense Hand IK Debug] " +
+                    $"Two Bone IK Constraint was not found for target {handTarget.name}.",
+                    this);
+            }
+        }
+
+        sniperDefenseHandIkDebugCoroutine = StartCoroutine(SniperDefenseHandIkDebugRoutine());
+    }
+
+    private void StopSniperDefenseHandIkDebug()
+    {
+        if (sniperDefenseHandIkDebugCoroutine != null)
+        {
+            StopCoroutine(sniperDefenseHandIkDebugCoroutine);
+            sniperDefenseHandIkDebugCoroutine = null;
+        }
+
+        sniperDefenseHandIkTipDebugTransforms = null;
+    }
+
+    private IEnumerator SniperDefenseHandIkDebugRoutine()
+    {
+        WaitForSecondsRealtime interval =
+            new WaitForSecondsRealtime(SniperDefenseHandIkDebugLogInterval);
+
+        while (playMode == BalancePlayMode.SniperDefense && enableDebugLog)
+        {
+            yield return interval;
+            yield return new WaitForEndOfFrame();
+
+            if (playMode != BalancePlayMode.SniperDefense || !enableDebugLog)
+            {
+                break;
+            }
+
+            LogSniperDefenseHandIkAfterRigEvaluation();
+        }
+
+        sniperDefenseHandIkDebugCoroutine = null;
+    }
+
+    private void LogSniperDefenseHandIkAfterRigEvaluation()
+    {
+        float stickOffset = Mathf.Lerp(
+            GetEffectiveSniperDefenseStickFollowMin(),
+            GetEffectiveSniperDefenseStickFollowMax(),
+            GetNormalizedPointPosition01());
+        string positionState = GetSniperDefenseStickPositionStateForDebug();
+
+        Debug.Log(
+            $"[Sniper Defense Hand IK Debug] " +
+            $"StickPositionState={positionState}, " +
+            $"StickOffset={stickOffset:F4}, " +
+            GetSniperDefenseHandIkMeasurementForDebug(0, "Left") + ", " +
+            GetSniperDefenseHandIkMeasurementForDebug(1, "Right"),
+            this);
+    }
+
+    private string GetSniperDefenseStickPositionStateForDebug()
+    {
+        float minPointPosition = GetMinPointPosition();
+        float maxPointPosition = GetMaxPointPosition();
+
+        if (pointAxisPosition <= minPointPosition)
+        {
+            return "LowerLimit";
+        }
+
+        if (pointAxisPosition >= maxPointPosition)
+        {
+            return "UpperLimit";
+        }
+
+        float normalizedZeroOffset = Mathf.InverseLerp(
+            GetEffectiveSniperDefenseStickFollowMin(),
+            GetEffectiveSniperDefenseStickFollowMax(),
+            0f);
+        float zeroOffsetPointPosition = Mathf.Lerp(
+            minPointPosition,
+            maxPointPosition,
+            normalizedZeroOffset);
+
+        return Mathf.Approximately(pointAxisPosition, zeroOffsetPointPosition)
+            ? "Center"
+            : "Moving";
+    }
+
+    private string GetSniperDefenseHandIkMeasurementForDebug(int index, string label)
+    {
+        Transform target = sniperDefenseHandFollowTargets != null
+            && index >= 0
+            && index < sniperDefenseHandFollowTargets.Length
+                ? sniperDefenseHandFollowTargets[index]
+                : null;
+        Transform tip = sniperDefenseHandIkTipDebugTransforms != null
+            && index >= 0
+            && index < sniperDefenseHandIkTipDebugTransforms.Length
+                ? sniperDefenseHandIkTipDebugTransforms[index]
+                : null;
+        string additionalWorldDistance =
+            GetSniperDefenseHandAdditionalWorldDistanceForDebug(index, target);
+        string targetAdditionalWorldDistance =
+            GetSniperDefenseHandAdditionalOffsetDistanceForDebug(
+                sniperDefenseHandTargetAdditionalWorldOffsets,
+                index);
+        string appliedAdditionalWorldDistance =
+            GetSniperDefenseHandAdditionalOffsetDistanceForDebug(
+                sniperDefenseHandCurrentAdditionalWorldOffsets,
+                index);
+
+        if (target == null || tip == null)
+        {
+            return $"{label}TargetWorld={GetTransformPositionForDebug(target)}, " +
+                $"{label}TipWorld={GetTransformPositionForDebug(tip)}, " +
+                $"{label}TargetTipDistance=Unavailable, " +
+                $"{label}HandAdditionalWorldDistance={additionalWorldDistance}, " +
+                $"{label}TargetAdditionalWorldDistance={targetAdditionalWorldDistance}, " +
+                $"{label}AppliedAdditionalWorldDistance={appliedAdditionalWorldDistance}";
+        }
+
+        return $"{label}TargetWorld={FormatVector(target.position)}, " +
+            $"{label}TipWorld={FormatVector(tip.position)}, " +
+            $"{label}TargetTipDistance={Vector3.Distance(target.position, tip.position):F4}, " +
+            $"{label}HandAdditionalWorldDistance={additionalWorldDistance}, " +
+            $"{label}TargetAdditionalWorldDistance={targetAdditionalWorldDistance}, " +
+            $"{label}AppliedAdditionalWorldDistance={appliedAdditionalWorldDistance}";
+    }
+
+    private string GetSniperDefenseHandAdditionalOffsetDistanceForDebug(
+        Vector3[] offsets,
+        int index)
+    {
+        if (offsets == null || index < 0 || index >= offsets.Length)
+        {
+            return "Unavailable";
+        }
+
+        return offsets[index].magnitude.ToString("F4");
+    }
+
+    private string GetSniperDefenseHandAdditionalWorldDistanceForDebug(
+        int index,
+        Transform target)
+    {
+        if (target == null
+            || sniperDefenseHandBasePositions == null
+            || index < 0
+            || index >= sniperDefenseHandBasePositions.Length)
+        {
+            return "Unavailable";
+        }
+
+        Transform parent = target.parent;
+        Vector3 baseWorldPosition = parent != null
+            ? parent.TransformPoint(sniperDefenseHandBasePositions[index])
+            : sniperDefenseHandBasePositions[index];
+        return Vector3.Distance(baseWorldPosition, target.position).ToString("F4");
+    }
+
+    private string GetTransformNameForDebug(Transform target)
+    {
+        return target != null ? target.name : "None";
+    }
+
+    private string GetTransformPositionForDebug(Transform target)
+    {
+        return target != null ? FormatVector(target.position) : "None";
+    }
+
+    private void SetSniperDefensePointToZeroStickOffset()
+    {
+        float normalizedZeroOffset = Mathf.InverseLerp(
+            GetEffectiveSniperDefenseStickFollowMin(),
+            GetEffectiveSniperDefenseStickFollowMax(),
+            0f);
+        pointAxisPosition = Mathf.Lerp(
+            GetMinPointPosition(),
+            GetMaxPointPosition(),
+            normalizedZeroOffset);
+    }
+
+    private void ActivatePendingSniperDefenseStickWorldYRange()
+    {
+        hasDynamicSniperDefenseStickFollowRange = false;
+        dynamicSniperDefenseStickFollowMin = 0f;
+        dynamicSniperDefenseStickFollowMax = 0f;
+        sniperDefenseStartStickBaseWorldY = sniperDefenseStickTarget != null
+            ? sniperDefenseStickTarget.position.y
+            : float.NaN;
+        sniperDefenseLowerLaserWorldY = float.NaN;
+        sniperDefenseUpperLaserWorldY = float.NaN;
+
+        if (!hasPendingSniperDefenseStickWorldYRange)
+        {
+            return;
+        }
+
+        sniperDefenseLowerLaserWorldY = pendingSniperDefenseLowerLaserWorldY;
+        sniperDefenseUpperLaserWorldY = pendingSniperDefenseUpperLaserWorldY;
+        hasPendingSniperDefenseStickWorldYRange = false;
+
+        if (sniperDefenseStickTarget == null)
+        {
+            Debug.LogWarning(
+                "BalanceManager: Sniper Defense Stick Target is not assigned. " +
+                "Serialized Stick Follow Min/Max will be used.",
+                this);
+            return;
+        }
+
+        float lowerStickWorldY =
+            sniperDefenseLowerLaserWorldY - sniperDefenseStickWorldYOffset;
+        float upperStickWorldY =
+            sniperDefenseUpperLaserWorldY - sniperDefenseStickWorldYOffset;
+        float dynamicMinOffset = lowerStickWorldY - sniperDefenseStartStickBaseWorldY;
+        float dynamicMaxOffset = upperStickWorldY - sniperDefenseStartStickBaseWorldY;
+
+        if (!IsFinite(dynamicMinOffset)
+            || !IsFinite(dynamicMaxOffset)
+            || dynamicMaxOffset <= dynamicMinOffset
+            || dynamicMinOffset > 0f
+            || dynamicMaxOffset < 0f)
+        {
+            Debug.LogWarning(
+                "BalanceManager: Calculated Sniper Defense stick range is invalid or does not contain the start position. " +
+                "Serialized Stick Follow Min/Max will be used.",
+                this);
+            return;
+        }
+
+        dynamicSniperDefenseStickFollowMin = dynamicMinOffset;
+        dynamicSniperDefenseStickFollowMax = dynamicMaxOffset;
+        hasDynamicSniperDefenseStickFollowRange = true;
+    }
+
+    private float GetEffectiveSniperDefenseStickFollowMin()
+    {
+        return hasDynamicSniperDefenseStickFollowRange
+            ? dynamicSniperDefenseStickFollowMin
+            : stickFollowMinValue;
+    }
+
+    private float GetEffectiveSniperDefenseStickFollowMax()
+    {
+        return hasDynamicSniperDefenseStickFollowRange
+            ? dynamicSniperDefenseStickFollowMax
+            : stickFollowMaxValue;
+    }
+
+    private void LogSniperDefenseStickWorldYRange()
+    {
+        DebugLog(
+            $"SniperDefense stick World Y range. " +
+            $"LowerLaserWorldY={sniperDefenseLowerLaserWorldY:F4}, " +
+            $"UpperLaserWorldY={sniperDefenseUpperLaserWorldY:F4}, " +
+            $"DefenseStartStickBaseWorldY={sniperDefenseStartStickBaseWorldY:F4}, " +
+            $"StickWorldYOffset={sniperDefenseStickWorldYOffset:F4}, " +
+            $"EffectiveStickFollowMin={GetEffectiveSniperDefenseStickFollowMin():F4}, " +
+            $"EffectiveStickFollowMax={GetEffectiveSniperDefenseStickFollowMax():F4}, " +
+            $"DynamicRangeUsed={hasDynamicSniperDefenseStickFollowRange}");
+    }
+
+    private void ClearSniperDefenseStickWorldYRange()
+    {
+        hasPendingSniperDefenseStickWorldYRange = false;
+        hasDynamicSniperDefenseStickFollowRange = false;
+        dynamicSniperDefenseStickFollowMin = 0f;
+        dynamicSniperDefenseStickFollowMax = 0f;
+        sniperDefenseStartStickBaseWorldY = float.NaN;
+        sniperDefenseLowerLaserWorldY = float.NaN;
+        sniperDefenseUpperLaserWorldY = float.NaN;
+    }
+
+    private static bool IsFinite(float value)
+    {
+        return !float.IsNaN(value) && !float.IsInfinity(value);
+    }
+
+    private void ResetSniperDefenseJoyConInput()
+    {
+        sniperDefenseJoyCon = null;
+        sniperDefenseJoyConPreviousPitch = 0f;
+        sniperDefenseJoyConGestureState = SniperDefenseJoyConGestureState.Neutral;
+        sniperDefenseJoyConNeutralElapsed = 0f;
+        sniperDefenseJoyConOppositeDirectionElapsed = 0f;
+        nextSniperDefenseJoyConDebugLogTime = 0f;
     }
 
     private void UpdateMatrixAvoidMode()
@@ -1005,7 +1657,10 @@ public class BalanceManager : MonoBehaviour
         SaveSniperDefenseStickBasePosition();
 
         float normalizedPoint = GetNormalizedPointPosition01();
-        float stickOffset = Mathf.Lerp(stickFollowMinValue, stickFollowMaxValue, normalizedPoint);
+        float stickOffset = Mathf.Lerp(
+            GetEffectiveSniperDefenseStickFollowMin(),
+            GetEffectiveSniperDefenseStickFollowMax(),
+            normalizedPoint);
         float smoothSpeed = Mathf.Max(0f, stickFollowSmoothSpeed);
         bool logThisFrame = ShouldLogSniperDefenseFollow();
 
@@ -1036,6 +1691,8 @@ public class BalanceManager : MonoBehaviour
     {
         int targetCount = sniperDefenseHandFollowTargets != null ? sniperDefenseHandFollowTargets.Length : 0;
         sniperDefenseHandBasePositions = new Vector3[targetCount];
+        sniperDefenseHandTargetAdditionalWorldOffsets = new Vector3[targetCount];
+        sniperDefenseHandCurrentAdditionalWorldOffsets = new Vector3[targetCount];
         DebugLog($"SniperDefense hand base save start. targetCount={targetCount}, followSpace=Local");
 
         for (int i = 0; i < targetCount; i++)
@@ -1080,8 +1737,10 @@ public class BalanceManager : MonoBehaviour
 
         for (int i = 0; i < targetCount; i++)
         {
+            Transform followTarget = sniperDefenseHandFollowTargets[i];
             UpdateSniperDefenseHandFollowTarget(
-                sniperDefenseHandFollowTargets[i],
+                i,
+                followTarget,
                 sniperDefenseHandBasePositions[i],
                 handAdditionalMovement,
                 logThisFrame);
@@ -1089,6 +1748,7 @@ public class BalanceManager : MonoBehaviour
     }
 
     private void UpdateSniperDefenseHandFollowTarget(
+        int targetIndex,
         Transform handTarget,
         Vector3 baseLocalPosition,
         float additionalMovement,
@@ -1104,9 +1764,21 @@ public class BalanceManager : MonoBehaviour
             ? parent.TransformPoint(baseLocalPosition)
             : baseLocalPosition;
 
-        // Transform.Translate(..., Space.Self)と同じく、手Target自身のLocal Z方向を使います。
-        Vector3 localZDirection = handTarget.TransformDirection(Vector3.forward).normalized;
-        Vector3 targetWorldPosition = baseWorldPosition + localZDirection * additionalMovement;
+        // PosingEventと同じTarget Local Z方向の補正候補をScale込みのWorld変位へ変換し、
+        // 棒の親移動とは別に加える距離だけをWorld基準で制限します。
+        Vector3 candidateLocalDisplacement = Vector3.forward * additionalMovement;
+        Vector3 candidateWorldDisplacement =
+            handTarget.TransformVector(candidateLocalDisplacement);
+        Vector3 clampedWorldDisplacement = Vector3.ClampMagnitude(
+            candidateWorldDisplacement,
+            Mathf.Max(0f, sniperDefenseHandAdditionalMaxWorldDistance));
+        sniperDefenseHandTargetAdditionalWorldOffsets[targetIndex] = clampedWorldDisplacement;
+        Vector3 appliedWorldDisplacement = Vector3.MoveTowards(
+            sniperDefenseHandCurrentAdditionalWorldOffsets[targetIndex],
+            clampedWorldDisplacement,
+            Mathf.Max(0f, sniperDefenseHandAdditionalSmoothSpeed) * Time.deltaTime);
+        sniperDefenseHandCurrentAdditionalWorldOffsets[targetIndex] = appliedWorldDisplacement;
+        Vector3 targetWorldPosition = baseWorldPosition + appliedWorldDisplacement;
 
         if (parent != null)
         {
@@ -1119,7 +1791,7 @@ public class BalanceManager : MonoBehaviour
 
         if (logThisFrame)
         {
-            DebugLog($"Posing-style hand follow updated. target={handTarget.name}, baseLocal={FormatVector(baseLocalPosition)}, localAfter={FormatVector(handTarget.localPosition)}, additionalMovement={additionalMovement:F4}");
+            DebugLog($"Posing-style hand follow updated. target={handTarget.name}, baseLocal={FormatVector(baseLocalPosition)}, localAfter={FormatVector(handTarget.localPosition)}, additionalMovement={additionalMovement:F4}, candidateWorldDistance={candidateWorldDisplacement.magnitude:F4}, targetWorldDistance={clampedWorldDisplacement.magnitude:F4}, appliedWorldDistance={appliedWorldDisplacement.magnitude:F4}");
         }
     }
 
@@ -1127,6 +1799,7 @@ public class BalanceManager : MonoBehaviour
     {
         if (sniperDefenseHandFollowTargets == null || sniperDefenseHandBasePositions == null)
         {
+            ResetSniperDefenseHandAdditionalWorldOffsets();
             return;
         }
 
@@ -1141,6 +1814,27 @@ public class BalanceManager : MonoBehaviour
 
             // 防御開始時に保存した握り位置へ正確に戻します。
             followTarget.localPosition = sniperDefenseHandBasePositions[i];
+        }
+
+        ResetSniperDefenseHandAdditionalWorldOffsets();
+    }
+
+    private void ResetSniperDefenseHandAdditionalWorldOffsets()
+    {
+        if (sniperDefenseHandTargetAdditionalWorldOffsets != null)
+        {
+            System.Array.Clear(
+                sniperDefenseHandTargetAdditionalWorldOffsets,
+                0,
+                sniperDefenseHandTargetAdditionalWorldOffsets.Length);
+        }
+
+        if (sniperDefenseHandCurrentAdditionalWorldOffsets != null)
+        {
+            System.Array.Clear(
+                sniperDefenseHandCurrentAdditionalWorldOffsets,
+                0,
+                sniperDefenseHandCurrentAdditionalWorldOffsets.Length);
         }
     }
 

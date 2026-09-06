@@ -1443,7 +1443,7 @@ MonoBehaviour:
   titleIdleDemoSeconds: 10
   keyboardButtonTransform: {fileID: 2201000051}
   joyConButtonTransform: {fileID: 2201000061}
-  useControlSelectFlow: 0
+  useControlSelectFlow: 1
   defaultControlType: 0
   normalButtonScale: 1
   selectedButtonScale: 1.3

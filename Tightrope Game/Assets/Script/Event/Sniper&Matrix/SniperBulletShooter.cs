@@ -311,8 +311,90 @@ public class SniperBulletShooter : MonoBehaviour
             return;
         }
 
+        if (TryGetSniperDefenseLaserWorldYRange(
+            out float lowerLaserWorldY,
+            out float upperLaserWorldY))
+        {
+            balanceManager.SetSniperDefenseStickWorldYRange(
+                lowerLaserWorldY,
+                upperLaserWorldY);
+        }
+
         balanceManager.EnableSniperDefenseMode();
         enabledSniperDefenseMode = true;
+    }
+
+    private bool TryGetSniperDefenseLaserWorldYRange(
+        out float lowerLaserWorldY,
+        out float upperLaserWorldY)
+    {
+        lowerLaserWorldY = float.PositiveInfinity;
+        upperLaserWorldY = float.NegativeInfinity;
+
+        if (sideViewLaserController == null)
+        {
+            Debug.LogWarning(
+                "SniperBulletShooter: Side View Laser Controller is not assigned. " +
+                "Serialized Stick Follow Min/Max will be used.",
+                this);
+            return false;
+        }
+
+        int laserCount = sideViewLaserController.GetLaserCount();
+        if (laserCount < 2)
+        {
+            Debug.LogWarning(
+                $"SniperBulletShooter: At least two Defense lasers are required to calculate the stick range. " +
+                $"count={laserCount}. Serialized Stick Follow Min/Max will be used.",
+                this);
+            return false;
+        }
+
+        try
+        {
+            for (int i = 0; i < laserCount; i++)
+            {
+                float laserWorldY = sideViewLaserController.GetLaserEndPosition(i).y;
+                if (!IsFinite(laserWorldY))
+                {
+                    Debug.LogWarning(
+                        $"SniperBulletShooter: Defense laser {i} returned an invalid World Y. " +
+                        "Serialized Stick Follow Min/Max will be used.",
+                        this);
+                    return false;
+                }
+
+                lowerLaserWorldY = Mathf.Min(lowerLaserWorldY, laserWorldY);
+                upperLaserWorldY = Mathf.Max(upperLaserWorldY, laserWorldY);
+            }
+        }
+        catch (Exception exception)
+        {
+            Debug.LogWarning(
+                $"SniperBulletShooter: Failed to read the Defense laser World Y range. " +
+                $"Serialized Stick Follow Min/Max will be used. {exception.Message}",
+                this);
+            return false;
+        }
+
+        if (!IsFinite(lowerLaserWorldY)
+            || !IsFinite(upperLaserWorldY)
+            || upperLaserWorldY <= lowerLaserWorldY)
+        {
+            Debug.LogWarning(
+                $"SniperBulletShooter: Defense laser World Y range is invalid. " +
+                $"lower={lowerLaserWorldY}, upper={upperLaserWorldY}. " +
+                "Serialized Stick Follow Min/Max will be used.",
+                this);
+            return false;
+        }
+
+        return true;
+    }
+
+    private static bool IsFinite(float value)
+    {
+        return !float.IsNaN(value) && !float.IsInfinity(value);
     }
 
     private void DisableSniperDefenseModeIfNeeded()

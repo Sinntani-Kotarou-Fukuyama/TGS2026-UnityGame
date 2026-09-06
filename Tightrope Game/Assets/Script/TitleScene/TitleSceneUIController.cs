@@ -363,6 +363,11 @@ public class TitleSceneUIController : MonoBehaviour
             return;
         }
 
+        GameplayControlType selectedControlType = controlSelection == ControlSelection.JoyCon
+            ? GameplayControlType.JoyCon
+            : GameplayControlType.Keyboard;
+        ControlSelectionSession.SetSelection(selectedControlType);
+
         LoadGameScene();
     }
 

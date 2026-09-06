@@ -159,6 +159,7 @@ public class TrolleyWall : MonoBehaviour
     private float angularVelocity = 0f; // 角速度 (度/秒)
     private bool isInitialized = false;
     private bool isStop = false; //カメラが離れて見えづらい時などに一時的に操作、回転を止める用
+    private bool isJoyConStartHold;
     public bool balanceOnlyMode = false;
     private bool waitForBalanceInputRelease;
     private bool isPausedForExternalEvent;
@@ -176,6 +177,8 @@ public class TrolleyWall : MonoBehaviour
     public event Action<float> ManagedFallStarted;
     public bool UsesManagedFallFlow => useManagedFallFlow;
     public bool IsAutoWalkEnabled => autoWalk;
+    public bool IsJoyConInputActive => useJoyConInput && myJoycon != null;
+    public bool IsJoyConReady => IsJoyConInputActive && neutralCaptured;
 
     private struct RigidbodyStateSnapshot
     {
@@ -233,6 +236,12 @@ public class TrolleyWall : MonoBehaviour
         {
             enabled = false;
             return;
+        }
+
+        if (ControlSelectionSession.HasSelection)
+        {
+            useJoyConInput =
+                ControlSelectionSession.SelectedControlType == GameplayControlType.JoyCon;
         }
 
         if (useLimits && maxAngle <= minAngle)
@@ -639,6 +648,28 @@ public class TrolleyWall : MonoBehaviour
         // ロープから離れていれば処理しない
         if (isTouchingRope == false) { return; }
 
+        // ゲーム開始時のJoy-Con準備中だけ、通常入力と棒表示を止めてNeutral判定だけを進めます。
+        if (isJoyConStartHold)
+        {
+            if (useJoyConInput && !joyConInitializationAttempted)
+            {
+                TryInitializeJoyConInput();
+            }
+
+            if (IsJoyConInputActive && !neutralCaptured)
+            {
+                UpdateJoyConInput();
+            }
+
+            latestBarRoll = 0f;
+            if (balanceBarTransform != null)
+            {
+                ApplyBalanceBarRotation(0f);
+            }
+
+            return;
+        }
+
         if (waitForBalanceInputRelease)
         {
             Keyboard routeKeyboard = Keyboard.current;
@@ -857,6 +888,27 @@ public class TrolleyWall : MonoBehaviour
         if (isStop || isPausedForExternalEvent || isManagedFallActive)
         {
             StopRigidBodyMotion();
+            return;
+        }
+
+        // IsStopとは独立した開始準備専用Holdです。Neutral取得はUpdate側で継続します。
+        if (isJoyConStartHold)
+        {
+            currentAngle = 0f;
+            angularVelocity = 0f;
+            latestBarRoll = 0f;
+            StopRigidBodyMotion();
+
+            if (balanceBarTransform != null)
+            {
+                ApplyBalanceBarRotation(0f);
+            }
+
+            if (isInitialized && connectedRigidbody != null)
+            {
+                ApplyConnectedHingeTransforms(connectedRigidbody.transform);
+            }
+
             return;
         }
 
@@ -1220,6 +1272,26 @@ public class TrolleyWall : MonoBehaviour
     public bool IsStop()
     {
         return isStop;
+    }
+
+    // Joy-ConのNeutral取得だけを続けながら、ゲーム開始前の移動・傾きを中央で停止します。
+    public void SetJoyConStartHold(bool hold)
+    {
+        isJoyConStartHold = hold;
+        if (!hold)
+        {
+            return;
+        }
+
+        currentAngle = 0f;
+        angularVelocity = 0f;
+        latestBarRoll = 0f;
+        StopRigidBodyMotion();
+
+        if (balanceBarTransform != null && WallRb != null)
+        {
+            ApplyBalanceBarRotation(0f);
+        }
     }
 
     private void StopRigidBodyMotion()
