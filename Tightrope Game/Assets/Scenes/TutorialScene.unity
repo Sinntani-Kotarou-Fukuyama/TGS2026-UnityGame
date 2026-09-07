@@ -2761,6 +2761,7 @@ GameObject:
   - component: {fileID: 165546788}
   - component: {fileID: 165546790}
   - component: {fileID: 165546789}
+  - component: {fileID: 165546791}
   m_Layer: 5
   m_Name: NextText
   m_TagString: Untagged
@@ -2886,6 +2887,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 165546787}
   m_CullTransparentMesh: 1
+--- !u!225 &165546791
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 165546787}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!4 &166201655 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1510712901304232389, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
@@ -28927,6 +28940,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ropeWalkManager: {fileID: 197166605}
   tutorialUI: {fileID: 1556019458}
+  wall: {fileID: 1424827498}
 --- !u!4 &1556019457
 Transform:
   m_ObjectHideFlags: 0
@@ -28957,6 +28971,9 @@ MonoBehaviour:
   tutorialUI: {fileID: 244653535}
   tutorialText: {fileID: 552844075}
   nextHintText: {fileID: 165546789}
+  nextHintCanvasGroup: {fileID: 165546791}
+  hintFadeDuration: 0.3
+  fadeSpeed: 0.8
 --- !u!1001 &1556565779
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36927,6 +36944,7 @@ MonoBehaviour:
   fallTriggerName: fall
   fallDuration: 2
   fallDistance: 2.42
+  fallGroundTarget: {fileID: 0}
   gameOverDelay: 2.5
   balanceManager: {fileID: 1311752719}
   tightropeAutoGoalMover: {fileID: 2019293633}

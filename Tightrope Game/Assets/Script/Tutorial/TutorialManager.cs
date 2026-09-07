@@ -5,7 +5,8 @@ public class TutorialManager : MonoBehaviour
 {
     [SerializeField] RopeWalkManager ropeWalkManager;
     [SerializeField] TutorialUIController tutorialUI;
-   
+    [SerializeField] TrolleyWall wall;//プレイヤーの移動処理
+
     Joycon jc;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -46,12 +47,20 @@ public class TutorialManager : MonoBehaviour
             if (ropeWalkManager.IsPlayerStop())
             {
                 ropeWalkManager.MovePlayer();
-                Invoke(nameof(StopPlayer), 1f);
+
+                var joyWait = FindFirstObjectByType<JoyConStartWaitController>();
+                if (joyWait != null)
+                {
+                    joyWait.OnJoyConReady = () =>
+                    {
+                        Invoke(nameof(Tutorial_1), 1f);
+                    };
+                }
                 Debug.Log("動きました");
             }
         }
     }
-    void StopPlayer()
+    void Tutorial_1()
     {
         //ジョイコンが無かったら
         if(jc==null)
@@ -61,7 +70,13 @@ public class TutorialManager : MonoBehaviour
             {
                 "ロープの上でバランスを取ろう！",
                 "キーボード←　→で左右に倒してみよう。",
-                "倒れすぎると落ちるよ！"
+                "倒れすぎると落ちるよ！",
+                "実際にやってみよう！"
+            },
+            () => {
+                //UIが消えた瞬間に呼ばれる
+                wall.IsStop(false);
+               
             }
             );
         }
@@ -72,12 +87,18 @@ public class TutorialManager : MonoBehaviour
            {
           "ロープの上でバランスを取ろう！",
           "棒を左右に倒してみよう。",
-          "倒れすぎると落ちるよ！"
+          "倒れすぎると落ちるよ！",
+           "実際にやってみよう！"
+           },
+           () => {
+               //UIが消えた瞬間に呼ばれる
+               ropeWalkManager.MovePlayer();
+              
            }
            );
         }
-           
-        if (ropeWalkManager != null) { ropeWalkManager.StopPlayer(); }
+
+        wall.IsStop(true);
     }
     void Update()
     {

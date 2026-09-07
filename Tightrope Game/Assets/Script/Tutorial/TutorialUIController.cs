@@ -1,15 +1,22 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
+
 
 public class TutorialUIController : MonoBehaviour
 {
     [SerializeField] private GameObject tutorialUI;
     [SerializeField] private TMP_Text tutorialText;
     [SerializeField] public TMP_Text nextHintText;
+    [SerializeField] private CanvasGroup nextHintCanvasGroup;
+    [SerializeField] private float hintFadeDuration = 1.0f;
+    [SerializeField,Header("次への点滅スピード")] private float fadeSpeed = 1.0f;
 
     private string[] currentLines;
     private int index;
     private System.Action onFinished;
+    private bool prevJoyconPressed = false;
+    private Coroutine hintFadeRoutine;
 
     private void Start()
     {
@@ -24,47 +31,44 @@ public class TutorialUIController : MonoBehaviour
 
         tutorialText.text = currentLines[index];
         tutorialUI.SetActive(true);
+
+        if (hintFadeRoutine != null) StopCoroutine(hintFadeRoutine);
+        hintFadeRoutine = StartCoroutine(HintFadeLoop());
     }
 
-    private void LateUpdate()
+    private void Update()
     {
+
         if (!tutorialUI.activeSelf)
             return;
 
-        // キーボード（クリック）
-        if (Input.GetMouseButtonDown(0))
+        var joycons = JoyconManager.Instance.j;
+        bool hasJoycon = joycons != null && joycons.Count > 0;
+
+        // Joy-Con がない場合はクリックで進む
+        if (!hasJoycon)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Next();
+            }
+            return;
+        }
+
+        // Joy-Con がある場合
+        Joycon jc = joycons[0];
+        bool isPressed = jc.GetButton(Joycon.Button.DPAD_UP);
+
+
+        if (isPressed && !prevJoyconPressed)
         {
             Next();
         }
 
-        // Joy-Con（Xボタン）
-        var joycons = JoyconManager.Instance.j;
-        if (joycons != null && joycons.Count > 0)
-        {
-            Joycon jc = joycons[0];
-            if (jc != null && jc.GetButtonDown(Joycon.Button.DPAD_UP))
-            {
-                Next();
-            }
 
-        }
-
-
-        if (joycons == null)
-        {
-            Debug.Log("JoyconManager.Instance.j が null");
-        }
-        else if (joycons.Count == 0)
-        {
-            Debug.Log("Joy-Con が見つかっていない（Count=0）");
-        }
-        else
-        {
-            Joycon jc = joycons[0];
-            Debug.Log("Joy-Con state = " + jc.state);
-        }
-
+        prevJoyconPressed = isPressed;
     }
+
 
     private void Next()
     {
@@ -78,10 +82,36 @@ public class TutorialUIController : MonoBehaviour
         {
             tutorialUI.SetActive(false);
 
-            if (onFinished != null)
+            
+            if (hintFadeRoutine != null) StopCoroutine(hintFadeRoutine);
+            nextHintCanvasGroup.alpha = 1f;
+
+            onFinished?.Invoke();
+        }
+    }
+    private IEnumerator HintFadeLoop()
+    {
+        while (true)
+        {
+            // フェードアウト
+            float t = 0f;
+            while (t < 1f)
             {
-                onFinished.Invoke();
+                t += Time.deltaTime * fadeSpeed;
+                nextHintCanvasGroup.alpha = 1f - t;
+                yield return null;
+            }
+
+            // フェードイン
+            t = 0f;
+            while (t < 1f)
+            {
+                t += Time.deltaTime * fadeSpeed;
+                nextHintCanvasGroup.alpha = t;
+                yield return null;
             }
         }
     }
+
+
 }

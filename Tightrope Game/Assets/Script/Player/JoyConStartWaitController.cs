@@ -30,6 +30,9 @@ public class JoyConStartWaitController : MonoBehaviour
     private static readonly int WalkAnimationHash = Animator.StringToHash("catwalk");
     private bool isWaiting;
 
+    public System.Action OnJoyConReady;
+
+
     private void Awake()
     {
         SetGuideVisible(false);
@@ -129,6 +132,8 @@ public class JoyConStartWaitController : MonoBehaviour
         // 待機中に直接OFFへした歩行Boolを、通常開始時の状態へ戻します。
         SetWalkAnimation(true);
         SetGuideVisible(false);
+
+        OnJoyConReady?.Invoke();
     }
 
     private void SetWalkAnimation(bool walking)
