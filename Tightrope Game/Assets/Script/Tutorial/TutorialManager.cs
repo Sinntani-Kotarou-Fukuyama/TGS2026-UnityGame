@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
 {
     [SerializeField] RopeWalkManager ropeWalkManager;
     [SerializeField] TutorialUIController tutorialUI;
+   
     Joycon jc;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,9 +28,18 @@ public class TutorialManager : MonoBehaviour
         {
             Debug.LogWarning("[Joycon Debug] Joy-Con が見つかりません。接続を確認してください。");
         }
+        if (jc == null)
+        {
+           tutorialUI.nextHintText.text = "クリックで次へ";
+        }
+        else
+        {
+           tutorialUI.nextHintText.text = "Xボタンで次へ";
+
+        }
     }
 
-    void StartPlayer()
+        void StartPlayer()
     {
         if (ropeWalkManager != null)
         {
