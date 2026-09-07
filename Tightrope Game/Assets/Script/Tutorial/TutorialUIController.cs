@@ -25,6 +25,8 @@ public class TutorialUIController : MonoBehaviour
 
     public void ShowLines(string[] lines, System.Action finishedCallback = null)
     {
+        Time.timeScale = 0f;
+
         currentLines = lines;
         index = 0;
         onFinished = finishedCallback;
@@ -43,28 +45,25 @@ public class TutorialUIController : MonoBehaviour
             return;
 
         var joycons = JoyconManager.Instance.j;
-        bool hasJoycon = joycons != null && joycons.Count > 0;
 
-        // Joy-Con がない場合はクリックで進む
-        if (!hasJoycon)
+        // Joy-Con が無い場合（または途中で切断された場合）
+        if (joycons == null || joycons.Count == 0)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetKeyDown(KeyCode.Space))
             {
                 Next();
             }
             return;
         }
 
-        // Joy-Con がある場合
+        // Joy-Con がある場合だけ joycons[0] を読む
         Joycon jc = joycons[0];
         bool isPressed = jc.GetButton(Joycon.Button.DPAD_UP);
-
 
         if (isPressed && !prevJoyconPressed)
         {
             Next();
         }
-
 
         prevJoyconPressed = isPressed;
     }
@@ -86,6 +85,8 @@ public class TutorialUIController : MonoBehaviour
             if (hintFadeRoutine != null) StopCoroutine(hintFadeRoutine);
             nextHintCanvasGroup.alpha = 1f;
 
+            Time.timeScale = 1f;
+
             onFinished?.Invoke();
         }
     }
@@ -97,7 +98,7 @@ public class TutorialUIController : MonoBehaviour
             float t = 0f;
             while (t < 1f)
             {
-                t += Time.deltaTime * fadeSpeed;
+                t += Time.unscaledDeltaTime * fadeSpeed;
                 nextHintCanvasGroup.alpha = 1f - t;
                 yield return null;
             }
@@ -106,7 +107,7 @@ public class TutorialUIController : MonoBehaviour
             t = 0f;
             while (t < 1f)
             {
-                t += Time.deltaTime * fadeSpeed;
+                t += Time.unscaledDeltaTime * fadeSpeed;
                 nextHintCanvasGroup.alpha = t;
                 yield return null;
             }

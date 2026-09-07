@@ -1,11 +1,13 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TutorialManager : MonoBehaviour
 {
     [SerializeField] RopeWalkManager ropeWalkManager;
     [SerializeField] TutorialUIController tutorialUI;
     [SerializeField] TrolleyWall wall;//プレイヤーの移動処理
+    [SerializeField] Earthquake earthquake;
 
     Joycon jc;
 
@@ -31,7 +33,7 @@ public class TutorialManager : MonoBehaviour
         }
         if (jc == null)
         {
-           tutorialUI.nextHintText.text = "クリックで次へ";
+           tutorialUI.nextHintText.text = "SPACEで次へ";
         }
         else
         {
@@ -39,15 +41,32 @@ public class TutorialManager : MonoBehaviour
 
         }
     }
-
-        void StartPlayer()
+    void Update()
     {
-        if (ropeWalkManager != null)
-        {
-            if (ropeWalkManager.IsPlayerStop())
-            {
-                ropeWalkManager.MovePlayer();
+        // 毎フレーム Joy-Con の接続状態を更新する
+        var joycons = JoyconManager.Instance.j;
 
+        if (joycons != null && joycons.Count > 0)
+        {
+            jc = joycons[0];
+        }
+        else
+        {
+            jc = null;
+        }
+    }
+    void StartPlayer()
+    {
+        if (ropeWalkManager != null && ropeWalkManager.IsPlayerStop())
+        {
+            ropeWalkManager.MovePlayer();
+
+            
+            bool isJoyCon = ControlSelectionSession.SelectedControlType == GameplayControlType.JoyCon;
+
+            if (isJoyCon)
+            {
+                
                 var joyWait = FindFirstObjectByType<JoyConStartWaitController>();
                 if (joyWait != null)
                 {
@@ -56,11 +75,26 @@ public class TutorialManager : MonoBehaviour
                         Invoke(nameof(Tutorial_1), 1f);
                     };
                 }
-                Debug.Log("動きました");
             }
+            else
+            {
+                
+                Invoke(nameof(Tutorial_1), 1f);
+            }
+
+            Debug.Log("動きました");
         }
+        var eq = FindFirstObjectByType<Earthquake>();
+if (eq != null)
+{
+    eq.OnEarthquakeStart = () =>
+    {
+        Invoke(nameof(Tutorial_2), 1f);
+    };
+}
+
     }
-    void Tutorial_1()
+    void Tutorial_1()//1つ目に出てくるチュートリアル
     {
         //ジョイコンが無かったら
         if(jc==null)
@@ -69,14 +103,14 @@ public class TutorialManager : MonoBehaviour
             tutorialUI.ShowLines(new string[]
             {
                 "ロープの上でバランスを取ろう！",
-                "キーボード←　→で左右に倒してみよう。",
-                "倒れすぎると落ちるよ！",
+                "キーボード←　→で左右に傾けてみよう！",
+                "マウスを左右に動かしてもできるよ！",
+                "傾けすぎると落ちちゃうから気を付けて！",
                 "実際にやってみよう！"
             },
             () => {
                 //UIが消えた瞬間に呼ばれる
                 wall.IsStop(false);
-               
             }
             );
         }
@@ -85,23 +119,96 @@ public class TutorialManager : MonoBehaviour
             //ジョイコンへ
            tutorialUI.ShowLines(new string[]
            {
-          "ロープの上でバランスを取ろう！",
-          "棒を左右に倒してみよう。",
-          "倒れすぎると落ちるよ！",
-           "実際にやってみよう！"
+              "ロープの上でバランスを取ろう！",
+              "棒を左右に倒してみよう。",
+              "傾けすぎると落ちちゃうから気を付けて！",
+              "実際にやってみよう！"
            },
            () => {
                //UIが消えた瞬間に呼ばれる
-               ropeWalkManager.MovePlayer();
-              
+               wall.IsStop(false);
            }
            );
         }
 
         wall.IsStop(true);
     }
-    void Update()
+   void Tutorial_2()//2つ目に出てくるチュートリアル
     {
-        
+        //ジョイコンが無かったら
+        if (jc == null)
+        {
+            //キーボードへ
+            tutorialUI.ShowLines(new string[]
+            {
+                "ロープを渡っていると異常が発生するよ！",
+                "異常中は何らかの邪魔が入るよ！",
+                "ロープから落とされないように気を付けて！"
+                
+            },
+            () => {
+                //UIが消えた瞬間に呼ばれる
+                wall.IsStop(false);
+                Invoke(nameof(Tutorial_3), 5f);
+            }
+            );
+        }
+        else//ジョイコンがあったら
+        {
+            //ジョイコンへ
+            tutorialUI.ShowLines(new string[]
+            {
+          "",
+          
+            },
+            () => {
+                //UIが消えた瞬間に呼ばれる
+                wall.IsStop(false);
+                Invoke(nameof(Tutorial_3), 5f);
+            }
+            );
+        }
+
+        wall.IsStop(true);
+    }
+
+    void Tutorial_3()//3つ目に出てくるチュートリアル
+    {
+        //ジョイコンが無かったら
+        if (jc == null)
+        {
+            //キーボードへ
+            tutorialUI.ShowLines(new string[]
+            {
+                "これでチュートリアルは終わり！",
+                "↑や↓を使う異常もあるから気を付けて！",
+                "本番では怪獣が町で大暴れ！",
+                "頑張ってゴールを目指そう！",
+                "クリックするとゲームスタート！"
+            },
+            () => {
+                //UIが消えた瞬間に呼ばれる
+                wall.IsStop(false);
+                SceneManager.LoadScene("SampleScene");
+            }
+            );
+        }
+        else//ジョイコンがあったら
+        {
+            //ジョイコンへ
+            tutorialUI.ShowLines(new string[]
+            {
+          "",
+         
+            },
+            () => {
+                //UIが消えた瞬間に呼ばれる
+                wall.IsStop(false);
+                SceneManager.LoadScene("SampleScene");
+            }
+            );
+        }
+
+        wall.IsStop(true);
     }
 }

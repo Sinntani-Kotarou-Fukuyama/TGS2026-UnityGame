@@ -110,6 +110,11 @@ public class TitleSceneUIController : MonoBehaviour
 
     [SerializeField] private RectTransform tutorialYesButtonTransform;
     [SerializeField] private RectTransform tutorialNoButtonTransform;
+    [SerializeField] private GameObject joyconWarningRoot;
+    [SerializeField] private float joyconWarningAutoCloseSeconds = 3f;
+
+    private float joyconWarningTimer = 0f;
+    private bool joyconWarningActive = false;
 
     private ScreenState currentState;
     private TitleSelection titleSelection;
@@ -117,7 +122,7 @@ public class TitleSceneUIController : MonoBehaviour
     private float titleIdleSeconds;
     private float demoElapsedSeconds;
     private bool isLoadingScene;
-    private bool tutorialWillStart = true;
+    private bool? tutorialWillStart = null;
 
     private Button startButton;
     private Button quitButton;
@@ -126,6 +131,8 @@ public class TitleSceneUIController : MonoBehaviour
     private TMP_FontAsset runtimeJapaneseFontAsset;
     private readonly JoyConMenuInput joyConMenuInput = new JoyConMenuInput();
     private bool ignoreFirstControlSelectJoyConInput;
+    private bool ignoreFirstTutorialInput = false;
+
 
     private void Awake()
     {
@@ -169,6 +176,17 @@ public class TitleSceneUIController : MonoBehaviour
             case ScreenState.TutorialSelect:
                 UpdateTutorialSelect();
                 break;
+        }
+
+        if (joyconWarningActive)
+        {
+            joyconWarningTimer += Time.unscaledDeltaTime;
+
+            if (joyconWarningTimer >= joyconWarningAutoCloseSeconds)
+            {
+                joyconWarningRoot.SetActive(false);
+                joyconWarningActive = false;
+            }
         }
     }
 
@@ -407,9 +425,22 @@ public class TitleSceneUIController : MonoBehaviour
             return;
         }
 
-        GameplayControlType selectedControlType = controlSelection == ControlSelection.JoyCon
-            ? GameplayControlType.JoyCon
-            : GameplayControlType.Keyboard;
+        bool joyconConnected = JoyconManager.Instance.j.Count > 0;
+
+        
+        if (controlSelection == ControlSelection.JoyCon && !joyconConnected)
+        {
+            //ジョイコンを接続していなかったら進めない
+            ShowJoyconWarning();
+            return;              
+        }
+
+        
+        GameplayControlType selectedControlType =
+            controlSelection == ControlSelection.JoyCon
+                ? GameplayControlType.JoyCon
+                : GameplayControlType.Keyboard;
+
         ControlSelectionSession.SetSelection(selectedControlType);
 
         ShowTutorialSelect();
@@ -650,8 +681,10 @@ public class TitleSceneUIController : MonoBehaviour
         ClearEventSystemSelection();
         SetOnlyRootActive(tutorialSelectRoot);
 
-        // 最初は「Yes」を選択状態にする
-        SelectTutorialButton(true);
+        tutorialWillStart = null; 
+        SetButtonScale(tutorialYesButtonTransform, normalButtonScale);
+        SetButtonScale(tutorialNoButtonTransform, normalButtonScale);
+       
     }
     private void SelectTutorialButton(bool yes)
     {
@@ -662,6 +695,32 @@ public class TitleSceneUIController : MonoBehaviour
     }
     private void UpdateTutorialSelect()
     {
+        if (ignoreFirstTutorialInput)
+        {
+            ignoreFirstTutorialInput = false;
+            return; 
+        }
+
+        JoyConMenuInputFrame joyConInput = joyConMenuInput.Read();
+
+        //左右選択（Joy-Con）
+        if (joyConInput.HorizontalStep < 0)
+        {
+            SelectTutorialButton(true);   //Yes
+        }
+        else if (joyConInput.HorizontalStep > 0)
+        {
+            SelectTutorialButton(false);  //No
+        }
+
+        
+        if (joyConInput.ConfirmPressed)
+        {
+            ConfirmTutorialSelection();
+            return;
+        }
+
+        //キーボード入力
         if (Keyboard.current.leftArrowKey.wasPressedThisFrame)
         {
             SelectTutorialButton(true);
@@ -692,9 +751,20 @@ public class TitleSceneUIController : MonoBehaviour
     }
     private void ConfirmTutorialSelection()
     {
-        // チュートリアルするかどうかを保存
-        TutorialSelectionSession.SetWillStartTutorial(tutorialWillStart);
+        if (tutorialWillStart == null)
+        {
+            Debug.Log("Yes/No を選択してください");
+            return; 
+        }
 
+        TutorialSelectionSession.SetWillStartTutorial(tutorialWillStart.Value);
         LoadGameScene();
     }
+    private void ShowJoyconWarning()
+    {
+        joyconWarningRoot.SetActive(true);
+        joyconWarningTimer = 0f;
+        joyconWarningActive = true;
+    }
+
 }

@@ -22,6 +22,8 @@ public class Earthquake : MonoBehaviour
 
     private bool enable_event = false;
 
+    public System.Action OnEarthquakeStart;
+
     void Start()
     {
         Telop_earthquake.gameObject.SetActive(false);
@@ -36,6 +38,8 @@ public class Earthquake : MonoBehaviour
         {
             return;
         }
+
+        OnEarthquakeStart?.Invoke();
 
         cam.RopeCameraCansel = true;
         StartCoroutine("Telop_Earthquake");

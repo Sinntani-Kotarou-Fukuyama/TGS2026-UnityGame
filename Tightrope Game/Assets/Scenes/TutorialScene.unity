@@ -28941,6 +28941,7 @@ MonoBehaviour:
   ropeWalkManager: {fileID: 197166605}
   tutorialUI: {fileID: 1556019458}
   wall: {fileID: 1424827498}
+  earthquake: {fileID: 1550136032}
 --- !u!4 &1556019457
 Transform:
   m_ObjectHideFlags: 0
