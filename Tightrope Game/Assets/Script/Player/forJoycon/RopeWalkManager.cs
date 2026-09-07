@@ -414,7 +414,7 @@ public class RopeWalkManager : MonoBehaviour
 
     private IEnumerator ManagedFallRecoveryRoutine()
     {
-        yield return clearSceneLoader.WaitForManagedFallAnimationComplete();
+        yield return clearSceneLoader.WaitForManagedFallToGroundAndAnimationComplete(false);
 
         if (!CanContinueManagedFallRecovery())
         {

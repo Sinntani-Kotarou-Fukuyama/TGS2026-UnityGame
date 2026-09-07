@@ -65,7 +65,7 @@ public class PlayerGameFeedbackController : MonoBehaviour
     // Emissionを持つMaterialの場合、この強さで発光させます。
     [SerializeField] private float redEmissionIntensity = 2f;
 
-    [Header("5ミス時の落下GameOver")]
+    [Header("ミス時の落下")]
     [Tooltip("落下させるプレイヤー本体のTransformです。未設定の場合はMoverやAnimatorなどから自動取得を試します。")]
     [SerializeField] private Transform playerTransform;
 
@@ -81,8 +81,11 @@ public class PlayerGameFeedbackController : MonoBehaviour
     [Tooltip("プレイヤー座標を下へ移動させる時間です。")]
     [SerializeField, Min(0f)] private float fallDuration = 2f;
 
-    [Tooltip("プレイヤー座標を下へ移動させる距離です。")]
+    [Tooltip("地面参照が未設定の場合だけ使用する旧落下距離です。")]
     [SerializeField, Min(0f)] private float fallDistance = 5f;
+
+    [Tooltip("落下演出でプレイヤーの足元を合わせる地面位置です。")]
+    [SerializeField] private Transform fallGroundTarget;
 
     [Tooltip("落下開始からGameOverSceneへ遷移するまでの時間です。落下を最後まで見せる場合はFall Duration以上にします。")]
     [SerializeField, Min(0f)] private float gameOverDelay = 2f;
@@ -109,6 +112,7 @@ public class PlayerGameFeedbackController : MonoBehaviour
     private bool isRecoveryInvulnerable;
     private bool isRecoveryBlinkActive;
     private bool[] recoveryBlinkRendererStates;
+    private bool hasLoggedMissingFallGroundTarget;
 
     public int DamageCount => damageCount;
     public int MaxDamageCount => maxDamageCount;
@@ -250,29 +254,15 @@ public class PlayerGameFeedbackController : MonoBehaviour
     {
         StopPlayerForFall();
 
-        float safeFallDuration = Mathf.Max(0f, fallDuration);
         float safeGameOverDelay = Mathf.Max(0f, gameOverDelay);
-        Vector3 startPosition = playerTransform != null ? playerTransform.position : Vector3.zero;
-        Vector3 targetPosition = startPosition + Vector3.down * Mathf.Max(0f, fallDistance);
-        float elapsedTime = 0f;
+        float sequenceStartTime = Time.time;
+        yield return WaitForManagedFallToGroundAndAnimationComplete(true);
 
-        while (elapsedTime < safeGameOverDelay)
+        float remainingDelay = safeGameOverDelay - (Time.time - sequenceStartTime);
+        while (remainingDelay > 0f)
         {
-            if (playerTransform != null)
-            {
-                float fallProgress = safeFallDuration <= 0f
-                    ? 1f
-                    : Mathf.Clamp01(elapsedTime / safeFallDuration);
-                playerTransform.position = Vector3.Lerp(startPosition, targetPosition, fallProgress);
-            }
-
-            elapsedTime += Time.deltaTime;
+            remainingDelay -= Time.deltaTime;
             yield return null;
-        }
-
-        if (playerTransform != null && safeFallDuration <= safeGameOverDelay)
-        {
-            playerTransform.position = targetPosition;
         }
 
         LoadGameOverScene();
@@ -280,10 +270,10 @@ public class PlayerGameFeedbackController : MonoBehaviour
 
     private void StopPlayerForFall()
     {
-        // Route Controllerを先に止め、OnDisable内の停止処理と分岐入力停止を利用します。
+        // ComponentをDisableすると旧BalanceGaugeの抑制が解除されるため、GameOver専用停止を使用します。
         if (tightropeRouteController != null)
         {
-            tightropeRouteController.enabled = false;
+            tightropeRouteController.StopForGameOver();
         }
 
         if (tightropeAutoGoalMover != null)
@@ -383,6 +373,117 @@ public class PlayerGameFeedbackController : MonoBehaviour
                 ? "PlayerGameFeedbackController: Fallアニメーション完了待ちがTimeoutしたため、復帰処理を続行します。"
                 : "PlayerGameFeedbackController: AnimatorがFall Stateへ入らなかったため、Timeout後に復帰処理を続行します。",
             this);
+    }
+
+    // 1～4ミスと5ミスで、同じ地面位置へのRoot移動とFall Animation完了待ちを並行して行います。
+    public IEnumerator WaitForManagedFallToGroundAndAnimationComplete(bool isGameOverFall)
+    {
+        bool animationCompleted = false;
+        StartCoroutine(WaitForManagedFallAnimationAndMarkComplete(() => animationCompleted = true));
+
+        yield return MovePlayerRootToFallGround(isGameOverFall);
+
+        while (!animationCompleted)
+        {
+            yield return null;
+        }
+    }
+
+    private IEnumerator WaitForManagedFallAnimationAndMarkComplete(Action onComplete)
+    {
+        yield return WaitForManagedFallAnimationComplete();
+        onComplete?.Invoke();
+    }
+
+    private IEnumerator MovePlayerRootToFallGround(bool isGameOverFall)
+    {
+        if (playerTransform == null)
+        {
+            ResolveFallReferences();
+        }
+
+        if (playerTransform == null)
+        {
+            yield break;
+        }
+
+        Vector3 startPosition = playerTransform.position;
+        float targetRootY = startPosition.y - Mathf.Max(0f, fallDistance);
+        float groundY = targetRootY;
+
+        if (fallGroundTarget != null)
+        {
+            groundY = fallGroundTarget.position.y;
+            float rootToFeetOffset = CalculateRootToFeetOffset();
+            targetRootY = groundY + rootToFeetOffset;
+        }
+        else if (!hasLoggedMissingFallGroundTarget)
+        {
+            hasLoggedMissingFallGroundTarget = true;
+            Debug.LogWarning(
+                "PlayerGameFeedbackController: Fall Ground Targetが未設定のため、旧Fall DistanceへFallbackします。",
+                this);
+        }
+
+        // 誤設定時にも落下演出で上方向へ移動しないよう、開始位置を上限にします。
+        targetRootY = Mathf.Min(startPosition.y, targetRootY);
+        Vector3 targetPosition = new Vector3(startPosition.x, targetRootY, startPosition.z);
+        float safeFallDuration = Mathf.Max(0f, fallDuration);
+        float elapsedTime = 0f;
+
+        DebugLog(
+            $"[Managed Fall] Damage={damageCount}, StartY={startPosition.y:F4}, GroundY={groundY:F4}, " +
+            $"TargetRootY={targetRootY:F4}, IsGameOverFall={isGameOverFall}");
+
+        while (elapsedTime < safeFallDuration)
+        {
+            float fallProgress = safeFallDuration <= 0f
+                ? 1f
+                : Mathf.Clamp01(elapsedTime / safeFallDuration);
+            playerTransform.position = Vector3.Lerp(startPosition, targetPosition, fallProgress);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        playerTransform.position = targetPosition;
+        DebugLog(
+            $"[Managed Fall] Damage={damageCount}, FinalY={playerTransform.position.y:F4}, " +
+            $"IsGameOverFall={isGameOverFall}");
+    }
+
+    private float CalculateRootToFeetOffset()
+    {
+        bool hasBounds = false;
+        float feetY = float.PositiveInfinity;
+
+        if (playerRenderers != null)
+        {
+            for (int i = 0; i < playerRenderers.Length; i++)
+            {
+                Renderer playerRenderer = playerRenderers[i];
+                if (playerRenderer == null || !playerRenderer.gameObject.activeInHierarchy)
+                {
+                    continue;
+                }
+
+                feetY = Mathf.Min(feetY, playerRenderer.bounds.min.y);
+                hasBounds = true;
+            }
+        }
+
+        if (!hasBounds)
+        {
+            Collider playerCollider = playerTransform.GetComponentInChildren<Collider>(true);
+            if (playerCollider != null)
+            {
+                feetY = playerCollider.bounds.min.y;
+                hasBounds = true;
+            }
+        }
+
+        return hasBounds
+            ? Mathf.Max(0f, playerTransform.position.y - feetY)
+            : 0f;
     }
 
     // Fallには通常歩行への遷移がないため、既存catwalk Stateへ小さくCrossFadeして復帰します。

@@ -36338,6 +36338,7 @@ MonoBehaviour:
   fallTriggerName: fall
   fallDuration: 2
   fallDistance: 2.42
+  fallGroundTarget: {fileID: 7300000000000000002}
   gameOverDelay: 2.5
   balanceManager: {fileID: 1311752719}
   tightropeAutoGoalMover: {fileID: 2019293633}
@@ -40286,6 +40287,37 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1510712901304232389, guid: a0784937bb3831e439d58b0e2bf68381, type: 3}
   m_PrefabInstance: {fileID: 6977082093991870634}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7300000000000000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7300000000000000002}
+  m_Layer: 0
+  m_Name: FallGroundTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7300000000000000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7300000000000000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -40327,3 +40359,4 @@ SceneRoots:
   - {fileID: 197166606}
   - {fileID: 1549183867}
   - {fileID: 2135025396}
+  - {fileID: 7300000000000000002}

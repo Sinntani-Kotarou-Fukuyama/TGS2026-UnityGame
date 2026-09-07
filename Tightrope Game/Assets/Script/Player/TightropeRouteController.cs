@@ -209,6 +209,18 @@ public class TightropeRouteController : MonoBehaviour
         SetTrolleyNormalBalanceSuppressed(false);
     }
 
+    /// <summary>GameOver落下中のRoute進行と入力だけを止め、Trolley用の旧ゲージ抑制は維持します。</summary>
+    public void StopForGameOver()
+    {
+        state = RouteState.Completed;
+        pendingRouteSelection = PendingRouteSelection.None;
+        trolleyRouteSelected = null;
+        playerMover?.StopMoving();
+        playerMover?.SetManualMovementEnabled(false);
+        SetTrolleyNormalBalanceSuppressed(true);
+        HideRouteSelectionUI();
+    }
+
     /// <summary>新しいTrolley方式と従来移動方式のどちらがルートを動かすかを切り替えます。</summary>
     public void SetTrolleyMovementActive(bool active)
     {
