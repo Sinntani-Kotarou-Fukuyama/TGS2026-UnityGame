@@ -3483,7 +3483,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Space\u3092\u62BC\u3057\u3066\u6C7A\u5B9A"
+  m_text: "Space\u304BX\u3092\u62BC\u3057\u3066\u6C7A\u5B9A"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
   m_sharedMaterial: {fileID: -3406407452144206221, guid: 5e483855690f03143a57c1d1fe60ea59, type: 2}
@@ -3604,8 +3604,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 405bad29b2b998c408059182c189d9e9, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
+  m_Name: 
+  m_EditorClassIdentifier: 
   EnableIMU: 1
   EnableLocalize: 1
 --- !u!1660057539 &9223372036854775807

@@ -25262,8 +25262,8 @@ MonoBehaviour:
   rotationAxis: {x: 0, y: 0, z: 1}
   localCenterOfMass: {x: 0, y: 0, z: 0}
   useLimits: 1
-  minAngle: -90
-  maxAngle: 90
+  minAngle: -50
+  maxAngle: 50
   useManagedFallFlow: 1
   bounciness: 0.2
   angularDrag: 1
@@ -25272,7 +25272,7 @@ MonoBehaviour:
   fallSpeedScale: 1
   postureControlStrength: 2
   reactionForceScale: 0
-  wobbleIntensity: 8
+  wobbleIntensity: 20
   naturalSwaySpeed: 0.5
   balanceOnlyMode: 0
   heliAngle: 0
@@ -37129,9 +37129,9 @@ MonoBehaviour:
   m_fontSize: 150
   m_fontSizeBase: 150
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 35
+  m_fontSizeMax: 100
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
