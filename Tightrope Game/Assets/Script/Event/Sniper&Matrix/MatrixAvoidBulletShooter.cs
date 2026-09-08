@@ -418,7 +418,7 @@ public class MatrixAvoidBulletShooter : MonoBehaviour
     {
         if (matrixMashMessageText != null)
         {
-            matrixMashMessageText.text = success ? "素晴らしい！" : "間に合わないっ！";
+            matrixMashMessageText.text = success ? "回避成功！" : "回避失敗";
         }
 
         if (matrixMashArrowText != null)

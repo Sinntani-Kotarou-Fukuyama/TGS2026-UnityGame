@@ -45,6 +45,17 @@ public class Earthquake : MonoBehaviour
         StartCoroutine("Telop_Earthquake");
     }
 
+    public void StopEarthquake()
+    {
+        StopCoroutine("Telop_Earthquake");
+        StopCoroutine("E_Earthquake");
+        enable_event = false;
+        Telop_earthquake.gameObject.SetActive(false);
+        cameara.StopShake();
+        cam.RopeCameraCansel = false;
+        audioSource.Stop();
+    }
+
     IEnumerator Telop_Earthquake()
     {
         Telop_earthquake.gameObject.SetActive(true);

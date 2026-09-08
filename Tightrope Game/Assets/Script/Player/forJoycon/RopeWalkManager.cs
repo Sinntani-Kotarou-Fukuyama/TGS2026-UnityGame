@@ -28,6 +28,8 @@ public class RopeWalkManager : MonoBehaviour
     [Tooltip("イベント中は画面端の傾き表示を止めるための参照です。")]
     [SerializeField] private BlanceBar_Vignette balanceVignette;
 
+    [SerializeField] private Earthquake earthquake;
+
     [Header("Recovery")]
     [Tooltip("ロープ復帰後に入力・移動・Damageを止める実時間です。")]
     [SerializeField, Min(0f)] private float recoveryProtectionDuration = 1f;
@@ -180,6 +182,7 @@ public class RopeWalkManager : MonoBehaviour
         }
 
         hasReachedCommonEnd = true;
+        earthquake?.StopEarthquake();
         isWaitingForRouteSelection = true;
 
         if (!routeController.BeginTrolleyRouteSelection(OnTrolleyRouteSelected))

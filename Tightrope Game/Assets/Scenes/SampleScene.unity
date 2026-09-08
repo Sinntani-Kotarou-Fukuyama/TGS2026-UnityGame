@@ -3259,6 +3259,7 @@ MonoBehaviour:
   routeController: {fileID: 2019293636}
   clearSceneLoader: {fileID: 2025167755}
   balanceVignette: {fileID: 1973266952}
+  earthquake: {fileID: 1550136032}
   recoveryProtectionDuration: 1
   recoveryBlinkInterval: 0.1
   commonRoutePoints:
