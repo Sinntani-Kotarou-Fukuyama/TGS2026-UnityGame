@@ -218,6 +218,10 @@ public class BalanceManager : MonoBehaviour
     // スナイパー防御中に白球を上へ動かすキーです。
     [SerializeField] private KeyCode sniperDefenseUpKey = KeyCode.UpArrow;
 
+    [Header("Sniper Defense Keyboard")]
+    [Tooltip("Keyboard Defense入力だけに適用する移動倍率です。Joy-Con操作には影響しません。")]
+    [SerializeField, Min(0f)] private float sniperDefenseKeyboardMoveMultiplier = 5f;
+
     [Header("Sniper Defense Joy-Con")]
     [Tooltip("Joy-ConのGyro Xを上下入力として扱う閾値です。PosingEventと同じ初期値を使用します。")]
     [SerializeField, Min(0f)] private float sniperDefenseJoyConPitchThreshold = 0.15f;
@@ -920,6 +924,8 @@ public class BalanceManager : MonoBehaviour
             {
                 input += 1f;
             }
+
+            input *= Mathf.Max(0f, sniperDefenseKeyboardMoveMultiplier);
         }
 
         pointAxisPosition += input * pointMoveSpeed * Time.deltaTime;

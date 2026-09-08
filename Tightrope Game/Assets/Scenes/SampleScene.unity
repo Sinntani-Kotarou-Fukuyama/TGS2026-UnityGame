@@ -23270,6 +23270,7 @@ MonoBehaviour:
   sniperDefenseHeightTolerance: 0.03
   sniperDefenseDownKey: 274
   sniperDefenseUpKey: 273
+  sniperDefenseKeyboardMoveMultiplier: 5
   sniperDefenseJoyConPitchThreshold: 0.15
   sniperDefenseJoyConMoveMultiplier: 5
   sniperDefenseJoyConGestureEndDelay: 0.1
