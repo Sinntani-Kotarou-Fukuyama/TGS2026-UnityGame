@@ -50,7 +50,7 @@ public class PosingEvent : MonoBehaviour
     Joycon jc;
     float rotationY = 0f; // キャラの現在の回転角
     float prevTwist = 0f;
-    float sensitivity = 200.0f;//ジャイロの回転の強さ
+    float sensitivity = 300.0f;//ジャイロの回転の強さ
     float smooth = 0.1f;//ジャイロの滑らかさ
     float stickSensitivity = 1.0f;
     private float prevPitch = 0f;
@@ -121,92 +121,116 @@ public class PosingEvent : MonoBehaviour
         if (PlayerRotation == true)
         {
 
-            if (Input.GetKey(KeyCode.RightArrow))//右矢印を押したら左回転する
+            GameplayControlType control = ControlSelectionSession.SelectedControlType;
+
+            //キーボード操作
+            if (control == GameplayControlType.Keyboard)
             {
-                player.transform.Rotate(new Vector3(0, -Rotatespeed, 0));
-            }
-            if (Input.GetKey(KeyCode.LeftArrow))//左矢印を押したら右回転する
-            {
-                player.transform.Rotate(new Vector3(0, Rotatespeed, 0));
-            }
-            if (Input.GetKey(KeyCode.UpArrow))//上矢印を押したら棒を持ち上げる
-            {
-                if (StickOver <= 30)
+                if (Input.GetKey(KeyCode.RightArrow))//右矢印を押したら左回転する
                 {
-                    stick.transform.Translate(0.0f, 0.0f, -Stickspeed * 0.3f * Time.deltaTime);
-                    playerRightHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
-                    playerLeftHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
-                    StickOver++;
-                    Debug.Log("StickOverの値" + StickOver);
+                    player.transform.Rotate(new Vector3(0, -Rotatespeed, 0));
                 }
-
-            }
-            if (Input.GetKey(KeyCode.DownArrow))//下矢印を押したら棒を下げる
-            {
-                if (StickOver >= -25)
+                if (Input.GetKey(KeyCode.LeftArrow))//左矢印を押したら右回転する
                 {
-                    stick.transform.Translate(0.0f, 0.0f, Stickspeed * 0.3f * Time.deltaTime);
-                    playerRightHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
-                    playerLeftHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
-                    StickOver--;
-                    Debug.Log("StickOverの値" + StickOver);
+                    player.transform.Rotate(new Vector3(0, Rotatespeed, 0));
                 }
-
-            }
-            if (jc == null)
-            {
-                Debug.LogWarning("[Joycon Debug] jc が null のため Joy-Con 回転処理をスキップします。");
-                return;
-            }
-
-            //ジャイロ
-            Vector3 gyro = jc.GetGyro();
-
-            //横持ちなら Z軸が回転速度
-            float yawSpeed = gyro.z;
-
-            //積分して角度にする
-            rotationY += yawSpeed * Time.deltaTime * sensitivity;
-
-            //滑らかに回す
-            float newY = Mathf.LerpAngle(player.transform.eulerAngles.y, rotationY, smooth);
-
-            player.transform.rotation = Quaternion.Euler(0, newY, 0);
-
-
-            //上下の動きは X軸の回転速度
-            float pitch = gyro.x;
-
-            //ノイズ除去（しきい値）
-            float threshold = 0.15f;   // ← ここが重要。0.05 は小さすぎてノイズを拾う
-
-            //減衰フィルタ（ノイズを弱める）
-            pitch = Mathf.Lerp(prevPitch, pitch, 0.2f);
-            prevPitch = pitch;
-
-            //上に動かす
-            if (pitch > threshold)
-            {
-                if (StickOver <= 30)
+                if (Input.GetKey(KeyCode.UpArrow))//上矢印を押したら棒を持ち上げる
                 {
-                    stick.transform.Translate(0.0f, 0.0f, -Stickspeed * 0.3f * Time.deltaTime);
-                    playerRightHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
-                    playerLeftHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
-                    StickOver++;
+                    if (StickOver <= 30)
+                    {
+                        stick.transform.Translate(0.0f, 0.0f, -Stickspeed * 0.3f * Time.deltaTime);
+                        playerRightHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
+                        playerLeftHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
+                        StickOver++;
+                        Debug.Log("StickOverの値" + StickOver);
+                    }
+
+                }
+                if (Input.GetKey(KeyCode.DownArrow))//下矢印を押したら棒を下げる
+                {
+                    if (StickOver >= -25)
+                    {
+                        stick.transform.Translate(0.0f, 0.0f, Stickspeed * 0.3f * Time.deltaTime);
+                        playerRightHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
+                        playerLeftHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
+                        StickOver--;
+                        Debug.Log("StickOverの値" + StickOver);
+                    }
+
                 }
             }
 
-            //下に動かす
-            if (pitch < -threshold)
+
+            //ジョイコン操作
+            if (control == GameplayControlType.JoyCon)
             {
-                if (StickOver >= -25)
+                if (jc == null)
                 {
-                    stick.transform.Translate(0.0f, 0.0f, Stickspeed * 0.3f * Time.deltaTime);
-                    playerRightHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
-                    playerLeftHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
-                    StickOver--;
+                    Debug.LogWarning("[Joycon Debug] jc が null のため Joy-Con 回転処理をスキップします。");
+                    return;
+                }
+
+                //ジャイロ
+                Vector3 gyro = jc.GetGyro();
+
+                //横持ちなら Z軸が回転速度
+                float yawSpeed = gyro.z;
+
+                //積分して角度にする
+                rotationY += yawSpeed * Time.deltaTime * sensitivity;
+
+                //滑らかに回す
+                float newY = Mathf.LerpAngle(player.transform.eulerAngles.y, rotationY, smooth);
+
+                player.transform.rotation = Quaternion.Euler(0, newY, 0);
+
+
+                //上下の動きは X軸の回転速度
+                float pitch = gyro.x;
+
+                //減衰フィルタ（速くする）
+                pitch = Mathf.Lerp(prevPitch, pitch, 0.6f);
+                prevPitch = pitch;
+
+                //しきい値（誤反応を減らす）
+                float threshold = 0.50f;
+
+                //上下操作が終わったら即リセット
+                if (Mathf.Abs(pitch) < threshold)
+                {
+                    prevPitch = 0f;
+                }
+
+                //上下が強い時だけ左右を無効化
+                if (Mathf.Abs(pitch) > threshold)
+                {
+                    yawSpeed = 0f;
+                }
+                //上に動かす
+                if (pitch > threshold)
+                {
+                    if (StickOver <= 30)
+                    {
+                        stick.transform.Translate(0.0f, 0.0f, -Stickspeed * 0.3f * Time.deltaTime);
+                        playerRightHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
+                        playerLeftHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
+                        StickOver++;
+                    }
+                }
+
+                //下に動かす
+                if (pitch < -threshold)
+                {
+                    if (StickOver >= -25)
+                    {
+                        stick.transform.Translate(0.0f, 0.0f, Stickspeed * 0.3f * Time.deltaTime);
+                        playerRightHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
+                        playerLeftHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
+                        StickOver--;
+                    }
                 }
             }
+               
 
         }
 
