@@ -25243,7 +25243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   autoWalk: 1
-  moveSpeed: 0.3
+  moveSpeed: 0.2
   BarMaxAngle: 90
   useJoyConInput: 1
   joyConSensitivity: 0.5
