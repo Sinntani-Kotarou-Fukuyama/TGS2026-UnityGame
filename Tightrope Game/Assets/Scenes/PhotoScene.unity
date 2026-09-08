@@ -23108,8 +23108,6 @@ MonoBehaviour:
   useSeparateHandFollowSettings: 0
   handFollowSpace: 0
   handFollowAxis: 2
-  handFollowMinValue: 0.8
-  handFollowMaxValue: -0.1
   stickFollowSpace: 1
   stickFollowAxis: 1
   stickFollowMinValue: -0.2
@@ -23118,10 +23116,18 @@ MonoBehaviour:
   stickFollowUpdateTiming: 0
   resetStickTargetOnSniperDefenseEnd: 1
   sniperDefenseHandAdditionalFollowMultiplier: -0.8
+  sniperDefenseHandAdditionalMaxWorldDistance: 0.03
+  sniperDefenseHandAdditionalSmoothSpeed: 0.2
   sniperDefenseStickWorldYOffset: 0
   sniperDefenseHeightTolerance: 0.2
   sniperDefenseDownKey: 274
   sniperDefenseUpKey: 273
+  sniperDefenseKeyboardMoveMultiplier: 5
+  sniperDefenseJoyConPitchThreshold: 0.15
+  sniperDefenseJoyConMoveMultiplier: 5
+  sniperDefenseJoyConGestureEndDelay: 0.1
+  sniperDefenseJoyConOppositeDirectionHoldDuration: 0.08
+  invertSniperDefenseJoyConVerticalDirection: 0
   sniperDeflectAudioSource: {fileID: 1311752721}
   sniperDeflectSound: {fileID: 8300000, guid: 89a4b5b6230699d45b0fb93b71c83c5e, type: 3}
   sniperDeflectSoundVolume: 1
@@ -23190,7 +23196,6 @@ MonoBehaviour:
   unbalanceBoolName: Unbalance
   unbalanceDuration: 0.6
   enableDebugLog: 1
-  timerLogInterval: 0.25
 --- !u!4 &1311752720
 Transform:
   m_ObjectHideFlags: 0
@@ -27931,13 +27936,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1541420865}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.49844667, y: 0.5017164, z: -0.49675113, w: 0.50306064}
-  m_LocalPosition: {x: 8.77, y: 8.32, z: 0.09}
+  m_LocalRotation: {x: -0, y: -0.0077579296, z: -0, w: 0.9999699}
+  m_LocalPosition: {x: 4.81, y: 5.93, z: 10.26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 98741599}
-  m_LocalEulerAnglesHint: {x: 29.654, y: -112.444, z: 0.011}
+  m_LocalEulerAnglesHint: {x: 0, y: -360.889, z: -360}
 --- !u!114 &1541420867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29434,8 +29439,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1599052639}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.49844667, y: 0.5017164, z: -0.49675113, w: 0.50306064}
-  m_LocalPosition: {x: -2.024397, y: 3.8981266, z: -3.5008452}
+  m_LocalRotation: {x: 0, y: -0.0077579296, z: 0, w: 0.9999699}
+  m_LocalPosition: {x: -5.9843974, y: 1.5081267, z: 6.669155}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -35883,6 +35888,9 @@ MonoBehaviour:
   rightRouteKey: 275
   confirmRouteKey: 32
   useImmediateRouteSelection: 1
+  joyConRouteHoldAngleThreshold: 15
+  joyConRouteHoldDuration: 1.5
+  trolleyWall: {fileID: 0}
   routeSelectUIController: {fileID: 2037000005}
   balanceManager: {fileID: 1311752719}
   pauseBalanceWhileChoosing: 1
@@ -35982,6 +35990,7 @@ MonoBehaviour:
   fallTriggerName: fall
   fallDuration: 2
   fallDistance: 2.42
+  fallGroundTarget: {fileID: 0}
   gameOverDelay: 2.5
   balanceManager: {fileID: 1311752719}
   tightropeAutoGoalMover: {fileID: 2019293633}
@@ -36379,6 +36388,8 @@ MonoBehaviour:
   leftArrowTransform: {fileID: 2037000021}
   rightArrowTransform: {fileID: 2037000031}
   decideText: {fileID: 2037000043}
+  leftHoldCircleImage: {fileID: 0}
+  rightHoldCircleImage: {fileID: 0}
   normalArrowScale: 1
   selectedArrowScale: 1.3
   balanceGaugeRoot: {fileID: 1515038812}
