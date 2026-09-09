@@ -1,46 +1,46 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.AI;
 
 public class PosingEvent : MonoBehaviour
 {
-    [SerializeField] public AudioSource keikokuAudio;//Œx‰¹
-    [SerializeField] GameObject PosingDino;//ƒCƒxƒ“ƒg‰öb‚ÌƒvƒŒƒnƒu—p
-    [SerializeField] Transform Dino;//ƒCƒxƒ“ƒg’†‚Í‰öb‚ğŒ©‚¦‚È‚¢‚Æ‚±‚ë‚ÖˆÚ“®‚³‚¹‚é
-    [SerializeField] Transform Bill;//ƒCƒxƒ“ƒg‚Å”j‰ó‚³‚ê‚éƒrƒ‹‚ÌÀ•W
-    [SerializeField] Transform player;//ƒvƒŒƒCƒ„[‚ÌÀ•W
-    [SerializeField] Transform stick;//–_‚ÌÀ•W
-    [SerializeField] Transform playerRightHund;//‰Eè‚ÌÀ•W
-    [SerializeField] Transform playerLeftHund;//¶è‚ÌÀ•W
-    [SerializeField] CameraSwhich cam;//ƒJƒƒ‰‚ğØ‚è‘Ö‚¦‚ê‚é‚æ‚¤‚É
+    [SerializeField] public AudioSource keikokuAudio;//è­¦å‘ŠéŸ³
+    [SerializeField] GameObject PosingDino;//ã‚¤ãƒ™ãƒ³ãƒˆæ€ªç£ã®ãƒ—ãƒ¬ãƒãƒ–ç”¨
+    [SerializeField] Transform Dino;//ã‚¤ãƒ™ãƒ³ãƒˆä¸­ã¯æ€ªç£ã‚’è¦‹ãˆãªã„ã¨ã“ã‚ã¸ç§»å‹•ã•ã›ã‚‹
+    [SerializeField] Transform Bill;//ã‚¤ãƒ™ãƒ³ãƒˆã§ç ´å£Šã•ã‚Œã‚‹ãƒ“ãƒ«ã®åº§æ¨™
+    [SerializeField] Transform player;//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åº§æ¨™
+    [SerializeField] Transform stick;//æ£’ã®åº§æ¨™
+    [SerializeField] Transform playerRightHund;//å³æ‰‹ã®åº§æ¨™
+    [SerializeField] Transform playerLeftHund;//å·¦æ‰‹ã®åº§æ¨™
+    [SerializeField] CameraSwhich cam;//ã‚«ãƒ¡ãƒ©ã‚’åˆ‡ã‚Šæ›¿ãˆã‚Œã‚‹ã‚ˆã†ã«
     [SerializeField] BalanceManager balance;
-    [SerializeField] float speed = 1f;//‰öb‚ÌˆÚ“®‘¬“x
-    [SerializeField] float Rotatespeed = 1f;//‰ñ“]‘¬“x
-    [SerializeField] float Stickspeed = 0.00000001f;//–_‚ğ‚¿ã‚°‚é‘¬“x
+    [SerializeField] float speed = 1f;//æ€ªç£ã®ç§»å‹•é€Ÿåº¦
+    [SerializeField] float Rotatespeed = 1f;//å›è»¢é€Ÿåº¦
+    [SerializeField] float Stickspeed = 0.00000001f;//æ£’ã‚’æŒã¡ä¸Šã’ã‚‹é€Ÿåº¦
     [SerializeField] GameObject Text;
-    [SerializeField] GameObject Timer;//ƒ^ƒCƒ}[‚ğ”ñ•\¦‚É‚·‚é—p
-    [SerializeField] private Behaviour _target;//“_–Å‚³‚¹‚é‘ÎÛ
-    [SerializeField] public GameObject Porsemp4;//“®‰æ
-    [SerializeField] private float _cycle = 1; // “_–ÅüŠú[•b]
-    [SerializeField] ParentKaizyo exoloOarentReset;//e‰ğœ
+    [SerializeField] GameObject Timer;//ã‚¿ã‚¤ãƒãƒ¼ã‚’éè¡¨ç¤ºã«ã™ã‚‹ç”¨
+    [SerializeField] private Behaviour _target;//ç‚¹æ»…ã•ã›ã‚‹å¯¾è±¡
+    [SerializeField] public GameObject Porsemp4;//å‹•ç”»
+    [SerializeField] private float _cycle = 1; // ç‚¹æ»…å‘¨æœŸ[ç§’]
+    [SerializeField] ParentKaizyo exoloOarentReset;//è¦ªè§£é™¤
     [SerializeField] NavMeshAgent agent;
     [SerializeField] KaijuAI AI;
-    Quaternion startplayer;//Å‰‚Ì‰ñ“]‚ğ‹L˜^‚·‚é
-    Quaternion startstick;//Å‰‚Ì‰ñ“]‚ğ‹L˜^‚·‚é
-    Quaternion startplayerRightHund;//Å‰‚Ì‰ñ“]‚ğ‹L˜^‚·‚é
-    Quaternion startplayerLeftHund;//Å‰‚Ì‰ñ“]‚ğ‹L˜^‚·‚é
-    Vector3 startstickposition;//Å‰‚ÌÀ•W‚ğ‹L˜^‚·‚é
-    Vector3 startplayerRightHundposition;//Å‰‚ÌÀ•W‚ğ‹L˜^‚·‚é
-    Vector3 startplayerLeftHubdposition;//Å‰‚ÌÀ•W‚ğ‹L˜^‚·‚é
+    Quaternion startplayer;//æœ€åˆã®å›è»¢ã‚’è¨˜éŒ²ã™ã‚‹
+    Quaternion startstick;//æœ€åˆã®å›è»¢ã‚’è¨˜éŒ²ã™ã‚‹
+    Quaternion startplayerRightHund;//æœ€åˆã®å›è»¢ã‚’è¨˜éŒ²ã™ã‚‹
+    Quaternion startplayerLeftHund;//æœ€åˆã®å›è»¢ã‚’è¨˜éŒ²ã™ã‚‹
+    Vector3 startstickposition;//æœ€åˆã®åº§æ¨™ã‚’è¨˜éŒ²ã™ã‚‹
+    Vector3 startplayerRightHundposition;//æœ€åˆã®åº§æ¨™ã‚’è¨˜éŒ²ã™ã‚‹
+    Vector3 startplayerLeftHubdposition;//æœ€åˆã®åº§æ¨™ã‚’è¨˜éŒ²ã™ã‚‹
     private double _time;
     int StickOver = 0;
-    bool DinoStoping = false;//‰öb‚ğ“®‚©‚È‚­‚·‚éƒtƒ‰ƒO
-    bool Flag = false;//ƒCƒxƒ“ƒgŠJnƒtƒ‰ƒO
-    bool DinoIdouflag = true;//‰öbˆÚ“®ƒtƒ‰ƒO
+    bool DinoStoping = false;//æ€ªç£ã‚’å‹•ã‹ãªãã™ã‚‹ãƒ•ãƒ©ã‚°
+    bool Flag = false;//ã‚¤ãƒ™ãƒ³ãƒˆé–‹å§‹ãƒ•ãƒ©ã‚°
+    bool DinoIdouflag = true;//æ€ªç£ç§»å‹•ãƒ•ãƒ©ã‚°
     bool PlayerRotation = false;
-    bool KeikokuFlag;//Œxƒtƒ‰ƒO
-    bool PlayerResetFlag = true;//ƒvƒŒƒCƒ„[‚Ì‰ñ“]ƒŠƒZƒbƒg
-    [SerializeField] TightropeAutoGoalMover playerMover;//ƒvƒŒƒCƒ„[‚Ì“®‚«æ“¾
-    [Tooltip("V‚µ‚¢TrolleyˆÚ“®‚ğƒ|[ƒYƒCƒxƒ“ƒg’†‚¾‚¯’â~EÄŠJ‚·‚éManager‚Å‚·B")]
+    bool KeikokuFlag;//è­¦å‘Šãƒ•ãƒ©ã‚°
+    bool PlayerResetFlag = true;//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å›è»¢ãƒªã‚»ãƒƒãƒˆ
+    [SerializeField] TightropeAutoGoalMover playerMover;//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‹•ãå–å¾—
+    [Tooltip("æ–°ã—ã„Trolleyç§»å‹•ã‚’ãƒãƒ¼ã‚ºã‚¤ãƒ™ãƒ³ãƒˆä¸­ã ã‘åœæ­¢ãƒ»å†é–‹ã™ã‚‹Managerã§ã™ã€‚")]
     [SerializeField] RopeWalkManager ropeWalkManager;
     private GameObject spawneDino;
     private bool isRopeWalkPausedForPosingEvent;
@@ -48,10 +48,10 @@ public class PosingEvent : MonoBehaviour
     private bool timerWasActiveBeforePosing;
     private bool hasWarnedMissingTimer;
     Joycon jc;
-    float rotationY = 0f; // ƒLƒƒƒ‰‚ÌŒ»İ‚Ì‰ñ“]Šp
+    float rotationY = 0f; // ã‚­ãƒ£ãƒ©ã®ç¾åœ¨ã®å›è»¢è§’
     float prevTwist = 0f;
-    float sensitivity = 300.0f;//ƒWƒƒƒCƒ‚Ì‰ñ“]‚Ì‹­‚³
-    float smooth = 0.1f;//ƒWƒƒƒCƒ‚ÌŠŠ‚ç‚©‚³
+    float sensitivity = 300.0f;//ã‚¸ãƒ£ã‚¤ãƒ­ã®å›è»¢ã®å¼·ã•
+    float smooth = 0.1f;//ã‚¸ãƒ£ã‚¤ãƒ­ã®æ»‘ã‚‰ã‹ã•
     float stickSensitivity = 1.0f;
     private float prevPitch = 0f;
 
@@ -68,16 +68,16 @@ public class PosingEvent : MonoBehaviour
     {
         var joycons = JoyconManager.Instance.j;
 
-        Debug.Log($"[Joycon Debug] Joy-Con ‚ÌŒŸo”: {joycons.Count}");
+        Debug.Log($"[Joycon Debug] Joy-Con ã®æ¤œå‡ºæ•°: {joycons.Count}");
 
         if (joycons.Count > 0)
         {
             jc = joycons[0];
-            Debug.Log("[Joycon Debug] Joy-Con ‚ª³í‚ÉƒZƒbƒg‚³‚ê‚Ü‚µ‚½B");
+            Debug.Log("[Joycon Debug] Joy-Con ãŒæ­£å¸¸ã«ã‚»ãƒƒãƒˆã•ã‚Œã¾ã—ãŸã€‚");
         }
         else
         {
-            Debug.LogWarning("[Joycon Debug] Joy-Con ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñBÚ‘±‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
+            Debug.LogWarning("[Joycon Debug] Joy-Con ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚æ¥ç¶šã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚");
         }
     }
 
@@ -87,30 +87,30 @@ public class PosingEvent : MonoBehaviour
 
         if (KeikokuFlag == true)
         {
-            // “à•”‚ğŒo‰ß‚³‚¹‚é
+            // å†…éƒ¨æ™‚åˆ»ã‚’çµŒéã•ã›ã‚‹
             _time += Time.deltaTime;
 
-            // üŠúcycle‚ÅŒJ‚è•Ô‚·’l‚Ìæ“¾
-            // 0`cycle‚Ì”ÍˆÍ‚Ì’l‚ª“¾‚ç‚ê‚é
+            // å‘¨æœŸcycleã§ç¹°ã‚Šè¿”ã™å€¤ã®å–å¾—
+            // 0ï½cycleã®ç¯„å›²ã®å€¤ãŒå¾—ã‚‰ã‚Œã‚‹
             var repeatValue = Mathf.Repeat((float)_time, _cycle);
 
-            // “à•”time‚É‚¨‚¯‚é–¾–Åó‘Ô‚ğ”½‰f
+            // å†…éƒ¨æ™‚åˆ»timeã«ãŠã‘ã‚‹æ˜æ»…çŠ¶æ…‹ã‚’åæ˜ 
             _target.enabled = repeatValue >= _cycle * 0.5f;
-           
+
         }
-        if (Flag == true)//ƒCƒxƒ“ƒgŠJnƒtƒ‰ƒO
+        if (Flag == true)//ã‚¤ãƒ™ãƒ³ãƒˆé–‹å§‹ãƒ•ãƒ©ã‚°
         {
             PoseEvent();
             Flag = false;
         }
-        if (DinoStoping == true)//‰öb‚ğ“®‚©‚È‚­‚·‚éƒtƒ‰ƒO
+        if (DinoStoping == true)//æ€ªç£ã‚’å‹•ã‹ãªãã™ã‚‹ãƒ•ãƒ©ã‚°
         {
             agent.Warp(new Vector3(-20.8f, 0.0f, -15.0f));
-           // Dino.transform.position = new Vector3(50.0f, 0.0f, 50.0f);
+            // Dino.transform.position = new Vector3(50.0f, 0.0f, 50.0f);
         }
         if (DinoIdouflag == true)
         {
-            //‰öb‚ÌˆÚ“®
+            //æ€ªç£ã®ç§»å‹•
             Vector3 move = new Vector3(0.0f, 0.0f, -2.0f) * speed * Time.deltaTime;
             if (spawneDino != null)
             {
@@ -123,18 +123,18 @@ public class PosingEvent : MonoBehaviour
 
             GameplayControlType control = ControlSelectionSession.SelectedControlType;
 
-            //ƒL[ƒ{[ƒh‘€ì
+            //ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰æ“ä½œ
             if (control == GameplayControlType.Keyboard)
             {
-                if (Input.GetKey(KeyCode.RightArrow))//‰E–îˆó‚ğ‰Ÿ‚µ‚½‚ç¶‰ñ“]‚·‚é
+                if (Input.GetKey(KeyCode.RightArrow))//å³çŸ¢å°ã‚’æŠ¼ã—ãŸã‚‰å·¦å›è»¢ã™ã‚‹
                 {
                     player.transform.Rotate(new Vector3(0, -Rotatespeed, 0));
                 }
-                if (Input.GetKey(KeyCode.LeftArrow))//¶–îˆó‚ğ‰Ÿ‚µ‚½‚ç‰E‰ñ“]‚·‚é
+                if (Input.GetKey(KeyCode.LeftArrow))//å·¦çŸ¢å°ã‚’æŠ¼ã—ãŸã‚‰å³å›è»¢ã™ã‚‹
                 {
                     player.transform.Rotate(new Vector3(0, Rotatespeed, 0));
                 }
-                if (Input.GetKey(KeyCode.UpArrow))//ã–îˆó‚ğ‰Ÿ‚µ‚½‚ç–_‚ğ‚¿ã‚°‚é
+                if (Input.GetKey(KeyCode.UpArrow))//ä¸ŠçŸ¢å°ã‚’æŠ¼ã—ãŸã‚‰æ£’ã‚’æŒã¡ä¸Šã’ã‚‹
                 {
                     if (StickOver <= 30)
                     {
@@ -142,11 +142,11 @@ public class PosingEvent : MonoBehaviour
                         playerRightHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
                         playerLeftHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
                         StickOver++;
-                        Debug.Log("StickOver‚Ì’l" + StickOver);
+                        Debug.Log("StickOverã®å€¤" + StickOver);
                     }
 
                 }
-                if (Input.GetKey(KeyCode.DownArrow))//‰º–îˆó‚ğ‰Ÿ‚µ‚½‚ç–_‚ğ‰º‚°‚é
+                if (Input.GetKey(KeyCode.DownArrow))//ä¸‹çŸ¢å°ã‚’æŠ¼ã—ãŸã‚‰æ£’ã‚’ä¸‹ã’ã‚‹
                 {
                     if (StickOver >= -25)
                     {
@@ -154,88 +154,84 @@ public class PosingEvent : MonoBehaviour
                         playerRightHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
                         playerLeftHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
                         StickOver--;
-                        Debug.Log("StickOver‚Ì’l" + StickOver);
+                        Debug.Log("StickOverã®å€¤" + StickOver);
                     }
 
                 }
             }
 
 
-            //ƒWƒ‡ƒCƒRƒ“‘€ì
+            //ã‚¸ãƒ§ã‚¤ã‚³ãƒ³æ“ä½œ
             if (control == GameplayControlType.JoyCon)
             {
                 if (jc == null)
                 {
-                    Debug.LogWarning("[Joycon Debug] jc ‚ª null ‚Ì‚½‚ß Joy-Con ‰ñ“]ˆ—‚ğƒXƒLƒbƒv‚µ‚Ü‚·B");
+                    Debug.LogWarning("[Joycon Debug] jc ãŒ null ã®ãŸã‚ Joy-Con å›è»¢å‡¦ç†ã‚’ã‚¹ã‚­ãƒƒãƒ—ã—ã¾ã™ã€‚");
                     return;
                 }
-
-                //ƒWƒƒƒCƒ
+                //ã‚¸ãƒ£ã‚¤ãƒ­
                 Vector3 gyro = jc.GetGyro();
 
-                //‰¡‚¿‚È‚ç Z²‚ª‰ñ“]‘¬“x
-                float yawSpeed = gyro.z;
-
-                //Ï•ª‚µ‚ÄŠp“x‚É‚·‚é
-                rotationY += yawSpeed * Time.deltaTime * sensitivity;
-
-                //ŠŠ‚ç‚©‚É‰ñ‚·
-                float newY = Mathf.LerpAngle(player.transform.eulerAngles.y, rotationY, smooth);
-
-                player.transform.rotation = Quaternion.Euler(0, newY, 0);
-
-
-                //ã‰º‚Ì“®‚«‚Í X²‚Ì‰ñ“]‘¬“x
+                //ä¸Šä¸‹ã®å‹•ãã¯ Xè»¸ã®å›è»¢é€Ÿåº¦
                 float pitch = gyro.x;
 
-                //Œ¸ŠƒtƒBƒ‹ƒ^i‘¬‚­‚·‚éj
-                pitch = Mathf.Lerp(prevPitch, pitch, 0.6f);
+                //ãƒã‚¤ã‚ºé™¤å»ï¼ˆå¼·ã™ãã‚‹ã¨ä¸Šä¸‹ãŒå¼±ããªã‚‹ã®ã§ 0.35 ãŒæœ€é©ï¼‰
+                pitch = Mathf.Lerp(prevPitch, pitch, 0.35f);
                 prevPitch = pitch;
 
-                //‚µ‚«‚¢’liŒë”½‰‚ğŒ¸‚ç‚·j
-                float threshold = 0.50f;
+                //ä¸Šä¸‹åˆ¤å®šã®ã—ãã„å€¤
+                float threshold = 0.45f;
 
-                //ã‰º‘€ì‚ªI‚í‚Á‚½‚ç‘¦ƒŠƒZƒbƒg
+                //ä¸Šä¸‹æ“ä½œãŒçµ‚ã‚ã£ãŸã‚‰å³ãƒªã‚»ãƒƒãƒˆ
                 if (Mathf.Abs(pitch) < threshold)
                 {
                     prevPitch = 0f;
                 }
 
-                //ã‰º‚ª‹­‚¢‚¾‚¯¶‰E‚ğ–³Œø‰»
+                //å·¦å³ã®å›è»¢é€Ÿåº¦
+                float yawSpeed = gyro.z;
+
+                // â˜… ä¸Šä¸‹ãŒå¼·ã„æ™‚ã ã‘å·¦å³ã‚’å¼±ã‚ã‚‹ï¼ˆã“ã“ãŒæœ€é‡è¦ï¼‰
                 if (Mathf.Abs(pitch) > threshold)
                 {
-                    yawSpeed = 0f;
+                    yawSpeed *= 0.2f;   // â† ä¸Šä¸‹æ“ä½œä¸­ã ã‘å¼±ã‚ã‚‹
                 }
-                //ã‚É“®‚©‚·
+
+                //å·¦å³å›è»¢å‡¦ç†
+                rotationY += yawSpeed * Time.deltaTime * sensitivity;
+                float newY = Mathf.LerpAngle(player.transform.eulerAngles.y, rotationY, smooth);
+                player.transform.rotation = Quaternion.Euler(0, newY, 0);
+
+                //ä¸Šã«å‹•ã‹ã™
                 if (pitch > threshold)
                 {
                     if (StickOver <= 30)
                     {
-                        stick.transform.Translate(0.0f, 0.0f, -Stickspeed * 0.3f * Time.deltaTime);
-                        playerRightHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
-                        playerLeftHund.Translate(0.0f, 0.0f, Stickspeed * Time.deltaTime);
+                        stick.transform.Translate(0, 0, -Stickspeed * 0.3f * Time.deltaTime);
+                        playerRightHund.Translate(0, 0, Stickspeed * Time.deltaTime);
+                        playerLeftHund.Translate(0, 0, Stickspeed * Time.deltaTime);
                         StickOver++;
                     }
                 }
 
-                //‰º‚É“®‚©‚·
+                //ä¸‹ã«å‹•ã‹ã™
                 if (pitch < -threshold)
                 {
                     if (StickOver >= -25)
                     {
-                        stick.transform.Translate(0.0f, 0.0f, Stickspeed * 0.3f * Time.deltaTime);
-                        playerRightHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
-                        playerLeftHund.Translate(0.0f, 0.0f, -Stickspeed * Time.deltaTime);
+                        stick.transform.Translate(0, 0, Stickspeed * 0.3f * Time.deltaTime);
+                        playerRightHund.Translate(0, 0, -Stickspeed * Time.deltaTime);
+                        playerLeftHund.Translate(0, 0, -Stickspeed * Time.deltaTime);
                         StickOver--;
                     }
                 }
             }
-               
 
         }
+    
 
     }
-    public void EventFlag() //ƒCƒxƒ“ƒgƒ}ƒl[ƒWƒƒ[‚ÅŒÄ‚Ño‚·
+    public void EventFlag() //ã‚¤ãƒ™ãƒ³ãƒˆãƒãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã§å‘¼ã³å‡ºã™
     {
         PauseRopeWalkForPosingEvent();
         HideBalanceTimerForPosingEvent();
@@ -244,38 +240,38 @@ public class PosingEvent : MonoBehaviour
 
     void PoseEvent()
     {
-        // ƒvƒŒƒCƒ„[E–_Eè‚ğ‘‚«Š·‚¦‚é‘O‚ÉAV‚µ‚¢j“n‚èXV‚ğ’â~‚µ‚Ü‚·B
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ»æ£’ãƒ»æ‰‹ã‚’æ›¸ãæ›ãˆã‚‹å‰ã«ã€æ–°ã—ã„ç¶±æ¸¡ã‚Šæ›´æ–°ã‚’åœæ­¢ã—ã¾ã™ã€‚
         PauseRopeWalkForPosingEvent();
         cam.RopeCameraCansel = true;
-        //1•bŒã‚É”š”­ƒ|ƒCƒ“ƒg‚ğq‚¶‚á‚È‚­‚·‚é
+        //1ç§’å¾Œã«çˆ†ç™ºãƒã‚¤ãƒ³ãƒˆã‚’å­ã˜ã‚ƒãªãã™ã‚‹
         Invoke(nameof(ParentReset),1f);
         Vector3 currentRotation = player.transform.eulerAngles;
         currentRotation.x = 0f;
         player.transform.eulerAngles = currentRotation;
-        DinoStoping = true;//‰öb‚ğŒÅ’è
-        playerMover.PlayerStoping = true;//ƒvƒŒƒCƒ„[‚ğŒÅ’è
-        startplayer = player.transform.rotation;//ƒCƒxƒ“ƒg‘O‚Ì‰ñ“]‚ğŠi”[
-        startstick = stick.transform.rotation;//ƒCƒxƒ“ƒg‘O‚Ì‰ñ“]‚ğŠi”[
-        startplayerRightHund = playerRightHund.transform.rotation;//ƒCƒxƒ“ƒg‘O‚Ì‰ñ“]‚ğŠi”[
-        startplayerLeftHund = playerLeftHund.transform.rotation;//ƒCƒxƒ“ƒg‘O‚Ì‰ñ“]‚ğŠi”[
-        startstickposition = stick.transform.position;//ƒCƒxƒ“ƒg‘O‚ÌÀ•W‚ğŠi”[
-        startplayerRightHundposition = playerRightHund.transform.position;//ƒCƒxƒ“ƒg‘O‚ÌÀ•W‚ğŠi”[
-        startplayerLeftHubdposition = playerLeftHund.transform.position;//ƒCƒxƒ“ƒg‘O‚ÌÀ•W‚ğŠi”[
-        player.transform.LookAt(Bill.transform); //ƒvƒŒƒCƒ„[‚ÌŒü‚«‚ğ’²®‚·‚é
-        Invoke(nameof(DinoEvent), 0.1f);//0.1•bŒê‚Éƒ|[ƒYƒCƒxƒ“ƒg‚ğn‚ß‚é
+        DinoStoping = true;//æ€ªç£ã‚’å›ºå®š
+        playerMover.PlayerStoping = true;//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å›ºå®š
+        startplayer = player.transform.rotation;//ã‚¤ãƒ™ãƒ³ãƒˆå‰ã®å›è»¢ã‚’æ ¼ç´
+        startstick = stick.transform.rotation;//ã‚¤ãƒ™ãƒ³ãƒˆå‰ã®å›è»¢ã‚’æ ¼ç´
+        startplayerRightHund = playerRightHund.transform.rotation;//ã‚¤ãƒ™ãƒ³ãƒˆå‰ã®å›è»¢ã‚’æ ¼ç´
+        startplayerLeftHund = playerLeftHund.transform.rotation;//ã‚¤ãƒ™ãƒ³ãƒˆå‰ã®å›è»¢ã‚’æ ¼ç´
+        startstickposition = stick.transform.position;//ã‚¤ãƒ™ãƒ³ãƒˆå‰ã®åº§æ¨™ã‚’æ ¼ç´
+        startplayerRightHundposition = playerRightHund.transform.position;//ã‚¤ãƒ™ãƒ³ãƒˆå‰ã®åº§æ¨™ã‚’æ ¼ç´
+        startplayerLeftHubdposition = playerLeftHund.transform.position;//ã‚¤ãƒ™ãƒ³ãƒˆå‰ã®åº§æ¨™ã‚’æ ¼ç´
+        player.transform.LookAt(Bill.transform); //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‘ãã‚’èª¿æ•´ã™ã‚‹
+        Invoke(nameof(DinoEvent), 0.1f);//0.1ç§’èªã«ãƒãƒ¼ã‚ºã‚¤ãƒ™ãƒ³ãƒˆã‚’å§‹ã‚ã‚‹
         rotationY = player.transform.eulerAngles.y;
-        prevTwist = 0f;   // Gyro•û®‚È‚ç prevGyro ‚É•ÏX
+        prevTwist = 0f;   // Gyroæ–¹å¼ãªã‚‰ prevGyro ã«å¤‰æ›´
     }
     void DinoEvent()
     {
-        Quaternion rotation = Quaternion.Euler(0, 180, 0);//‰öb‚ÌŒü‚«
-        //ƒrƒ‹‚Ì‰¡‚É‰öb‚ğ¶¬
+        Quaternion rotation = Quaternion.Euler(0, 180, 0);//æ€ªç£ã®å‘ã
+        //ãƒ“ãƒ«ã®æ¨ªã«æ€ªç£ã‚’ç”Ÿæˆ
         Vector3 billpos = Bill.transform.position + new Vector3(0.0f, 0, 10.0f);
         spawneDino = Instantiate(PosingDino, billpos, rotation);
-        //4•bŒã‚É‰öb‚ğ’â~
+        //4ç§’å¾Œã«æ€ªç£ã‚’åœæ­¢
         Invoke(nameof(DinoIdouFlag), 4.0f);
         cam.PosingCameraSet();
-        balance.PauseNormalBalanceGauge();//ƒoƒ‰ƒ“ƒXƒQ[ƒW‚ğ~‚ß‚é
+        balance.PauseNormalBalanceGauge();//ãƒãƒ©ãƒ³ã‚¹ã‚²ãƒ¼ã‚¸ã‚’æ­¢ã‚ã‚‹
         HideBalanceTimerForPosingEvent();
 
     }
@@ -303,18 +299,18 @@ public class PosingEvent : MonoBehaviour
     public void PosingFinish()
     {
        
-        KeikokuFlag = false;//“_–Å‚ğÁ‚·
+        KeikokuFlag = false;//ç‚¹æ»…ã‚’æ¶ˆã™
         _target.enabled = false;
-        PlayerRotation = false;//ƒvƒŒƒCƒ„[‚ğ‰ñ“]‚Å‚«‚È‚­‚·‚é
+        PlayerRotation = false;//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å›è»¢ã§ããªãã™ã‚‹
         cam.CameraSet();
         Invoke(nameof(GameSet), 3.5f);
-        player.transform.rotation = startplayer;//‰ñ“]‚ğŒ³‚É–ß‚·
-        stick.transform.rotation = startstick;//‰ñ“]‚ğŒ³‚É–ß‚·
-        stick.transform.position = startstickposition;//À•W‚ğŒ³‚É–ß‚·
-        playerRightHund.transform.rotation = startplayerRightHund;//‰ñ“]‚ğŒ³‚É–ß‚·
-        playerLeftHund.transform.rotation = startplayerLeftHund;//‰ñ“]‚ğŒ³‚É–ß‚·
-        playerRightHund.transform.position = startplayerRightHundposition;//À•W‚ğŒ³‚É–ß‚·
-        playerLeftHund.transform.position = startplayerLeftHubdposition;//À•W‚ğŒ³‚É–ß‚·
+        player.transform.rotation = startplayer;//å›è»¢ã‚’å…ƒã«æˆ»ã™
+        stick.transform.rotation = startstick;//å›è»¢ã‚’å…ƒã«æˆ»ã™
+        stick.transform.position = startstickposition;//åº§æ¨™ã‚’å…ƒã«æˆ»ã™
+        playerRightHund.transform.rotation = startplayerRightHund;//å›è»¢ã‚’å…ƒã«æˆ»ã™
+        playerLeftHund.transform.rotation = startplayerLeftHund;//å›è»¢ã‚’å…ƒã«æˆ»ã™
+        playerRightHund.transform.position = startplayerRightHundposition;//åº§æ¨™ã‚’å…ƒã«æˆ»ã™
+        playerLeftHund.transform.position = startplayerLeftHubdposition;//åº§æ¨™ã‚’å…ƒã«æˆ»ã™
     }
     
         
@@ -322,13 +318,13 @@ public class PosingEvent : MonoBehaviour
     {
         cam.RopeCameraCansel = false;
         RestoreBalanceTimerAfterPosingEvent();
-        playerMover.PlayerStoping = false;//ƒvƒŒƒCƒ„[‚ğ“®‚¯‚é‚æ‚¤‚É
-        DinoStoping = false;//‰öb‚ğ“®‚¯‚é‚æ‚¤‚É
+        playerMover.PlayerStoping = false;//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’å‹•ã‘ã‚‹ã‚ˆã†ã«
+        DinoStoping = false;//æ€ªç£ã‚’å‹•ã‘ã‚‹ã‚ˆã†ã«
         agent.Warp(new Vector3(-18.05f, 0.1f, 8.0f));
         AI.PointReset();
-        //Dino.transform.position = new Vector3(-18.05f, 0.1f, 8.0f); //ƒrƒ‹‚Ì‰¡‚É‰öb‚ğˆÚ“®
+        //Dino.transform.position = new Vector3(-18.05f, 0.1f, 8.0f); //ãƒ“ãƒ«ã®æ¨ªã«æ€ªç£ã‚’ç§»å‹•
         balance.ResumeNormalBalanceGauge();
-        // ƒvƒŒƒCƒ„[E–_EèEƒJƒƒ‰EƒQ[ƒW‚ğ–ß‚µ‚½Œã‚É‚¾‚¯j“n‚è‚ğÄŠJ‚µ‚Ü‚·B
+        // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãƒ»æ£’ãƒ»æ‰‹ãƒ»ã‚«ãƒ¡ãƒ©ãƒ»ã‚²ãƒ¼ã‚¸ã‚’æˆ»ã—ãŸå¾Œã«ã ã‘ç¶±æ¸¡ã‚Šã‚’å†é–‹ã—ã¾ã™ã€‚
         ResumeRopeWalkAfterPosingEvent();
     }
 
@@ -393,7 +389,7 @@ public class PosingEvent : MonoBehaviour
 
         if (ropeWalkManager == null)
         {
-            Debug.LogWarning("PosingEvent: Rope Walk Manager‚ª–¢İ’è‚Ì‚½‚ßAV‚µ‚¢j“n‚è‚Ì’â~‚ğƒXƒLƒbƒv‚µ‚Ü‚·B", this);
+            Debug.LogWarning("PosingEvent: Rope Walk ManagerãŒæœªè¨­å®šã®ãŸã‚ã€æ–°ã—ã„ç¶±æ¸¡ã‚Šã®åœæ­¢ã‚’ã‚¹ã‚­ãƒƒãƒ—ã—ã¾ã™ã€‚", this);
             return;
         }
 
@@ -419,7 +415,7 @@ public class PosingEvent : MonoBehaviour
     private void OnDisable()
     {
         RestoreBalanceTimerAfterPosingEvent();
-        // ‹­§I—¹‚âScene‘JˆÚ‚Å‚àAƒ|[ƒYƒCƒxƒ“ƒg‚Ì’â~——R‚¾‚¯‚Íc‚³‚È‚¢‚æ‚¤‚É‚µ‚Ü‚·B
+        // å¼·åˆ¶çµ‚äº†ã‚„Sceneé·ç§»ã§ã‚‚ã€ãƒãƒ¼ã‚ºã‚¤ãƒ™ãƒ³ãƒˆã®åœæ­¢ç†ç”±ã ã‘ã¯æ®‹ã•ãªã„ã‚ˆã†ã«ã—ã¾ã™ã€‚
         ResumeRopeWalkAfterPosingEvent();
     }
 }
