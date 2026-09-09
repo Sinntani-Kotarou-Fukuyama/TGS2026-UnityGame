@@ -25,6 +25,8 @@ public class RopeWalkManager : MonoBehaviour
     [Tooltip("最終ルート終点で、既存のClear処理を1回だけ呼ぶための参照です。")]
     [SerializeField] private PlayerGameFeedbackController clearSceneLoader;
 
+    [SerializeField] private GoalCelebrationController goalCelebrationController;
+
     [Tooltip("イベント中は画面端の傾き表示を止めるための参照です。")]
     [SerializeField] private BlanceBar_Vignette balanceVignette;
 
@@ -276,6 +278,12 @@ public class RopeWalkManager : MonoBehaviour
         }
 
         Debug.Log("[RopeWalkManager] 選択ルートの最終地点に到達しました。既存のClear処理を呼びます。", this);
+        if (goalCelebrationController != null &&
+            goalCelebrationController.PlayCelebration(clearSceneLoader.LoadClearScene))
+        {
+            return;
+        }
+
         clearSceneLoader.LoadClearScene();
     }
 
