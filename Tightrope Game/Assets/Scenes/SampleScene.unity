@@ -22594,7 +22594,7 @@ Transform:
   m_GameObject: {fileID: 1248933303}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.06, y: 0, z: 0.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24999,7 +24999,7 @@ Transform:
   m_GameObject: {fileID: 1410916109}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.06, y: 0, z: -0.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -25258,6 +25258,8 @@ MonoBehaviour:
   returnToCenterSpeed: 20
   trolley: {fileID: 1389379653}
   Player: {fileID: 2019293626}
+  playerRopeVerticalOffset: 0.02
+  playerRopeLateralOffset: 0.02
   balanceBarTransform: {fileID: 1837462911}
   barInfluenceStrength: 2
   localAnchor: {x: 0, y: 0, z: 0}
@@ -32845,7 +32847,7 @@ Transform:
   m_GameObject: {fileID: 1837462910}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.0009498352, y: -0.00483, z: 0.01188}
+  m_LocalPosition: {x: -0.001, y: -0.0026, z: 0.0126}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

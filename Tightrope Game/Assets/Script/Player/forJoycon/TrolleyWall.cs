@@ -65,6 +65,10 @@ public class TrolleyWall : MonoBehaviour
     private ConfigurableJoint trolleyjoin;　// trollyのconfigurableJoin
     [SerializeField] private GameObject trolley;
     [SerializeField] private GameObject Player;
+    [Tooltip("ロープ基準位置に対するPlayer Rootの垂直Offsetです。")]
+    [SerializeField] private float playerRopeVerticalOffset = -0.09f;
+    [Tooltip("ロープ進行方向に対するPlayer表示位置の左右Offsetです。")]
+    [SerializeField] private float playerRopeLateralOffset = 0f;
     //[SerializeField] private GameObject Pole;
 
 
@@ -373,7 +377,11 @@ public class TrolleyWall : MonoBehaviour
         trolley.transform.SetPositionAndRotation(targetPosition, targetRotation);
 
         Quaternion uprightPlayerRotation = Quaternion.Euler(0f, targetRotation.eulerAngles.y, 0f);
-        Player.transform.SetPositionAndRotation(targetPosition - Vector3.up * 0.09f, uprightPlayerRotation);
+        Vector3 lateralDirection = targetRotation * Vector3.right;
+        Vector3 playerPosition = targetPosition
+            + Vector3.up * playerRopeVerticalOffset
+            + lateralDirection * playerRopeLateralOffset;
+        Player.transform.SetPositionAndRotation(playerPosition, uprightPlayerRotation);
     }
 
     // 保存したSegment進行率から、Root・Trolley・Playerを同じロープ位置へ一式で戻します。
@@ -1200,6 +1208,7 @@ public class TrolleyWall : MonoBehaviour
             // プレイヤーの位置調整用（なくてもいい）
             CapsuleCollider capsuleCollider = Player.GetComponent<CapsuleCollider>();
             Vector3 trolleyPosition = trolley.transform.position;
+            Vector3 lateralDirection = WallRb.transform.right;
 
 
             // ロープから離れたら
@@ -1208,7 +1217,9 @@ public class TrolleyWall : MonoBehaviour
                 // 一度だけ、壁がロープに当たった地点にプレイヤーを移動させる
                 if (EndMove == false)
                 {
-                    Player.transform.position = targetPosition - new Vector3(0.0f, 0.09f, 0.0f);
+                    Player.transform.position = targetPosition
+                        + Vector3.up * playerRopeVerticalOffset
+                        + lateralDirection * playerRopeLateralOffset;
                     EndMove = true;
                 }
 
@@ -1222,7 +1233,9 @@ public class TrolleyWall : MonoBehaviour
             }
 
             // trolleyの位置(ロープと壁が当たった地点)にプレイヤーを移動させる。new Vectorは調整
-            Player.transform.position = trolleyPosition - new Vector3(0.0f, 0.09f, 0.0f);
+            Player.transform.position = trolleyPosition
+                + Vector3.up * playerRopeVerticalOffset
+                + lateralDirection * playerRopeLateralOffset;
 
 
 
