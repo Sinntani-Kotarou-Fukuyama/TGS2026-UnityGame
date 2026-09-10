@@ -203,12 +203,12 @@ public class BalanceManager : MonoBehaviour
     [SerializeField] private float stickFollowSmoothSpeed = 15f;
     [SerializeField] private StickFollowUpdateTiming stickFollowUpdateTiming = StickFollowUpdateTiming.LateUpdate;
     [SerializeField] private bool resetStickTargetOnSniperDefenseEnd = true;
-    [Tooltip("PosingEventと同じく、棒0.3に対して左右の手Targetを逆方向へ1.0動かすための倍率です。1で同じ比率になります。")]
-    [SerializeField] private float sniperDefenseHandAdditionalFollowMultiplier = 1f;
-    [Tooltip("スナイパー防御中に左右の手Targetへ加える追加補正の最大World距離です。")]
-    [SerializeField, Min(0f)] private float sniperDefenseHandAdditionalMaxWorldDistance = 0.03f;
-    [Tooltip("スナイパー防御中に左右の手Targetへ加える追加World補正の追従速度です。")]
-    [SerializeField, Min(0f)] private float sniperDefenseHandAdditionalSmoothSpeed = 0.2f;
+    [Tooltip("スナイパー防御中、棒のSmooth後World移動を左右の手Targetへ同フレーム同期する倍率です。")]
+    [SerializeField] private float sniperDefenseHandStickDeltaFollowMultiplier = 1f;
+    [Tooltip("スナイパー防御開始時に棒を画面上でPlayerから離すWorld距離です。")]
+    [SerializeField, Min(0f)] private float sniperDefenseStickScreenHorizontalOffset = 0.03f;
+    [Tooltip("棒を画面横方向へ離すCamera Rightの計算に使うSideView Camera Transformです。")]
+    [SerializeField] private Transform sniperDefenseSideViewCameraTransform;
     [Tooltip("防御判定に使う棒のWorld Y補正です。棒のPivotが見た目の中心からずれている場合だけ調整します。")]
     [SerializeField] private float sniperDefenseStickWorldYOffset = 0f;
     [Tooltip("棒と赤いレーザーのWorld Y差がこの値以内なら防御成功です。")]
@@ -294,10 +294,12 @@ public class BalanceManager : MonoBehaviour
     private float challengeTimer;
     private float wobbleTimer;
     private Quaternion wobbleBaseRotation;
+    private Vector3 sniperDefenseStickRestorePosition;
     private Vector3 sniperDefenseStickBasePosition;
+    private Vector3 sniperDefenseStickBaseWorldPosition;
+    private Vector3 sniperDefensePreviousStickWorldPosition;
+    private bool hasSniperDefensePreviousStickWorldPosition;
     private Vector3[] sniperDefenseHandBasePositions;
-    private Vector3[] sniperDefenseHandTargetAdditionalWorldOffsets;
-    private Vector3[] sniperDefenseHandCurrentAdditionalWorldOffsets;
     private bool hasPendingSniperDefenseStickWorldYRange;
     private float pendingSniperDefenseLowerLaserWorldY;
     private float pendingSniperDefenseUpperLaserWorldY;
@@ -565,8 +567,8 @@ public class BalanceManager : MonoBehaviour
         SaveHorizontalLayoutIfNeeded();
         ApplyEventVerticalLayout();
         hasSniperDefenseStickBasePosition = false;
+        hasSniperDefensePreviousStickWorldPosition = false;
         hasSniperDefenseHandBasePositions = false;
-        ResetSniperDefenseHandAdditionalWorldOffsets();
         SaveSniperDefenseStickBasePosition();
         ActivatePendingSniperDefenseStickWorldYRange();
         SetSniperDefensePointToZeroStickOffset();
@@ -1334,7 +1336,15 @@ public class BalanceManager : MonoBehaviour
     {
         if (sniperDefenseStickTarget != null && !hasSniperDefenseStickBasePosition)
         {
+            // Defense終了時の復元用位置は、水平Offsetを加える前に保存します。
+            sniperDefenseStickRestorePosition = GetFollowPosition(sniperDefenseStickTarget, stickFollowSpace);
+            ApplySniperDefenseStickScreenHorizontalOffset();
+
+            // 上下移動とHand同期は、水平Offset適用後の位置を基準にします。
             sniperDefenseStickBasePosition = GetFollowPosition(sniperDefenseStickTarget, stickFollowSpace);
+            sniperDefenseStickBaseWorldPosition = sniperDefenseStickTarget.position;
+            sniperDefensePreviousStickWorldPosition = sniperDefenseStickBaseWorldPosition;
+            hasSniperDefensePreviousStickWorldPosition = true;
             hasSniperDefenseStickBasePosition = true;
         }
 
@@ -1356,8 +1366,21 @@ public class BalanceManager : MonoBehaviour
         float smoothSpeed = Mathf.Max(0f, stickFollowSmoothSpeed);
 
         UpdateFollowTarget(sniperDefenseStickTarget, sniperDefenseStickBasePosition, hasSniperDefenseStickBasePosition, stickOffset, smoothSpeed, stickFollowSpace, stickFollowAxis);
-        float actualStickMovement = GetSniperDefenseStickMovementFromBase();
-        UpdateSniperDefenseHandFollowTargets(actualStickMovement);
+        Vector3 currentStickWorldPosition = sniperDefenseStickTarget != null
+            ? sniperDefenseStickTarget.position
+            : sniperDefenseStickBaseWorldPosition;
+        Vector3 previousStickWorldPosition = hasSniperDefensePreviousStickWorldPosition
+            ? sniperDefensePreviousStickWorldPosition
+            : currentStickWorldPosition;
+        Vector3 stickWorldDelta = currentStickWorldPosition - previousStickWorldPosition;
+        Vector3 absoluteStickWorldDisplacement =
+            (previousStickWorldPosition - sniperDefenseStickBaseWorldPosition)
+            + stickWorldDelta;
+        sniperDefensePreviousStickWorldPosition = currentStickWorldPosition;
+        hasSniperDefensePreviousStickWorldPosition = sniperDefenseStickTarget != null;
+
+        // Deltaと同じフレームで反映しつつ、最終位置は開始位置からの絶対変位で求めて累積誤差を防ぎます。
+        UpdateSniperDefenseHandFollowTargets(absoluteStickWorldDisplacement);
     }
 
     private void RestoreSniperDefenseStickPosition()
@@ -1366,19 +1389,48 @@ public class BalanceManager : MonoBehaviour
             && sniperDefenseStickTarget != null
             && hasSniperDefenseStickBasePosition)
         {
-            SetFollowPosition(sniperDefenseStickTarget, sniperDefenseStickBasePosition, stickFollowSpace);
+            SetFollowPosition(sniperDefenseStickTarget, sniperDefenseStickRestorePosition, stickFollowSpace);
         }
 
         // 棒の復元設定に関係なく、左右の手Targetは防御開始前の握り位置へ戻します。
         RestoreSniperDefenseHandFollowTargets();
+        hasSniperDefensePreviousStickWorldPosition = false;
+    }
+
+    private void ApplySniperDefenseStickScreenHorizontalOffset()
+    {
+        if (sniperDefenseStickTarget == null
+            || sniperDefenseSideViewCameraTransform == null
+            || sniperDefenseStickScreenHorizontalOffset <= 0f)
+        {
+            return;
+        }
+
+        Vector3 cameraRightHorizontal = sniperDefenseSideViewCameraTransform.right;
+        cameraRightHorizontal.y = 0f;
+        if (cameraRightHorizontal.sqrMagnitude <= Mathf.Epsilon)
+        {
+            return;
+        }
+
+        cameraRightHorizontal.Normalize();
+        Transform playerRoot = sniperDefenseStickTarget.root;
+        Vector3 playerPosition = playerRoot != null
+            ? playerRoot.position
+            : sniperDefenseStickTarget.position;
+        float currentScreenHorizontalSide = Vector3.Dot(
+            sniperDefenseStickTarget.position - playerPosition,
+            cameraRightHorizontal);
+        float offsetSign = currentScreenHorizontalSide < 0f ? -1f : 1f;
+        sniperDefenseStickTarget.position += cameraRightHorizontal
+            * offsetSign
+            * sniperDefenseStickScreenHorizontalOffset;
     }
 
     private void SaveSniperDefenseHandBasePositions()
     {
         int targetCount = sniperDefenseHandFollowTargets != null ? sniperDefenseHandFollowTargets.Length : 0;
         sniperDefenseHandBasePositions = new Vector3[targetCount];
-        sniperDefenseHandTargetAdditionalWorldOffsets = new Vector3[targetCount];
-        sniperDefenseHandCurrentAdditionalWorldOffsets = new Vector3[targetCount];
 
         for (int i = 0; i < targetCount; i++)
         {
@@ -1395,7 +1447,7 @@ public class BalanceManager : MonoBehaviour
         hasSniperDefenseHandBasePositions = true;
     }
 
-    private void UpdateSniperDefenseHandFollowTargets(float actualStickMovement)
+    private void UpdateSniperDefenseHandFollowTargets(Vector3 absoluteStickWorldDisplacement)
     {
         if (sniperDefenseHandFollowTargets == null || sniperDefenseHandBasePositions == null)
         {
@@ -1403,28 +1455,23 @@ public class BalanceManager : MonoBehaviour
         }
 
         int targetCount = Mathf.Min(sniperDefenseHandFollowTargets.Length, sniperDefenseHandBasePositions.Length);
-        // PosingEventでは、棒0.3に対して手Targetを逆方向へ1.0動かしています。
-        // 毎フレームの加算ではなく、開始時の位置から絶対値を計算して位置ずれの蓄積を防ぎます。
-        const float posingStickMovementRatio = 0.3f;
-        float handAdditionalMovement = -actualStickMovement
-            * (sniperDefenseHandAdditionalFollowMultiplier / posingStickMovementRatio);
+        Vector3 synchronizedStickWorldOffset = absoluteStickWorldDisplacement
+            * sniperDefenseHandStickDeltaFollowMultiplier;
 
         for (int i = 0; i < targetCount; i++)
         {
             Transform followTarget = sniperDefenseHandFollowTargets[i];
             UpdateSniperDefenseHandFollowTarget(
-                i,
                 followTarget,
                 sniperDefenseHandBasePositions[i],
-                handAdditionalMovement);
+                synchronizedStickWorldOffset);
         }
     }
 
     private void UpdateSniperDefenseHandFollowTarget(
-        int targetIndex,
         Transform handTarget,
         Vector3 baseLocalPosition,
-        float additionalMovement)
+        Vector3 synchronizedStickWorldOffset)
     {
         if (handTarget == null)
         {
@@ -1435,22 +1482,7 @@ public class BalanceManager : MonoBehaviour
         Vector3 baseWorldPosition = parent != null
             ? parent.TransformPoint(baseLocalPosition)
             : baseLocalPosition;
-
-        // PosingEventと同じTarget Local Z方向の補正候補をScale込みのWorld変位へ変換し、
-        // 棒の親移動とは別に加える距離だけをWorld基準で制限します。
-        Vector3 candidateLocalDisplacement = Vector3.forward * additionalMovement;
-        Vector3 candidateWorldDisplacement =
-            handTarget.TransformVector(candidateLocalDisplacement);
-        Vector3 clampedWorldDisplacement = Vector3.ClampMagnitude(
-            candidateWorldDisplacement,
-            Mathf.Max(0f, sniperDefenseHandAdditionalMaxWorldDistance));
-        sniperDefenseHandTargetAdditionalWorldOffsets[targetIndex] = clampedWorldDisplacement;
-        Vector3 appliedWorldDisplacement = Vector3.MoveTowards(
-            sniperDefenseHandCurrentAdditionalWorldOffsets[targetIndex],
-            clampedWorldDisplacement,
-            Mathf.Max(0f, sniperDefenseHandAdditionalSmoothSpeed) * Time.deltaTime);
-        sniperDefenseHandCurrentAdditionalWorldOffsets[targetIndex] = appliedWorldDisplacement;
-        Vector3 targetWorldPosition = baseWorldPosition + appliedWorldDisplacement;
+        Vector3 targetWorldPosition = baseWorldPosition + synchronizedStickWorldOffset;
 
         if (parent != null)
         {
@@ -1460,14 +1492,12 @@ public class BalanceManager : MonoBehaviour
         {
             handTarget.position = targetWorldPosition;
         }
-
     }
 
     private void RestoreSniperDefenseHandFollowTargets()
     {
         if (sniperDefenseHandFollowTargets == null || sniperDefenseHandBasePositions == null)
         {
-            ResetSniperDefenseHandAdditionalWorldOffsets();
             return;
         }
 
@@ -1483,39 +1513,6 @@ public class BalanceManager : MonoBehaviour
             // 防御開始時に保存した握り位置へ正確に戻します。
             followTarget.localPosition = sniperDefenseHandBasePositions[i];
         }
-
-        ResetSniperDefenseHandAdditionalWorldOffsets();
-    }
-
-    private void ResetSniperDefenseHandAdditionalWorldOffsets()
-    {
-        if (sniperDefenseHandTargetAdditionalWorldOffsets != null)
-        {
-            System.Array.Clear(
-                sniperDefenseHandTargetAdditionalWorldOffsets,
-                0,
-                sniperDefenseHandTargetAdditionalWorldOffsets.Length);
-        }
-
-        if (sniperDefenseHandCurrentAdditionalWorldOffsets != null)
-        {
-            System.Array.Clear(
-                sniperDefenseHandCurrentAdditionalWorldOffsets,
-                0,
-                sniperDefenseHandCurrentAdditionalWorldOffsets.Length);
-        }
-    }
-
-    private float GetSniperDefenseStickMovementFromBase()
-    {
-        if (sniperDefenseStickTarget == null || !hasSniperDefenseStickBasePosition)
-        {
-            return 0f;
-        }
-
-        Vector3 currentPosition = GetFollowPosition(sniperDefenseStickTarget, stickFollowSpace);
-        return GetAxisValue(currentPosition, stickFollowAxis)
-            - GetAxisValue(sniperDefenseStickBasePosition, stickFollowAxis);
     }
 
     private StickFollowSpace GetActiveHandFollowSpace()

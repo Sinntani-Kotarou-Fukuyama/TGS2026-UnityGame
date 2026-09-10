@@ -3786,7 +3786,7 @@ Transform:
   m_GameObject: {fileID: 231032325}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0027703156, y: 0.9871162, z: 0.005916267, w: -0.15987147}
-  m_LocalPosition: {x: 6.16, y: 2.53, z: 5.378}
+  m_LocalPosition: {x: 5.9, y: 2.53, z: 5.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23267,9 +23267,9 @@ MonoBehaviour:
   stickFollowSmoothSpeed: 15
   stickFollowUpdateTiming: 0
   resetStickTargetOnSniperDefenseEnd: 1
-  sniperDefenseHandAdditionalFollowMultiplier: -0.8
-  sniperDefenseHandAdditionalMaxWorldDistance: 0.06
-  sniperDefenseHandAdditionalSmoothSpeed: 0.7
+  sniperDefenseHandStickDeltaFollowMultiplier: 1
+  sniperDefenseStickScreenHorizontalOffset: 0.03
+  sniperDefenseSideViewCameraTransform: {fileID: 231032326}
   sniperDefenseStickWorldYOffset: 0
   sniperDefenseHeightTolerance: 0.03
   sniperDefenseDownKey: 274
@@ -28138,6 +28138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalCamera: {fileID: 1481858067}
   sideViewCamera: {fileID: 231032327}
+  thirdPersonCameraFollow: {fileID: 1599052644}
   activePriority: 30
   inactivePriority: 0
 --- !u!4 &1540248331
