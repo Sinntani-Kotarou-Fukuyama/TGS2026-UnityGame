@@ -148,14 +148,7 @@ public class TitleSceneUIController : MonoBehaviour
 
     private void Start()
     {
-        if (useDemoFlow)
-        {
-            ShowDemo();
-        }
-        else
-        {
-            ShowTitle();
-        }
+        ShowTitle();
     }
 
     private void Update()
@@ -207,7 +200,17 @@ public class TitleSceneUIController : MonoBehaviour
 
     private void UpdateDemo()
     {
-        if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+        JoyConMenuInputFrame joyConInput = joyConMenuInput.Read();
+        bool hasKeyboardInput = Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame;
+        bool hasMouseClick = Mouse.current != null &&
+            (Mouse.current.leftButton.wasPressedThisFrame ||
+             Mouse.current.rightButton.wasPressedThisFrame ||
+             Mouse.current.middleButton.wasPressedThisFrame);
+        bool hasJoyConInput = joyConInput.HorizontalStep != 0
+            || joyConInput.VerticalStep != 0
+            || joyConInput.ConfirmPressed;
+
+        if (hasKeyboardInput || hasMouseClick || hasJoyConInput)
         {
             ShowTitle();
             return;
@@ -328,7 +331,7 @@ public class TitleSceneUIController : MonoBehaviour
         }
 
         demoVideoPlayer.Stop();
-        demoVideoPlayer.isLooping = false;
+        demoVideoPlayer.isLooping = true;
 
         if (demoVideoPlayer.canSetTime)
         {
@@ -362,7 +365,7 @@ public class TitleSceneUIController : MonoBehaviour
 
     private void OnDemoFinished(VideoPlayer finishedPlayer)
     {
-        if (currentState == ScreenState.Demo)
+        if (currentState == ScreenState.Demo && !finishedPlayer.isLooping)
         {
             ShowTitle();
         }
