@@ -3407,7 +3407,9 @@ MonoBehaviour:
   playerAnimator: {fileID: 2019293627}
   routeController: {fileID: 2019293636}
   clearSceneLoader: {fileID: 2025167755}
+  goalCelebrationController: {fileID: 0}
   balanceVignette: {fileID: 1973266952}
+  earthquake: {fileID: 0}
   recoveryProtectionDuration: 1
   recoveryBlinkInterval: 0.1
   commonRoutePoints:
@@ -4097,7 +4099,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &244653536
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8842,8 +8844,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 15
-  m_fontSizeBase: 15
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -23586,13 +23588,14 @@ MonoBehaviour:
   stickFollowSmoothSpeed: 15
   stickFollowUpdateTiming: 0
   resetStickTargetOnSniperDefenseEnd: 1
-  sniperDefenseHandAdditionalFollowMultiplier: -0.8
-  sniperDefenseHandAdditionalMaxWorldDistance: 0.06
-  sniperDefenseHandAdditionalSmoothSpeed: 0.7
+  sniperDefenseHandStickDeltaFollowMultiplier: 1
+  sniperDefenseStickScreenHorizontalOffset: 0.03
+  sniperDefenseSideViewCameraTransform: {fileID: 0}
   sniperDefenseStickWorldYOffset: 0
   sniperDefenseHeightTolerance: 0.03
   sniperDefenseDownKey: 274
   sniperDefenseUpKey: 273
+  sniperDefenseKeyboardMoveMultiplier: 5
   sniperDefenseJoyConPitchThreshold: 0.15
   sniperDefenseJoyConMoveMultiplier: 5
   sniperDefenseJoyConGestureEndDelay: 0.1
@@ -25656,6 +25659,8 @@ MonoBehaviour:
   returnToCenterSpeed: 20
   trolley: {fileID: 1389379653}
   Player: {fileID: 2019293626}
+  playerRopeVerticalOffset: -0.09
+  playerRopeLateralOffset: 0
   balanceBarTransform: {fileID: 1837462911}
   barInfluenceStrength: 2
   localAnchor: {x: 0, y: 0, z: 0}
@@ -28531,6 +28536,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalCamera: {fileID: 1481858067}
   sideViewCamera: {fileID: 231032327}
+  thirdPersonCameraFollow: {fileID: 0}
   activePriority: 30
   inactivePriority: 0
 --- !u!4 &1540248331

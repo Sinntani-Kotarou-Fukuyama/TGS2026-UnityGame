@@ -8,12 +8,14 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] TutorialUIController tutorialUI;
     [SerializeField] TrolleyWall wall;//プレイヤーの移動処理
     [SerializeField] Earthquake earthquake;
+    GameplayControlType control;
 
     Joycon jc;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        control = ControlSelectionSession.SelectedControlType;
         if (ropeWalkManager != null) { ropeWalkManager.StopPlayer(); }
         Invoke(nameof(StartPlayer), 3f);
 
@@ -31,13 +33,13 @@ public class TutorialManager : MonoBehaviour
         {
             Debug.LogWarning("[Joycon Debug] Joy-Con が見つかりません。接続を確認してください。");
         }
-        if (jc == null)
+        if (control == GameplayControlType.Keyboard)
         {
-           tutorialUI.nextHintText.text = "SPACEで次へ";
+            tutorialUI.nextHintText.text = "SPACEで次へ";
         }
         else
         {
-           tutorialUI.nextHintText.text = "Xボタンで次へ";
+            tutorialUI.nextHintText.text = "Xボタンで次へ";
 
         }
     }
@@ -61,12 +63,12 @@ public class TutorialManager : MonoBehaviour
         {
             ropeWalkManager.MovePlayer();
 
-            
+
             bool isJoyCon = ControlSelectionSession.SelectedControlType == GameplayControlType.JoyCon;
 
             if (isJoyCon)
             {
-                
+
                 var joyWait = FindFirstObjectByType<JoyConStartWaitController>();
                 if (joyWait != null)
                 {
@@ -78,26 +80,26 @@ public class TutorialManager : MonoBehaviour
             }
             else
             {
-                
+
                 Invoke(nameof(Tutorial_1), 1f);
             }
 
             Debug.Log("動きました");
         }
         var eq = FindFirstObjectByType<Earthquake>();
-if (eq != null)
-{
-    eq.OnEarthquakeStart = () =>
-    {
-        Invoke(nameof(Tutorial_2), 1f);
-    };
-}
+        if (eq != null)
+        {
+            eq.OnEarthquakeStart = () =>
+            {
+                Invoke(nameof(Tutorial_2), 1f);
+            };
+        }
 
     }
     void Tutorial_1()//1つ目に出てくるチュートリアル
     {
-        //ジョイコンが無かったら
-        if(jc==null)
+        //操作方法をキーボード操作にしたら
+        if (control == GameplayControlType.Keyboard)
         {
             //キーボードへ
             tutorialUI.ShowLines(new string[]
@@ -114,29 +116,29 @@ if (eq != null)
             }
             );
         }
-        else//ジョイコンがあったら
+        else//操作方法をジョイコン操作にしたら
         {
             //ジョイコンへ
-           tutorialUI.ShowLines(new string[]
-           {
+            tutorialUI.ShowLines(new string[]
+            {
               "ロープの上でバランスを取ろう！",
               "棒を左右に倒してみよう。",
               "傾けすぎると落ちちゃうから気を付けて！",
               "実際にやってみよう！"
-           },
-           () => {
-               //UIが消えた瞬間に呼ばれる
-               wall.IsStop(false);
-           }
-           );
+            },
+            () => {
+                //UIが消えた瞬間に呼ばれる
+                wall.IsStop(false);
+            }
+            );
         }
 
         wall.IsStop(true);
     }
-   void Tutorial_2()//2つ目に出てくるチュートリアル
+    void Tutorial_2()//2つ目に出てくるチュートリアル
     {
-        //ジョイコンが無かったら
-        if (jc == null)
+        //操作方法をキーボード操作にしたら
+        if (control == GameplayControlType.Keyboard)
         {
             //キーボードへ
             tutorialUI.ShowLines(new string[]
@@ -144,7 +146,7 @@ if (eq != null)
                 "ロープを渡っていると異常が発生するよ！",
                 "異常中は何らかの邪魔が入るよ！",
                 "ロープから落とされないように気を付けて！"
-                
+
             },
             () => {
                 //UIが消えた瞬間に呼ばれる
@@ -153,13 +155,15 @@ if (eq != null)
             }
             );
         }
-        else//ジョイコンがあったら
+        else//操作方法をジョイコン操作にしたら
         {
             //ジョイコンへ
             tutorialUI.ShowLines(new string[]
             {
-          "",
-          
+                "ロープを渡っていると異常が発生するよ！",
+                "異常中は何らかの邪魔が入るよ！",
+                "ロープから落とされないように気を付けて！"
+
             },
             () => {
                 //UIが消えた瞬間に呼ばれる
@@ -174,8 +178,8 @@ if (eq != null)
 
     void Tutorial_3()//3つ目に出てくるチュートリアル
     {
-        //ジョイコンが無かったら
-        if (jc == null)
+        //操作方法をキーボード操作にしたら
+        if (control == GameplayControlType.Keyboard)
         {
             //キーボードへ
             tutorialUI.ShowLines(new string[]
@@ -184,7 +188,7 @@ if (eq != null)
                 "↑や↓を使う異常もあるから気を付けて！",
                 "本番では怪獣が町で大暴れ！",
                 "頑張ってゴールを目指そう！",
-                "クリックするとゲームスタート！"
+                "SPECEキーでゲームスタート！"
             },
             () => {
                 //UIが消えた瞬間に呼ばれる
@@ -193,13 +197,17 @@ if (eq != null)
             }
             );
         }
-        else//ジョイコンがあったら
+        else//操作方法をジョイコン操作にしたら
         {
             //ジョイコンへ
             tutorialUI.ShowLines(new string[]
             {
-          "",
-         
+                "これでチュートリアルは終わり！",
+                "棒を上下に動かす異常もあるから気を付けて！",
+                "本番では怪獣が町で大暴れ！",
+                "頑張ってゴールを目指そう！",
+                "Xボタンを押すとゲームスタート！"
+
             },
             () => {
                 //UIが消えた瞬間に呼ばれる

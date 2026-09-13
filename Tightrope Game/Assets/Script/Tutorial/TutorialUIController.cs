@@ -43,10 +43,19 @@ public class TutorialUIController : MonoBehaviour
 
         if (!tutorialUI.activeSelf)
             return;
-
+        GameplayControlType control = ControlSelectionSession.SelectedControlType;
         var joycons = JoyconManager.Instance.j;
 
-        // Joy-Con が無い場合（または途中で切断された場合）
+        if (control == GameplayControlType.Keyboard)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Next();
+            }
+            return;
+        }
+
+        //JoyConが無い場合はSPACEで動かす
         if (joycons == null || joycons.Count == 0)
         {
             if (Input.GetKeyDown(KeyCode.Space))
@@ -56,7 +65,7 @@ public class TutorialUIController : MonoBehaviour
             return;
         }
 
-        // Joy-Con がある場合だけ joycons[0] を読む
+        //JoyConがある場合だけボタン判定
         Joycon jc = joycons[0];
         bool isPressed = jc.GetButton(Joycon.Button.DPAD_UP);
 
