@@ -146,10 +146,10 @@ public class TrolleyWall : MonoBehaviour
     [SerializeField, Min(0f)] private float reactionForceScale = 1.0f;
 
     [Tooltip("前進中に発生する自然な揺れのトルク強度です。")]
-    [SerializeField, Min(0f)] private float wobbleIntensity = 0.5f; // 【追加】前進時に発生する「ブレ」の強さ
+    [SerializeField, Min(0f)] public float wobbleIntensity = 0.5f; // 【追加】前進時に発生する「ブレ」の強さ
 
     [Tooltip("自然な揺れのSin波へ掛ける時間係数（ラジアン/秒）です。大きいほど揺れが速くなります。")]
-    [SerializeField, Min(0f)] private float naturalSwaySpeed = 1f;
+    [SerializeField, Min(0f)] public float naturalSwaySpeed = 1f;
 
     private Rigidbody PlayerRb; // プレイヤーのRigidBody
     private Quaternion initialLocalRotation;
@@ -162,9 +162,11 @@ public class TrolleyWall : MonoBehaviour
     private bool isJoyConStartHold;
     public bool balanceOnlyMode = false;
     private bool waitForBalanceInputRelease;
-    private bool isPausedForExternalEvent;
+    public bool isPausedForExternalEvent;
     private bool isManagedFallActive;
     private bool hasNotifiedManagedFall;
+    public bool angleOnlyMode = false;
+    public bool freezeAngleMode = false;
 
     private Rigidbody trolleyRigidbody;
     private RigidbodyStateSnapshot managedFallWallRigidbodyState;
@@ -658,6 +660,8 @@ public class TrolleyWall : MonoBehaviour
     //=================================================================================
     private void Update()
     {
+        
+
         // カメラがはなれている時などは止まる
         if (isStop || isPausedForExternalEvent || isManagedFallActive) { return; }
         // ロープから離れていれば処理しない
@@ -904,7 +908,32 @@ public class TrolleyWall : MonoBehaviour
     public float heliAngularVelocity = 0f;
     private void FixedUpdate()
     {
+        if (freezeAngleMode)
+        {
+            // 角度更新を完全停止
+            angularVelocity = 0f;
+            currentAngle = 0f;
 
+            // プレイヤーの回転を固定（Z軸も固定）
+            PlayerRb.constraints = RigidbodyConstraints.FreezeAll;
+            // プレイヤーをまっすぐ立たせる（Y軸向きはロープ方向）
+            Player.transform.rotation = Quaternion.Euler(0, Player.transform.eulerAngles.y, 0);
+            // 物理処理を止める
+            StopRigidBodyMotion();
+            return;
+        }
+        if (angleOnlyMode)
+        {
+            // 位置は固定するが角度は更新する
+            PlayerRb.constraints =
+                RigidbodyConstraints.FreezePosition |
+                RigidbodyConstraints.FreezeRotationX |
+                RigidbodyConstraints.FreezeRotationY;
+
+            // Z回転だけ自由にする（自然揺れはZ軸）
+            isStop = false;
+            isPausedForExternalEvent = false;
+        }
         //通常モードの停止条件
         if (isStop || isPausedForExternalEvent || isManagedFallActive)
         {
@@ -942,16 +971,23 @@ public class TrolleyWall : MonoBehaviour
 
         float currentWobble = 0f;
 
-        // ★ ヘリイベント中は前進だけ止める
+        //ヘリイベント中は前進だけ止める
         if (balanceOnlyMode)
         {
+            //位置は固定
             WallRb.linearVelocity = Vector3.zero;
+
+            //前進していなくても自然揺れだけは動かす
+            float slowWave = Mathf.Sin(Time.time * Mathf.Max(0f, naturalSwaySpeed));
+            currentWobble = slowWave * Mathf.Max(0f, wobbleIntensity);
+
+            currentWobble *= 2.0f;
         }
         else
         {
 
-        
-        if (autoWalk)
+
+            if (autoWalk)
         {
             WallRb.linearVelocity = WallRb.transform.forward * Mathf.Max(0f, moveSpeed);
             // サイン波（Mathf.Sin）を使い、時間の経過（Time.time）に合わせて、大きな波のようにじわ〜っと揺らす。

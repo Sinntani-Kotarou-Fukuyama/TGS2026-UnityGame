@@ -161,12 +161,16 @@ public class Helicopter : MonoBehaviour
     }
     void HeliEvent()
     {
+        wall.angleOnlyMode = true;
         wall.SetBalanceOnlyMode(true);
-        wall.IsStop(false); 
+        wall.IsStop(false);
+        wall.isPausedForExternalEvent = false;
+       
+
         PauseRopeWalkForHelicopterEvent();
         Destroy(StartHeli);//初めのヘリを削除
         DinoStoping = true;//怪獣を固定
-        playerMover.PlayerStoping = true;//プレイヤーを固定
+        playerMover.PlayerStoping = false;
         Quaternion rotation = Quaternion.Euler(0, 0, 0);//ヘリの向き
         //プレイヤーの右にヘリを生成
         Vector3 playerpos = player.transform.position + player.right * offsetX + player.forward * offsetZ;
@@ -215,6 +219,8 @@ public class Helicopter : MonoBehaviour
     }
     void DinoEvent()
     {
+       
+        wall.freezeAngleMode = true;
         wall.StopRouteMovement();
         Quaternion rotation = Quaternion.Euler(0, -90, 0);//怪獣の向き
         //ヘリの横に怪獣を生成
@@ -259,11 +265,13 @@ public class Helicopter : MonoBehaviour
     }
     private void Destroy()
     {
+        wall.angleOnlyMode = false;
+        wall.freezeAngleMode = false;
         wall.SetBalanceOnlyMode(false);
         wall.ResumeRouteMovement(true);
         panel.SetActive(false);
         cameraFrame.SetActive(false);
-        playerMover.PlayerStoping = false;
+       // playerMover.PlayerStoping = false;
         DinoStoping = false;
         Vector3 pos = cam.mancamera.transform.position - cam.mancamera.transform.forward * 3;//カメラから3座標後ろにワープさせる
         pos.y = 0.1f;
