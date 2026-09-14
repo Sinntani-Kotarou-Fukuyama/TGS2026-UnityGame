@@ -54,6 +54,8 @@ public class PosingEvent : MonoBehaviour
     float smooth = 0.1f;//ジャイロの滑らかさ
     float stickSensitivity = 1.0f;
     private float prevPitch = 0f;
+    private float prevUpDown = 0f;
+
 
     private void Awake()
     {
@@ -166,44 +168,53 @@ public class PosingEvent : MonoBehaviour
             {
                 if (jc == null)
                 {
-                    Debug.LogWarning("[Joycon Debug] jc が null のため Joy-Con 回転処理をスキップします。");
+                    Debug.LogWarning("[Joycon Debug] jc が null のため Joy-Con 処理をスキップします。");
                     return;
                 }
-                //ジャイロ
-                Vector3 gyro = jc.GetGyro();
 
-                //上下の動きは X軸の回転速度
-                float pitch = gyro.x;
+                //Joy-Con の向きを取得
+                Quaternion joyRot = jc.GetVector();
+                Vector3 euler = joyRot.eulerAngles;
 
-                //ノイズ除去（強すぎると上下が弱くなるので 0.35 が最適）
-                pitch = Mathf.Lerp(prevPitch, pitch, 0.35f);
-                prevPitch = pitch;
+                //横持ち Joy-Con の左右回転は X軸
+                float rawX = -euler.x;
 
-                //上下判定のしきい値
-                float threshold = 0.45f;
+                //角度をアンラップ（連続角度に変換）
+                float delta = Mathf.DeltaAngle(prevTwist, rawX);
 
-                //上下操作が終わったら即リセット
-                if (Mathf.Abs(pitch) < threshold)
-                {
-                    prevPitch = 0f;
-                }
+                //左右が逆なら反転
+                delta = -delta;
 
-                //左右の回転速度
-                float yawSpeed = gyro.z;
+                //感度調整
+                float rotateAmount = delta * 1.5f;
 
-                // ★ 上下が強い時だけ左右を弱める（ここが最重要）
-                if (Mathf.Abs(pitch) > threshold)
-                {
-                    yawSpeed *= 0.2f;   // ← 上下操作中だけ弱める
-                }
-
-                //左右回転処理
-                rotationY += yawSpeed * Time.deltaTime * sensitivity;
-                float newY = Mathf.LerpAngle(player.transform.eulerAngles.y, rotationY, smooth);
+                // プレイヤーに回転を加える
+                float newY = player.transform.eulerAngles.y + rotateAmount;
                 player.transform.rotation = Quaternion.Euler(0, newY, 0);
 
-                //上に動かす
-                if (pitch > threshold)
+                //次のフレームのために保存
+                prevTwist = rawX;
+                //============================
+                //Joy-Con を上下に持ち上げた時の棒の上下動作
+                //============================
+                //Joy-Con の加速度を取得（上下専用）
+                //Joy-Con の向きを取得
+
+
+                //Update 内
+                //Joy-Con の加速度（上下専用）
+                Vector3 accel = jc.GetAccel();
+                float upDown = accel.z;
+
+                //ノイズ除去（上下だけスムージング）
+                float smoothUpDown = Mathf.Lerp(prevUpDown, upDown, 0.5f);
+                prevUpDown = smoothUpDown;
+
+                //上下判定のしきい値（ノイズを拾わない）
+                float threshold = 0.35f;
+
+                //上に持ち上げた時（Accel.y が大きくなる）
+                if (smoothUpDown > threshold)
                 {
                     if (StickOver <= 30)
                     {
@@ -214,8 +225,8 @@ public class PosingEvent : MonoBehaviour
                     }
                 }
 
-                //下に動かす
-                if (pitch < -threshold)
+                //下に下げた時（Accel.y がマイナス方向に大きくなる）
+                if (smoothUpDown < -threshold)
                 {
                     if (StickOver >= -25)
                     {
@@ -225,10 +236,10 @@ public class PosingEvent : MonoBehaviour
                         StickOver--;
                     }
                 }
-            }
 
+
+            }
         }
-    
 
     }
     public void EventFlag() //イベントマネージャーで呼び出す
@@ -240,7 +251,9 @@ public class PosingEvent : MonoBehaviour
 
     void PoseEvent()
     {
-        // プレイヤー・棒・手を書き換える前に、新しい綱渡り更新を停止します。
+        
+
+        //プレイヤー・棒・手を書き換える前に、新しい綱渡り更新を停止します。
         PauseRopeWalkForPosingEvent();
         cam.RopeCameraCansel = true;
         //1秒後に爆発ポイントを子じゃなくする
@@ -290,6 +303,8 @@ public class PosingEvent : MonoBehaviour
     }
     public void HahenTextFalse()
     {
+        //プレイヤーの回転を完全に初期化（水平に固定）
+        player.transform.rotation = Quaternion.Euler(0f, player.transform.eulerAngles.y, 0f);
         Text.SetActive(false);
         PlayerRotation = true;
         Porsemp4.SetActive(true);
